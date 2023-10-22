@@ -2,10 +2,13 @@
 import { useEffect, useState, useCallback } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-const ACCOUNT_ID = process.env.NEXT_PUBLIC_ACCOUNT_ID;
-const OANDA_TOKEN = process.env.NEXT_PUBLIC_OANDA_TOKEN;
-const OANDA_BASE_URL = process.env.NEXT_PUBLIC_OANDA_BASE_URL;
-const INSTRUMENT = "GBP_USD";
+import {
+  OANDA_BASE_URL,
+  OANDA_STREAM_URL,
+  OANDA_TOKEN,
+  ACCOUNT_ID,
+  INSTRUMENT,
+} from "../api/index";
 
 function RenkoChart() {
   const [renkoData, setRenkoData] = useState<

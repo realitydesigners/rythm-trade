@@ -1,6 +1,10 @@
-const OANDA_STREAM_URL = process.env.NEXT_PUBLIC_OANDA_STREAM_URL || "";
-const OANDA_TOKEN = process.env.NEXT_PUBLIC_OANDA_TOKEN;
-const ACCOUNT_ID = process.env.NEXT_PUBLIC_ACCOUNT_ID;
+import {
+  OANDA_BASE_URL,
+  OANDA_STREAM_URL,
+  OANDA_TOKEN,
+  ACCOUNT_ID,
+  INSTRUMENT,
+} from "./index";
 
 export interface StreamData {
   type: string;

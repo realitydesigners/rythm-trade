@@ -1,9 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
 
-const ACCOUNT_ID = process.env.NEXT_PUBLIC_ACCOUNT_ID;
-const OANDA_TOKEN = process.env.NEXT_PUBLIC_OANDA_TOKEN;
-const INSTRUMENT = "GBP_USD";
+import {
+  OANDA_BASE_URL,
+  OANDA_STREAM_URL,
+  OANDA_TOKEN,
+  ACCOUNT_ID,
+  INSTRUMENT,
+} from "../api/index";
 
 function PriceStream() {
   const [prices, setPrices] = useState({
@@ -93,27 +97,6 @@ function PriceStream() {
                 Bid:{" "}
               </span>
               <span className="animate-pulse">{prices.GBP_USD.bid}</span>
-            </>
-          ) : (
-            <span className="animate-pulse text-xxs ml-1 p-1 uppercase text-gray-600">
-              Loading...
-            </span>
-          )}
-        </p>
-      </div>
-
-      <div className="mb-2 p-3 rounded-lg bg-gray-600/20">
-        <p className="text-gray-400 uppercase text-sm sm:text-base font-bold font-mono">
-          USD/JPY:
-          {prices.USD_JPY.bid && prices.USD_JPY.ask ? (
-            <>
-              <span className="text-xxs sm:text-xs text-red-400"> Ask: </span>
-              <span className="animate-pulse">{prices.USD_JPY.ask}</span>
-              <span className="ml-1 sm:ml-2 text-xxs sm:text-xs text-blue-400">
-                {" "}
-                Bid:{" "}
-              </span>
-              <span className="animate-pulse">{prices.USD_JPY.bid}</span>
             </>
           ) : (
             <span className="animate-pulse text-xxs ml-1 p-1 uppercase text-gray-600">
