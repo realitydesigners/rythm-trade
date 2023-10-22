@@ -1,15 +1,16 @@
 import { CandleChart } from "./components/CandleChart";
+import { useEffect, useState } from "react";
 import PriceStream from "./components/PriceStream";
-import RenkoChart from "./components/RenkoChart";
+import Renko from "./components/RenkoChart";
 
-function Page() {
+function App() {
   return (
     <div>
       <PriceStream />
-      <RenkoChart />
+      <Renko />
       <CandleChart />
     </div>
   );
 }
 
-export default Page;
+export default App;

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 const ACCOUNT_ID = process.env.NEXT_PUBLIC_ACCOUNT_ID;
 const OANDA_TOKEN = process.env.NEXT_PUBLIC_OANDA_TOKEN;
-const INSTRUMENT = "GBP_USD,USD_JPY";
+const INSTRUMENT = "GBP_USD";
 
 function PriceStream() {
   const [prices, setPrices] = useState({

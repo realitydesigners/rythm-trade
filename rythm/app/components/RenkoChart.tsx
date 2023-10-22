@@ -2,6 +2,10 @@
 import { useEffect, useState, useCallback } from "react";
 import { v4 as uuidv4 } from "uuid";
 
+import dotenv from "dotenv";
+
+dotenv.config();
+
 const ACCOUNT_ID = process.env.NEXT_PUBLIC_ACCOUNT_ID;
 const OANDA_TOKEN = process.env.NEXT_PUBLIC_OANDA_TOKEN;
 const OANDA_BASE_URL = process.env.NEXT_PUBLIC_OANDA_BASE_URL;
