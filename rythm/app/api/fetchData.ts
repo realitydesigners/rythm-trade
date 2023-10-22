@@ -1,7 +1,4 @@
 import axios from "axios";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const OANDA_BASE_URL = process.env.NEXT_PUBLIC_OANDA_BASE_URL;
 const OANDA_TOKEN = process.env.NEXT_PUBLIC_OANDA_TOKEN;
