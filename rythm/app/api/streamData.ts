@@ -16,10 +16,11 @@ export interface StreamData {
 export const startStreaming = async (ACCOUNT_ID: string, INSTRUMENT: string, OANDA_TOKEN: string, onData: (data: any) => void) => {
   try {
     const response = await fetch(
-      `${OANDA_STREAM_URL}/${ACCOUNT_ID}/pricing/stream?instruments=${INSTRUMENT}`,
+      `${OANDA_STREAM_URL}/accounts/${ACCOUNT_ID}/pricing/stream?instruments=${INSTRUMENT}`,
       {
         headers: {
           Authorization: `Bearer ${OANDA_TOKEN}`,
+          "Content-Type": "application/json",
         },
       }
     );
