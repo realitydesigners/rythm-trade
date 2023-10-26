@@ -1,17 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { startStreaming } from "../api/getData";
-
-interface Price {
-  bid: string | null;
-  ask: string | null;
-}
-
-interface ForexData {
-  GBP_USD?: Price;
-  USD_JPY?: Price;
-}
-
+import { ForexData } from  "@/types";
 
 import {
   OANDA_BASE_URL,

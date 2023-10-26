@@ -2,15 +2,8 @@
 import { fetchData } from "../api/getData";
 import { useState, useEffect } from "react";
 
-interface CandleData {
-  time: string;
-  mid: {
-    o: string;
-    c: string;
-    h: string;
-    l: string;
-  };
-}
+import { CandleData } from "@/types";
+
 
 function DataTable() {
   const [data, setData] = useState<CandleData[]>([]);
