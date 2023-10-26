@@ -1,5 +1,5 @@
 "use client";
-import { fetchData } from "../api/fetchData";
+import { fetchData } from "../api/getData";
 import { useState, useEffect } from "react";
 
 interface CandleData {

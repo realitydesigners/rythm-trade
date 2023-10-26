@@ -8,9 +8,9 @@ import {
   OANDA_TOKEN,
   ACCOUNT_ID,
   INSTRUMENT,
-} from "../api/index";
+} from "../../index";
 
-import { startStreaming } from "../api/streamData";
+import { startStreaming } from "../api/getData";
 
 function PriceStream() {
   const [prices, setPrices] = useState({
