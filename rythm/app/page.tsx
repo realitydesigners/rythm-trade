@@ -1,13 +1,12 @@
-import FetchedData  from "./components/FetchedData";
-import PriceStream from "./components/PriceStream";
+import DataTable  from "./components/DataTable";
+import Stream from "./components/Stream";
 
 
 function App() {
   return (
     <div>
-      <PriceStream />
-   
-      <FetchedData />
+      <Stream />
+      <DataTable />
     </div>
   );
 }

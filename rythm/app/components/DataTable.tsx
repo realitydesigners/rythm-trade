@@ -12,7 +12,7 @@ interface CandleData {
   };
 }
 
-function FetchedData() {
+function DataTable() {
   const [data, setData] = useState<CandleData[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -93,4 +93,4 @@ function FetchedData() {
     </div>
   );
 }
-export default FetchedData;
+export default DataTable;

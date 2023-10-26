@@ -12,7 +12,7 @@ import {
 
 import { startStreaming } from "../api/getData";
 
-function PriceStream() {
+function Stream() {
   const [prices, setPrices] = useState({
     GBP_USD: { bid: null, ask: null },
     USD_JPY: { bid: null, ask: null },
@@ -126,4 +126,4 @@ function PriceStream() {
   );
 }
 
-export default PriceStream;
+export default Stream;
