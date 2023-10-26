@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "RYTHM - High Precision Algorithmic Trading",
   description:
-    "A geometrical trading model inspired by fractal mathematics and multi-dimensional time series. The first fully automated trading model incporporating a proprietrary graph technology.",
+    "A geometrical trading model inspired by fractal mathematics and multi-dimensional time series.",
 };
 
 export default function RootLayout({
