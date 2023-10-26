@@ -12,7 +12,7 @@ interface CandleData {
   };
 }
 
-export function CandleChart() {
+function FetchedData() {
   const [data, setData] = useState<CandleData[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -93,3 +93,4 @@ export function CandleChart() {
     </div>
   );
 }
+export default FetchedData;

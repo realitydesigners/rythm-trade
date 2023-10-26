@@ -1,4 +1,4 @@
-import { CandleChart } from "./components/CandleChart";
+import FetchedData  from "./components/FetchedData";
 
 import PriceStream from "./components/PriceStream";
 import Renko from "./components/RenkoChart";
@@ -8,7 +8,7 @@ function App() {
     <div>
       <PriceStream />
       <Renko />
-      <CandleChart />
+      <FetchedData />
     </div>
   );
 }
