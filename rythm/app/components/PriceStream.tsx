@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 
 import {
@@ -9,11 +10,27 @@ import {
   INSTRUMENT,
 } from "../api/index";
 
+import { startStreaming } from "../api/streamData";
+
 function PriceStream() {
   const [prices, setPrices] = useState({
     GBP_USD: { bid: null, ask: null },
     USD_JPY: { bid: null, ask: null },
   });
+
+  useEffect(() => {
+    startStreaming(ACCOUNT_ID, INSTRUMENT, OANDA_TOKEN, (data) => {
+      if (data.type === "PRICE") {
+        setPrices((prevPrices) => ({
+          ...prevPrices,
+          [data.instrument]: {
+            bid: data.bids[0].price,
+            ask: data.asks[0].price,
+          },
+        }));
+      }
+    });
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
