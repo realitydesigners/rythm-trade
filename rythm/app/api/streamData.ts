@@ -12,9 +12,6 @@ export interface StreamData {
   symbol: string;
   price: number;
 }
-// api/streamData.ts
-
-
 
 export const startStreaming = async (ACCOUNT_ID: string, INSTRUMENT: string, OANDA_TOKEN: string, onData: (data: any) => void) => {
   try {
