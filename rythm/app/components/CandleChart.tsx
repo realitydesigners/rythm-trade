@@ -39,6 +39,8 @@ const CandleChart: React.FC<{ data: CandleData[] }> = ({ data }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const containerRef = useRef<SVGGElement | null>(null);
 
+  
+
   useEffect(() => {
     if (!svgRef.current) return;
 

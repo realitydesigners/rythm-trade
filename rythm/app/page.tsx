@@ -1,21 +1,32 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from 'react';
-import DataTable  from "./components/DataTable";
+import DataTable from "./components/DataTable";
 import Stream from "./components/Stream";
 import CandleChart from "./components/CandleChart";
-import { fetchData } from './api/getData';  // Adjust path
+import { fetchData } from './api/getData'; 
+
+const API_INTERVAL = 5000;  // 5 seconds
 
 function App() {
-  const [candleData, setCandleData] = useState([]);  // Assuming the data structure matches your types
+  const [candleData, setCandleData] = useState([]);
 
   useEffect(() => {
-    // Fetch the candlestick data
-    fetchData().then(data => {
-      // Extract the candlestick data from the API response
-      // Assuming the API returns an object with a 'candles' property that contains the actual candlestick data
-      const candles = data?.candles; 
-      setCandleData(candles || []);  // Set the data to state, default to empty array if no data
-    });
+    const fetchCandleData = async () => {
+      try {
+        const data = await fetchData();
+
+        // Assuming the API returns an object with a 'candles' property that contains the candlestick data
+        const candles = data?.candles;
+        setCandleData(candles || []);
+      } catch (error) {
+        console.error('Error fetching candle data:', error);
+      }
+    };
+    fetchCandleData();
+
+    const interval = setInterval(fetchCandleData, API_INTERVAL);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (

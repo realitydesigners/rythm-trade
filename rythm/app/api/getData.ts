@@ -74,7 +74,7 @@ export const fetchData = async () => {
 
   try {
     const response = await axios.get(
-      `${OANDA_BASE_URL}/accounts/${ACCOUNT_ID}/instruments/GBP_USD/candles?granularity=M1`,
+      `${OANDA_BASE_URL}/accounts/${ACCOUNT_ID}/instruments/GBP_USD/candles?granularity=S5`,
       {
         headers: {
           Authorization: `Bearer ${OANDA_TOKEN}`,
