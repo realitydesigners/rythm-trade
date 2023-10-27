@@ -8,18 +8,18 @@ const CHART_DIMENSIONS = {
   height: 400,
   margin: {
     top: 20,
-    right: 20,
+    right: 50,
     bottom: 20,
     left: 50,
   },
 };
 
 const LIGHT_THEME = {
-    axisColor: "#D1D5DB",   // gray color
-    textColor: "#4B5563",   // darker gray color
-    bearColor: "#555555",   // gray for bearish candles
-    bullColor: "#E5E7EB",   // lighter gray for bullish candles
-    lineColor: "#E5E7EB"    // light gray for candle wicks
+    axisColor: "#888888",   // gray color
+    textColor: "#888888",   // darker gray color
+    bearColor: "#888888",   // gray for bearish candles
+    bullColor: "#888888",   // lighter gray for bullish candles
+    lineColor: "#ffffff"    // light gray for candle wicks
   };
 
 interface CandleData {
@@ -31,20 +31,14 @@ interface CandleData {
     l: string;
   };
 }
-const getColor = (d: CandleData) => parseFloat(d.mid.o) > parseFloat(d.mid.c) ? LIGHT_THEME.bearColor : LIGHT_THEME.bullColor;
-
-
 
 const CandleChart: React.FC<{ data: CandleData[] }> = ({ data }) => {
+  const chartAreaRef = useRef<SVGGElement | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
   const containerRef = useRef<SVGGElement | null>(null);
 
-  
-
   useEffect(() => {
     if (!svgRef.current) return;
-
-   
     let container = d3.select(containerRef.current);
 
     const { width, height, margin } = CHART_DIMENSIONS;
@@ -54,71 +48,68 @@ const CandleChart: React.FC<{ data: CandleData[] }> = ({ data }) => {
 
     const svgElement = svgRef.current;
     const containerElement = containerRef.current;
-
     if (!svgElement || !containerElement) return;
 
     x.domain(data.map(d => d.time));
-   // Calculate data range (difference between max and min values)
-const dataRange = d3.max(data, d => parseFloat(d.mid.h))! - d3.min(data, d => parseFloat(d.mid.l))!;
+    const dataRange = d3.max(data, d => parseFloat(d.mid.h))! - d3.min(data, d => parseFloat(d.mid.l))!;
+    const padding = dataRange * 0.05;
 
-// Define a dynamic padding, for example, 5% of the data range
-const padding = dataRange * 0.05;
-
-// Update y domain with dynamic padding
-y.domain([
-  d3.min(data, d => parseFloat(d.mid.l))! - padding,
-  d3.max(data, d => parseFloat(d.mid.h))! + padding
-]);
-;
+    y.domain([
+      d3.min(data, d => parseFloat(d.mid.l))! - padding,
+      d3.max(data, d => parseFloat(d.mid.h))! + padding
+    ]);
 
     const line = d3.line<CandleData>()
-  .x(d => (x(d.time) || 0) + x.bandwidth() / 2)  // X position in the middle of the band
-  .y(d => y(parseFloat(d.mid.c)))                 // Using closing price for the line
-
+      .x(d => (x(d.time) || 0) + x.bandwidth() / 2)
+      .y(d => y(parseFloat(d.mid.c)));
 
     const svg = d3.select(svgElement) as d3.Selection<SVGSVGElement, unknown, null, undefined>;
-
     const handleZoom = d3.zoom<SVGSVGElement, unknown>()
         .scaleExtent([0.5, 5])
         .on("zoom", (event) => {
-            container.attr("transform", event.transform);
+          d3.select(chartAreaRef.current).attr("transform", event.transform);
         });
 
     svg.call(handleZoom);
-
-    // Clear previous drawings
     container.selectAll('*').remove();
 
-    // Axes
-    container.append("g")
-        .attr("transform", `translate(0,${height - margin.bottom})`)
-        .call(d3.axisBottom(x).ticks(5).tickSizeOuter(0))
-        .selectAll("text")
-        .attr("fill", "white");
+  
 
     container.append("g")
         .attr("transform", `translate(${margin.left},0)`)
         .call(d3.axisLeft(y).tickFormat(d => (d as number).toFixed(5)))
         .selectAll("text")
-        .attr("fill", "white");
-
-    // Candles
-    const candles = container.selectAll(".candle").data(data).enter().append("g");
-    
+        .attr("fill", LIGHT_THEME.textColor);
 
 
+
+    // Horizontal gridlines
+    container.append("g")
+        .attr("class", "grid")
+        .attr("transform", `translate(${margin.left},0)`)
+        .call(d3.axisLeft(y)
+            .tickSize(-(width - margin.left - margin.right))
+            .tickFormat(() => "")
+        )
+        .attr("stroke", LIGHT_THEME.axisColor);
+
+    d3.select(chartAreaRef.current).selectAll(".candle").data(data).enter().append("g");
     container.append('path')
-    .datum(data)
-    .attr('fill', 'none')
-    .attr('stroke', LIGHT_THEME.lineColor)
-    .attr('stroke-width', 1)
-    .attr('d', line as any);
-}, [data]);
+      .datum(data)
+      .attr('fill', 'none')
+      .attr('stroke', LIGHT_THEME.lineColor)
+      .attr('stroke-width', 1)
+      .attr('d', line as any);
+  }, [data]);
 
   return (
-    <svg ref={svgRef} width={CHART_DIMENSIONS.width} height={CHART_DIMENSIONS.height}>
-      <g ref={containerRef}></g>
-    </svg>
+    <div className="w-full bg-black  p-8 flex">
+      <svg ref={svgRef} width={CHART_DIMENSIONS.width} height={CHART_DIMENSIONS.height}>
+        <g ref={containerRef}>
+          <g ref={chartAreaRef}></g>  
+        </g>
+      </svg>
+    </div>
   );
 };
 
