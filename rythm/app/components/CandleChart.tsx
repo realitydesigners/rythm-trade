@@ -7,7 +7,7 @@ import { CandleData } from '@/types';
 
 const CHART_DIMENSIONS = {
   width: 800,
-  height: 400,
+  height: 500,
   margin: {
     top: 20,
     right: 50,
@@ -17,22 +17,13 @@ const CHART_DIMENSIONS = {
 };
 
 const LIGHT_THEME = {
-    axisColor: "#888888",   // gray color
+    axisColor: "#333333",   // gray color
     textColor: "#888888",   // darker gray color
     bearColor: "#888888",   // gray for bearish candles
     bullColor: "#888888",   // lighter gray for bullish candles
-    lineColor: "#ffffff"    // light gray for candle wicks
+    lineColor: "#999999"    // light gray for candle wicks
   };
 
-interface CandleData {
-  time: string;
-  mid: {
-    o: string;
-    c: string;
-    h: string;
-    l: string;
-  };
-}
 
 const CandleChart: React.FC<{ data: CandleData[] }> = ({ data }) => {
   const chartAreaRef = useRef<SVGGElement | null>(null);
@@ -84,16 +75,16 @@ const CandleChart: React.FC<{ data: CandleData[] }> = ({ data }) => {
         .attr("fill", LIGHT_THEME.textColor);
 
 
-
-    // Horizontal gridlines
-    container.append("g")
-    .attr("class", "grid")
-    .attr("transform", `translate(${margin.left},0)`)
-    .call(d3.axisLeft(y)
-        .tickSize(-(width - margin.left - margin.right))
-        .tickFormat(() => "")
-    )
-    .attr("stroke", "#333333"); // Change this hex code to the desired color.
+// Horizontal gridlines
+container.append("g")
+  .attr("class", "grid")
+  .attr("transform", `translate(${margin.left},0)`)
+  .call(d3.axisLeft(y)
+    .tickSize(-(width - margin.left - margin.right))
+    .tickFormat(() => "")
+  )
+  .selectAll("line")
+  .attr("stroke", LIGHT_THEME.axisColor);
 
 
     d3.select(chartAreaRef.current).selectAll(".candle").data(data).enter().append("g");
@@ -106,7 +97,7 @@ const CandleChart: React.FC<{ data: CandleData[] }> = ({ data }) => {
   }, [data]);
 
   return (
-    <div className="w-full bg-gray-800/20  p-8 flex">
+    <div className="w-full h-auto bg-gray-800/20  pl-4 pr-4 flex">
       <svg ref={svgRef} width={CHART_DIMENSIONS.width} height={CHART_DIMENSIONS.height}>
         <g ref={containerRef}>
           <g ref={chartAreaRef}></g>  
