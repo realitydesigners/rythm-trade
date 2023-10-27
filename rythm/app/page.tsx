@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import DataTable from "./components/DataTable";
 import Stream from "./components/Stream";
-import CandleChart from "./components/CandleChart";
+import CandleChart from "./components/LineChart";
 import { fetchData } from './api/getData'; 
 
 const API_INTERVAL = 5000;  // 5 seconds

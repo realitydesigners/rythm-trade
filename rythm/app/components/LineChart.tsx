@@ -6,8 +6,8 @@ import { CandleData } from '@/types';
 
 
 const CHART_DIMENSIONS = {
-  width: 800,
-  height: 500,
+  width: 1000,
+  height: 600,
   margin: {
     top: 20,
     right: 50,
@@ -25,7 +25,7 @@ const LIGHT_THEME = {
   };
 
 
-const CandleChart: React.FC<{ data: CandleData[] }> = ({ data }) => {
+const LineChart: React.FC<{ data: CandleData[] }> = ({ data }) => {
   const chartAreaRef = useRef<SVGGElement | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
   const containerRef = useRef<SVGGElement | null>(null);
@@ -107,4 +107,4 @@ container.append("g")
   );
 };
 
-export default CandleChart;
+export default LineChart;
