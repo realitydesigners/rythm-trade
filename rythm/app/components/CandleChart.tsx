@@ -2,6 +2,8 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import { zoom } from 'd3-zoom';
+import { CandleData } from '@/types';
+
 
 const CHART_DIMENSIONS = {
   width: 800,
@@ -85,13 +87,14 @@ const CandleChart: React.FC<{ data: CandleData[] }> = ({ data }) => {
 
     // Horizontal gridlines
     container.append("g")
-        .attr("class", "grid")
-        .attr("transform", `translate(${margin.left},0)`)
-        .call(d3.axisLeft(y)
-            .tickSize(-(width - margin.left - margin.right))
-            .tickFormat(() => "")
-        )
-        .attr("stroke", LIGHT_THEME.axisColor);
+    .attr("class", "grid")
+    .attr("transform", `translate(${margin.left},0)`)
+    .call(d3.axisLeft(y)
+        .tickSize(-(width - margin.left - margin.right))
+        .tickFormat(() => "")
+    )
+    .attr("stroke", "#333333"); // Change this hex code to the desired color.
+
 
     d3.select(chartAreaRef.current).selectAll(".candle").data(data).enter().append("g");
     container.append('path')
@@ -103,7 +106,7 @@ const CandleChart: React.FC<{ data: CandleData[] }> = ({ data }) => {
   }, [data]);
 
   return (
-    <div className="w-full bg-black  p-8 flex">
+    <div className="w-full bg-gray-800/20  p-8 flex">
       <svg ref={svgRef} width={CHART_DIMENSIONS.width} height={CHART_DIMENSIONS.height}>
         <g ref={containerRef}>
           <g ref={chartAreaRef}></g>  

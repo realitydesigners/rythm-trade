@@ -6,11 +6,12 @@ export interface CandleData {
       h: string;
       l: string;
     };
+    parsedTime?: Date; 
   }
   
   export interface StreamData {
     type: string;
-    time: string;
+    time: string; 
     symbol: string;
     price: number;
   }
