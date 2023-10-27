@@ -44,7 +44,7 @@ const CandleChart: React.FC<{ data: CandleData[] }> = ({ data }) => {
   useEffect(() => {
     if (!svgRef.current) return;
 
-    const svgSelection = d3.select(svgRef.current).style("background-color", "black");
+   
     let container = d3.select(containerRef.current);
 
     const { width, height, margin } = CHART_DIMENSIONS;
@@ -58,10 +58,23 @@ const CandleChart: React.FC<{ data: CandleData[] }> = ({ data }) => {
     if (!svgElement || !containerElement) return;
 
     x.domain(data.map(d => d.time));
-    y.domain([
-      d3.min(data, d => parseFloat(d.mid.l))! * 0.99,
-      d3.max(data, d => parseFloat(d.mid.h))! * 1.01,
-    ]);
+   // Calculate data range (difference between max and min values)
+const dataRange = d3.max(data, d => parseFloat(d.mid.h))! - d3.min(data, d => parseFloat(d.mid.l))!;
+
+// Define a dynamic padding, for example, 5% of the data range
+const padding = dataRange * 0.05;
+
+// Update y domain with dynamic padding
+y.domain([
+  d3.min(data, d => parseFloat(d.mid.l))! - padding,
+  d3.max(data, d => parseFloat(d.mid.h))! + padding
+]);
+;
+
+    const line = d3.line<CandleData>()
+  .x(d => (x(d.time) || 0) + x.bandwidth() / 2)  // X position in the middle of the band
+  .y(d => y(parseFloat(d.mid.c)))                 // Using closing price for the line
+
 
     const svg = d3.select(svgElement) as d3.Selection<SVGSVGElement, unknown, null, undefined>;
 
@@ -92,19 +105,14 @@ const CandleChart: React.FC<{ data: CandleData[] }> = ({ data }) => {
     // Candles
     const candles = container.selectAll(".candle").data(data).enter().append("g");
     
-    candles.append("rect")
-    .attr("x", d => x(d.time) || 0)
-    .attr("y", d => y(Math.max(parseFloat(d.mid.o), parseFloat(d.mid.c))))
-    .attr("width", x.bandwidth())
-    .attr("height", d => y(Math.min(parseFloat(d.mid.o), parseFloat(d.mid.c))) - y(Math.max(parseFloat(d.mid.o), parseFloat(d.mid.c))))
-    .attr("fill", getColor);
 
-  candles.append("line")
-    .attr("x1", d => (x(d.time) || 0) + x.bandwidth() / 2)
-    .attr("x2", d => (x(d.time) || 0) + x.bandwidth() / 2)
-    .attr("y1", d => y(parseFloat(d.mid.h)))
-    .attr("y2", d => y(parseFloat(d.mid.l)))
-    .attr("stroke", LIGHT_THEME.lineColor);
+
+    container.append('path')
+    .datum(data)
+    .attr('fill', 'none')
+    .attr('stroke', LIGHT_THEME.lineColor)
+    .attr('stroke-width', 1)
+    .attr('d', line as any);
 }, [data]);
 
   return (
