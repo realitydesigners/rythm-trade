@@ -4,7 +4,7 @@ import DataTable from "./components/DataTable";
 import Stream from "./components/Stream";
 import CandleChart from "./components/LineChart";
 import { fetchData } from './api/getData'; 
-import Box from './components/Box';
+import BoxChart from './components/BoxChart';
 
 const API_INTERVAL = 5000;  // 5 seconds
 const BOX_SIZE = 1;  // Define your box size here, assuming 10 for this example
@@ -41,8 +41,8 @@ function App() {
   return (
     <div>
       <Stream />
-      {/* Pass the required props to the Box component */}
-      <Box currentPrice={currentPrice} boxSize={BOX_SIZE} candleData={candleData} />
+     <BoxChart/>
+
       <CandleChart data={candleData} />
       <DataTable />
     </div>
