@@ -3,7 +3,7 @@
 Rythm is a computational algorithm designed for the advanced analysis of financial market data. Its primary function is to convert traditional market data into a three-dimensional (3D) graph visualization, offering an innovative perspective on market dynamics.
 
 
-** Key Features:**
+**Key Features:**
 
 - **3D Visualization:**  
 Rythm leverages 3D visualization to revolutionize market data representation. Unlike traditional 2D time-series graphs, it constructs a dynamic 3D spatial format. This 3D perspective is particularly advantageous for capturing price movements across different scales, from subtle fluctuations to major market trends. The added dimension is used for multi-trend identification and pattern recognition.
