@@ -29,12 +29,12 @@ function Stream() {
   }, []);
 
   return (
-    <div className="p-3 sm:p-8 items-center bg-gray-800/20">
+    <div className="p-3 sm:p-8 items-center bg-black">
       <h1 className="text-xs sm:text-xs p-2 sm:p-4 tracking-wide font-bold text-gray-500 uppercase font-mono">
         Live Price
       </h1>
 
-      <div className="mb-2 p-3 rounded-lg bg-gray-600/20">
+      <div className="mb-2 p-3 rounded-lg bg-black border border-gray-600/20">
         <p className="text-gray-400 uppercase text-sm sm:text-base font-bold font-mono">
           GBP/USD:
           {prices && prices.GBP_USD && prices.GBP_USD.bid && prices.GBP_USD.ask ? (

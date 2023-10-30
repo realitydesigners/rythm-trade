@@ -97,7 +97,7 @@ container.append("g")
   }, [data]);
 
   return (
-    <div className="w-full h-auto bg-gray-800/20  pl-4 pr-4 flex">
+    <div className="w-full h-auto bg-black  pl-4 pr-4 flex">
       <svg ref={svgRef} width={CHART_DIMENSIONS.width} height={CHART_DIMENSIONS.height}>
         <g ref={containerRef}>
           <g ref={chartAreaRef}></g>  

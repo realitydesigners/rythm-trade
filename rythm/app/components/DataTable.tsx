@@ -26,10 +26,10 @@ function DataTable() {
   }, []);
 
   return (
-    <div className=" bg-gray-800/20 p-4 lg:p-8 shadow-lg">
+    <div className=" bg-black p-4 lg:p-8 shadow-lg">
       <div className="overflow-x-auto rounded-xl">
         <table className="min-w-full divide-y divide-gray-600/20">
-          <thead className="bg-gray-600/20">
+          <thead className="bg-black ">
             <tr className="font-mono text-gray-400 font-bold">
               <th className="p-4 text-left text-xs font-medium uppercase tracking-wider">
                 Time
@@ -48,7 +48,7 @@ function DataTable() {
               </th>
             </tr>
           </thead>
-          <tbody className="bg-gray-600/20 divide-y divide-gray-600/20 text-gray-400 text-xs">
+          <tbody className="bg-black divide-y divide-gray-600/20 text-gray-400 text-xs">
             {loading ? (
               // Render placeholders or loading animation over each row
               <tr className="uppercase text-xs text-gray-600">

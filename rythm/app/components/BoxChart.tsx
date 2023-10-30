@@ -22,15 +22,13 @@ interface Box {
 
 const BoxChart: React.FC = () => {
     const [currentClosePrice, setCurrentClosePrice] = useState<number | null>(null);
-
     const [currentDirection, setCurrentDirection] = useState<string | null>(null);
     const [boxArray, setBoxArray] = useState<Box[]>([]);
     const [initializationComplete, setInitializationComplete] = useState<boolean>(false);
-
     const [lowestIndex, setLowestIndex] = useState<number | null>(null);
     const [highestIndex, setHighestIndex] = useState<number | null>(null);
     
-    const defaultBoxSize = 10;
+    const defaultBoxSize = 1;
 
 
     useEffect(() => {
@@ -69,29 +67,29 @@ const BoxChart: React.FC = () => {
         initializeData();
     }, []);
     
-    
     return (
-        <div className='w-full p-8 bg-gray-700/20 text-xs text-gray-200'>
-            <div>Current Close Price: {currentClosePrice}</div>
-            <div>Lowest Index: {lowestIndex}</div>
-            <div>Highest Index: {highestIndex}</div>
-            <div>Box Size: {defaultBoxSize}</div>
-            <div>Current Direction: {currentDirection}</div>
-            <div>Box Array:
+        <div className='w-full pl-10 pr-10 pt-2 pb-2 bg-black text-sm space-y-1 font-mono text-gray-200'>
+            <div><span className='text-gray-400 font-bold'>Current Close Price:</span> {currentClosePrice}</div>
+            <div><span className='text-gray-400 font-bold'>Lowest Index:</span> {lowestIndex}</div>
+            <div><span className='text-gray-400 font-bold'>Highest Index:</span> {highestIndex}</div>
+            <div><span className='text-gray-400 font-bold'>Box Size:</span> {defaultBoxSize}</div>
+            <div><span className='text-gray-400 font-bold'>Current Direction:</span> {currentDirection}</div>
+            <div><span className='text-gray-400 font-bold'>Box Array:</span>
                 <ul>
                     {boxArray.map((box, index) => (
                         <li key={index}>
-                            High: {box.high}, Low: {box.low},
-                            Moved Up: {box.boxMovedUp ? "Yes" : "No"},
-                            Moved Down: {box.boxMovedDn ? "Yes" : "No"},
-                            Size: {box.rngSize},
-                            Direction: {box.boxMovedUp ? "UP" : box.boxMovedDn ? "DOWN" : "STABLE"}
+                            <span style={{ fontWeight: 'bold' }}>High:</span> {box.high}, <span style={{ fontWeight: 'bold' }}>Low:</span> {box.low},
+                            <span style={{ fontWeight: 'bold' }}>Moved Up:</span> {box.boxMovedUp ? "Yes" : "No"},
+                            <span style={{ fontWeight: 'bold' }}>Moved Down:</span> {box.boxMovedDn ? "Yes" : "No"},
+                            <span style={{ fontWeight: 'bold' }}>Size:</span> {box.rngSize},
+                            <span style={{ fontWeight: 'bold' }}>Direction:</span> {box.boxMovedUp ? "UP" : box.boxMovedDn ? "DOWN" : "STABLE"}
                         </li>
                     ))}
                 </ul>
             </div>
         </div>
     );
+    
 }
 
 export default BoxChart;
