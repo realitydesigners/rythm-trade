@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import DataTable from "./components/DataTable";
 import Stream from "./components/Stream";
-import CandleChart from "./components/LineChart";
-import { fetchData } from './api/getData'; 
+import LineChart from "./components/LineChart";
+import { chartData } from './api/getData'; 
 import BoxChart from './components/BoxChart';
 
 const API_INTERVAL = 5000;  // 5 seconds
@@ -16,7 +16,7 @@ function App() {
   useEffect(() => {
     const fetchCandleData = async () => {
       try {
-        const data = await fetchData();
+        const data = await chartData();
         const candles = data?.candles;
 
         setCandleData(candles || []);
@@ -43,7 +43,7 @@ function App() {
       <Stream />
      <BoxChart/>
 
-      <CandleChart data={candleData} />
+      <LineChart data={candleData} />
       <DataTable />
     </div>
   );

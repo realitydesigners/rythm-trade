@@ -70,7 +70,7 @@ export const fetchData = async () => {
 
   try {
     const response = await axios.get(
-      `${OANDA_BASE_URL}/accounts/${ACCOUNT_ID}/instruments/${INSTRUMENT}/candles?granularity=M1&count=100`,
+      `${OANDA_BASE_URL}/accounts/${ACCOUNT_ID}/instruments/${INSTRUMENT}/candles?granularity=M1&count=300`,
       {
         headers: {
           Authorization: `Bearer ${OANDA_TOKEN}`,
@@ -101,10 +101,7 @@ export const fetchData = async () => {
 };
 
 
-
-
-export const tableData = async () => {
-  // Check for the presence of required environment variables
+export const chartData = async () => {
   if (!OANDA_TOKEN || !ACCOUNT_ID) {
     console.error(
       "Missing necessary environment variables (OANDA_TOKEN or ACCOUNT_ID)."
@@ -114,7 +111,7 @@ export const tableData = async () => {
 
   try {
     const response = await axios.get(
-      `${OANDA_BASE_URL}/accounts/${ACCOUNT_ID}/instruments/GBP_USD/candles?granularity=M1&count=100`,
+      `${OANDA_BASE_URL}/accounts/${ACCOUNT_ID}/instruments/GBP_USD/candles?granularity=M1&count=300`,
       {
         headers: {
           Authorization: `Bearer ${OANDA_TOKEN}`,

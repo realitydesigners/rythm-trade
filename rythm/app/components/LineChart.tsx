@@ -6,7 +6,7 @@ import { CandleData } from '@/types';
 
 
 const CHART_DIMENSIONS = {
-  width: 1000,
+  width: 800,
   height: 600,
   margin: {
     top: 20,

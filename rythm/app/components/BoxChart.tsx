@@ -73,7 +73,7 @@ const BoxChart: React.FC = () => {
             <div><span className='text-gray-400 font-bold'>Lowest Index:</span> {lowestIndex}</div>
             <div><span className='text-gray-400 font-bold'>Highest Index:</span> {highestIndex}</div>
             <div><span className='text-gray-400 font-bold'>Box Size:</span> {defaultBoxSize}</div>
-            <div><span className='text-gray-400 font-bold'>Current Direction:</span> {currentDirection}</div>
+            <div><span className='text-gray-400 font-bold'>Current Price vs Prev Price:</span> {currentDirection}</div>
             <div><span className='text-gray-400 font-bold'>Box Array:</span>
                 <ul>
                     {boxArray.map((box, index) => (
