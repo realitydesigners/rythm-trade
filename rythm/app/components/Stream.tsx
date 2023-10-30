@@ -39,10 +39,11 @@ function Stream() {
           GBP/USD:
           {prices && prices.GBP_USD && prices.GBP_USD.bid && prices.GBP_USD.ask ? (
             <>
-              <span className="text-xxs sm:text-xs text-red-400"> Ask: </span>
-              <span className="animate-pulse">{prices.GBP_USD.ask}</span>
+          
               <span className="ml-1 sm:ml-2 text-xxs sm:text-xs text-blue-400"> Bid: </span>
               <span className="animate-pulse">{prices.GBP_USD.bid}</span>
+              <span className="text-xxs sm:text-xs text-red-400"> Ask: </span>
+              <span className="animate-pulse">{prices.GBP_USD.ask}</span>
             </>
           ) : (
             <span className="animate-pulse text-xxs ml-1 p-1 uppercase text-gray-600">
