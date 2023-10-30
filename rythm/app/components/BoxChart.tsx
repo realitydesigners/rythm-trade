@@ -11,12 +11,16 @@ interface Box {
     boxMovedDn: boolean;
     rngSize: number;
 }
+
 const convertPointsToDigits = (points: number, price: number) => {
     return points / price;
 };
 
-
-
+const symbolsToDigits = {
+    'GBPUSD': { point: 0.0001, digits: 4 },
+    'USDJPY': { point: 0.001, digits: 3 },
+    // Add more symbols and their corresponding point and digits here
+};
 
 const BoxChart: React.FC = () => {
     const [currentClosePrice, setCurrentClosePrice] = useState<number | null>(null);
@@ -25,11 +29,9 @@ const BoxChart: React.FC = () => {
     const [initializationComplete, setInitializationComplete] = useState<boolean>(false);
     const [lowestIndex, setLowestIndex] = useState<number | null>(null);
     const [highestIndex, setHighestIndex] = useState<number | null>(null);
-    let oandaData: CandleData[] = []; // Initialize it as an empty array
-
 
     const numBoxes = 5;
-    const boxSizePoints = 10.0;
+    const boxSizePoints = 100.0;
 
     const BoxMovedUp = new Array(numBoxes).fill(false);
     const BoxMovedDn = new Array(numBoxes).fill(false);
@@ -37,7 +39,8 @@ const BoxChart: React.FC = () => {
     const RngLow = new Array(numBoxes).fill(null);
     const RngSize = new Array(numBoxes).fill(null);
 
-    let Point = 10; 
+    let oandaData: CandleData[] = []; // Initialize it as an empty array
+    let Point = .10;
 
     useEffect(() => {
         const initializeData = async () => {
@@ -84,6 +87,9 @@ const BoxChart: React.FC = () => {
         if (typeof C === 'undefined') {
             return;
         }
+        
+
+        console.log(oandaData)
     
         console.log("C:", C);
         console.log("boxSizePoints:", boxSizePoints);
@@ -99,52 +105,62 @@ const BoxChart: React.FC = () => {
                 if (price < minHH) {
                     minHH = price;
                 }
-    
+
                 if (maxLL - minHH >= boxSizePoints * Point) {
                     break;
                 }
             }
-    
+
             for (let b = 0; b < numBoxes; b++) {
                 RngHigh[b] = maxLL;
                 RngLow[b] = maxLL - boxSizePoints * Point;
             }
-    
+
             console.log("Quick Init - RngHigh:", RngHigh);
             console.log("Quick Init - RngLow:", RngLow);
         }
     
-        const theBoxSize = convertPointsToDigits(boxSizePoints, C);
-    
-        if (!isNaN(theBoxSize)) {
-            console.log("theBoxSize:", theBoxSize);
-    
-            for (let b = 0; b < numBoxes; b++) {
-                if (RngSize[b] < theBoxSize) {
+        const symbol = 'GBPUSD'; // Replace this with the actual symbol you receive from your data
+
+        if (symbol in symbolsToDigits) {
+            const { point, digits } = symbolsToDigits[symbol];
+
+            const theBoxSize = boxSizePoints * Point;
+            
+
+            if (!isNaN(theBoxSize)) {
+                console.log("theBoxSize:", theBoxSize);
+
+                for (let b = 0; b < numBoxes; b++) {
+                    if (RngSize[b] < theBoxSize) {
+                        if (C > RngHigh[b]) {
+                            RngHigh[b] = C;
+                        } else if (C < RngLow[b]) {
+                            RngLow[b] = C;
+                        }
+                        continue;
+                    }
+
                     if (C > RngHigh[b]) {
                         RngHigh[b] = C;
+                        RngLow[b] = RngHigh[b] - theBoxSize;
+                        BoxMovedUp[b] = true;
+                        BoxMovedDn[b] = false;
                     } else if (C < RngLow[b]) {
                         RngLow[b] = C;
+                        RngHigh[b] = RngLow[b] + theBoxSize;
+                        BoxMovedUp[b] = false;
+                        BoxMovedDn[b] = true;
                     }
-                    continue;
+
+                    console.log(`Box ${b} - RngHigh: ${RngHigh}, RngLow: ${RngLow}`);
                 }
-    
-                if (C > RngHigh[b]) {
-                    RngHigh[b] = C;
-                    RngLow[b] = RngHigh[b] - theBoxSize;
-                    BoxMovedUp[b] = true;
-                    BoxMovedDn[b] = false;
-                } else if (C < RngLow[b]) {
-                    RngLow[b] = C;
-                    RngHigh[b] = RngLow[b] + theBoxSize;
-                    BoxMovedUp[b] = false;
-                    BoxMovedDn[b] = true;
-                }
-    
-                console.log(`Box ${b} - RngHigh: ${RngHigh}, RngLow: ${RngLow}`);
             }
+        } else {
+            console.log(`Symbol ${symbol} not found in symbolsToDigits mapping.`);
         }
     };
+    
     
     
     
