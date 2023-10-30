@@ -1,36 +1,47 @@
+import { CandleData } from '../../types';
 
-/**
- * Finds the index of the highest high in a given data range.
- *
- * @param {Array} data - The dataset to search through.
- * @param {number} start - The starting index for the search.
- * @param {number} end - The ending index for the search.
- * @return {number} - The index of the highest high within the given range.
- */
-export const findHighestHighIndex = (data: any[], start: number, end: number): number => {
-    let highestIndex = start;
-    for (let i = start; i >= end; i--) {
-        if (parseFloat(data[i].mid.c) > parseFloat(data[highestIndex].mid.c)) {
-            highestIndex = i;
+export function findCurrentPrice(data: CandleData[]): number | undefined {
+    if (data.length === 0) {
+        return undefined; 
+    }
+    
+    const sortedData = data.sort((a, b) => {
+        const timeA = new Date(a.time).getTime();
+        const timeB = new Date(b.time).getTime();
+        return timeB - timeA;
+    });
+
+    return parseFloat(sortedData[0].mid.c);
+}
+
+
+
+export function findHighest(data: CandleData[], startIdx: number, endIdx: number): number | undefined {
+    if (startIdx < 0 || endIdx >= data.length || startIdx > endIdx) {
+        return undefined; // Handle invalid input
+    }
+    
+    let highestValue = -Infinity;
+    for (let i = startIdx; i <= endIdx; i++) {
+        const closePrice = parseFloat(data[i].mid.c); // Convert to a number
+        if (closePrice > highestValue) {
+            highestValue = closePrice;
         }
     }
-    return highestIndex;
-};
+    return highestValue;
+}
 
-/**
- * Finds the index of the lowest low in a given data range.
- *
- * @param {Array} data - The dataset to search through.
- * @param {number} start - The starting index for the search.
- * @param {number} end - The ending index for the search.
- * @return {number} - The index of the lowest low within the given range.
- */
-export const findLowestLowIndex = (data: any[], start: number, end: number): number => {
-    let lowestIndex = start;
-    for (let i = start; i >= end; i--) {
-        if (parseFloat(data[i].mid.c) < parseFloat(data[lowestIndex].mid.c)) {
-            lowestIndex = i;
+export function findLowest(data: CandleData[], startIdx: number, endIdx: number): number | undefined {
+    if (startIdx < 0 || endIdx >= data.length || startIdx > endIdx) {
+        return undefined; // Handle invalid input
+    }
+    
+    let lowestValue = Infinity;
+    for (let i = startIdx; i <= endIdx; i++) {
+        const closePrice = parseFloat(data[i].mid.c); // Convert to a number
+        if (closePrice < lowestValue) {
+            lowestValue = closePrice;
         }
     }
-    return lowestIndex;
-};
+    return lowestValue;
+}

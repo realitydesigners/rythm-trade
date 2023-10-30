@@ -6,7 +6,7 @@ export interface CandleData {
       h: string;
       l: string;
     };
-    parsedTime?: Date; 
+   
   }
   
   export interface StreamData {

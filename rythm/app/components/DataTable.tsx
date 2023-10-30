@@ -1,5 +1,5 @@
 "use client";
-import { fetchData } from "../api/getData";
+import { tableData } from "../api/getData";
 import { useState, useEffect } from "react";
 
 import { CandleData } from "@/types";
@@ -12,7 +12,7 @@ function DataTable() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const result = await fetchData();
+        const result = await tableData();
         const reversedData = result.candles.reverse(); // Reverse the order of the candles array
         setData(reversedData);
         setLoading(false);

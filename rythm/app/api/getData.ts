@@ -62,8 +62,48 @@ export const startStreaming = async (ACCOUNT_ID: string, INSTRUMENT: string, OAN
   }
 };
 
-
 export const fetchData = async () => {
+  if (!OANDA_TOKEN || !ACCOUNT_ID) {
+    console.error("Missing necessary environment variables (OANDA_TOKEN or ACCOUNT_ID).");
+    return null;
+  }
+
+  try {
+    const response = await axios.get(
+      `${OANDA_BASE_URL}/accounts/${ACCOUNT_ID}/instruments/${INSTRUMENT}/candles?granularity=M1&count=100`,
+      {
+        headers: {
+          Authorization: `Bearer ${OANDA_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.status !== 200) {
+      throw new Error(`Failed to fetch data from Oanda. Status Code: ${response.status}`);
+    }
+
+    const candleData = response.data.candles.map((candle: any) => ({
+      time: candle.time,
+      mid: {
+        o: candle.mid.o,
+        c: candle.mid.c,
+        h: candle.mid.h,
+        l: candle.mid.l,
+      },
+    }));
+
+    return candleData;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return null;
+  }
+};
+
+
+
+
+export const tableData = async () => {
   // Check for the presence of required environment variables
   if (!OANDA_TOKEN || !ACCOUNT_ID) {
     console.error(
@@ -74,7 +114,7 @@ export const fetchData = async () => {
 
   try {
     const response = await axios.get(
-      `${OANDA_BASE_URL}/accounts/${ACCOUNT_ID}/instruments/GBP_USD/candles?granularity=M1&count=400`,
+      `${OANDA_BASE_URL}/accounts/${ACCOUNT_ID}/instruments/GBP_USD/candles?granularity=M1&count=100`,
       {
         headers: {
           Authorization: `Bearer ${OANDA_TOKEN}`,
