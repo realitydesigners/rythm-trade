@@ -1,23 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { OandaApi } from '../api/masterPi';
+import React, { useEffect, useState, useContext } from 'react';
+import { OandaApiContext } from '../page'; 
 
 const MasterProfile: React.FC = () => {
   const [accountSummary, setAccountSummary] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const api = useContext(OandaApiContext);
 
   useEffect(() => {
     const fetchAccount = async () => {
-      const api = new OandaApi();
-      const summary = await api.getAccountSummary();
-      setAccountSummary(summary);
+      if (api) {
+        const summary = await api.getAccountSummary();
+        setAccountSummary(summary);
+      }
       setLoading(false);
     };
     fetchAccount();
-  }, []);
+  }, [api]);
 
   return (
     <div>
-      {loading ? (
+      { !accountSummary ? (
         <p>Loading...</p>
       ) : (
         <div className='w-full pl-10 pr-10 pt-2 pb-2 bg-black text-sm space-y-1 font-mono text-gray-200'>

@@ -1,17 +1,22 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createContext, useContext } from 'react';
 import DataTable from "./components/DataTable";
 import Stream from "./components/Stream";
 import LineChart from "./components/LineChart";
 import { chartData } from './api/getData'; 
 import BoxChart from './components/BoxChart';
 import MasterProfile from './components/MasterProfile';
+import { OandaApi } from './api/OandaAPI';
 
 const API_INTERVAL = 5000;  // 5 seconds
 const BOX_SIZE = 1;  // Define your box size here, assuming 10 for this example
 
+export const OandaApiContext = createContext<OandaApi | null>(null);
+const api = new OandaApi();
+console.log(api)
+
 function App() {
-  const [candleData, setCandleData] = useState([]);
+  const [candleData, setCandleData] = useState([]); 
   const [currentPrice, setCurrentPrice] = useState(0);  // New state for current price
 
   useEffect(() => {
@@ -33,19 +38,21 @@ function App() {
     };
 
     fetchCandleData();
-
     const interval = setInterval(fetchCandleData, API_INTERVAL);
 
     return () => clearInterval(interval);
   }, []);
-
+  
   return (
     <div>
-      <Stream />
-      <MasterProfile />
-      <BoxChart/>
-      <LineChart data={candleData} />
-      <DataTable />
+      <OandaApiContext.Provider value={api}> 
+        <Stream />
+        <MasterProfile />
+        <BoxChart/>
+        <LineChart data={candleData} />
+        <DataTable />
+      </OandaApiContext.Provider>
+
     </div>
   );
 }

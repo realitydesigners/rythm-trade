@@ -1,32 +1,28 @@
 "use client";
-import { useEffect, useState } from "react";
-import { startStreaming } from "../api/getData";
-import { ForexData } from  "@/types";
 
-import {
-  OANDA_BASE_URL,
-  OANDA_STREAM_URL,
-  OANDA_TOKEN,
-  ACCOUNT_ID,
-  INSTRUMENT,
-} from "../../index";
+import { useEffect, useState, useContext } from "react";
+import { ForexData } from  "@/types";
+import { OandaApiContext } from '../page';  // Import the OandaApiContext
 
 function Stream() {
   const [prices, setPrices] = useState<ForexData | null>(null);
+  const api = useContext(OandaApiContext);  // Access the OandaApi instance from the context
 
   useEffect(() => {
-    startStreaming(ACCOUNT_ID, INSTRUMENT, OANDA_TOKEN, (data) => {
-      if (data.type === "PRICE") {
-        setPrices((prevPrices) => ({
-          ...prevPrices,
-          [data.instrument]: {
-            bid: data.bids[0].price,
-            ask: data.asks[0].price,
-          },
-        }));
-      }
-    });
-  }, []);
+    if (api) {
+      api.startStreaming('GBP_USD', (data) => {  // Assuming you have a 'startStreaming' method in your OandaApi class
+        if (data.type === "PRICE") {
+          setPrices((prevPrices) => ({
+            ...prevPrices,
+            [data.instrument]: {
+              bid: data.bids[0].price,
+              ask: data.asks[0].price,
+            },
+          }));
+        }
+      });
+    }
+  }, [api]);  // Add api to the dependency array
 
   return (
     <div className="p-3 sm:p-8 items-center bg-black">

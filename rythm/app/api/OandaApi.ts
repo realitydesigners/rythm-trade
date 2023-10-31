@@ -291,5 +291,84 @@ export class OandaApi {
     }
     return null;
   }
+  
+  public async startStreaming(instrument: string, onData: (data: any) => void) { 
+    // Start streaming price data for a given instrument. Calls onData with each new data point.
 
+    try {
+      const response = await fetch(
+        `${OANDA_STREAM_URL}/accounts/${this.account_id}/pricing/stream?instruments=${instrument}`,
+        {
+          headers: {
+            Authorization: `Bearer ${this.api_key}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const reader = response?.body?.getReader();
+      let buffer = "";
+
+      while (true) {
+        const result = await (reader?.read() as Promise<ReadableStreamReadResult<Uint8Array>>);
+        if (result?.done) {
+          console.log("WebSocket connection closed.");
+          break;
+        }
+        buffer += new TextDecoder().decode(result?.value);
+
+        let newlineIndex = buffer.indexOf("\n");
+        while (newlineIndex !== -1) {
+          const singleJSON = buffer.slice(0, newlineIndex);
+          try {
+            const data = JSON.parse(singleJSON);
+            onData(data);
+          } catch (error) {
+            console.error("Error parsing JSON:", error);
+          }
+
+          buffer = buffer.slice(newlineIndex + 1);
+          newlineIndex = buffer.indexOf("\n");
+        }
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+  
+  public async fetchData() { 
+    // Fetch candle data with granularity M1 and count 300. Returns an array of candle data.
+
+    const url = `accounts/${this.account_id}/instruments/${INSTRUMENT}/candles?granularity=M1&count=300`;
+    const [ok, data] = await this.makeRequest(url);
+    if (ok && data['candles']) {
+      return data['candles'].map((candle: any) => ({
+        time: candle.time,
+        mid: {
+          o: candle.mid.o,
+          c: candle.mid.c,
+          h: candle.mid.h,
+          l: candle.mid.l,
+        },
+      }));
+    } else {
+      console.error("Error fetching data:", data);
+      return null;
+    }
+  }
+
+  
+  public async chartData() {
+    // Fetch GBP_USD candle data with granularity M1 and count 300. Returns raw data.
+
+    const url = `accounts/${this.account_id}/instruments/GBP_USD/candles?granularity=M1&count=300`;
+    const [ok, data] = await this.makeRequest(url);
+    if (ok && data) {
+      return data;
+    } else {
+      console.error("Error fetching data:", data);
+      return null;
+    }
+  }
+  
 }
