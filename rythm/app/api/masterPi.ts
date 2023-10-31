@@ -1,9 +1,14 @@
 import axios, { AxiosResponse } from 'axios';
 import { parseISO } from 'date-fns';
 
-const OANDA_BASE_URL = 'https://api-fxtrade.oanda.com/v3'; // Replace with your OANDA URL
-const OANDA_TOKEN = ''; // Replace with your OANDA Token
-const ACCOUNT_ID = ''; // Replace with your Account ID
+
+import {
+  OANDA_BASE_URL,
+  OANDA_STREAM_URL,
+  OANDA_TOKEN,
+  ACCOUNT_ID,
+  INSTRUMENT,
+} from "../../index";
 
 export class OandaApi {
   private api_key: string;
@@ -11,12 +16,16 @@ export class OandaApi {
   private account_id: string;
 
   constructor(api_key: string = OANDA_TOKEN, oanda_url: string = OANDA_BASE_URL, account_id: string = ACCOUNT_ID) {
+    // Initialize Oanda API with optional API key, base URL, and account ID. 
+
     this.api_key = api_key;
     this.oanda_url = oanda_url;
     this.account_id = account_id;
   }
 
   private async makeRequest(url: string, method: 'get' | 'post' | 'put' = 'get', expectedStatusCode: number = 200, params: any = {}, data: any = {}): Promise<[boolean, any]> {
+    // Perform an HTTP request. Returns a tuple [success: boolean, data: any].
+
     const full_url = `${this.oanda_url}/${url}`;
 
     const headers = {
@@ -49,6 +58,8 @@ export class OandaApi {
   }
 
   private async getAccountEP(endpoint: string, dataKey: string, accId: string) {
+    // Fetch specific endpoint data for a given account ID. Returns the specified data key.
+
     const url = `accounts/${accId}/${endpoint}`;
     const [ok, data] = await this.makeRequest(url);
     if (ok && data[dataKey]) {
@@ -60,6 +71,8 @@ export class OandaApi {
   }
 
   public async getAccounts(dataKey: string) {
+    // Fetch all accounts. Returns data specified by dataKey.
+
     const url = 'accounts';
     const [ok, data] = await this.makeRequest(url);
     if (ok && data[dataKey]) {
@@ -69,11 +82,48 @@ export class OandaApi {
       return null;
     }
   }
+  
+  public async fetchLargeCandles(pairName: string, total_count: number = 1000, granularity: string = 'H1', price: string = 'MBA', dateFrom: Date | null = null, dateTo: Date | null = null) {
+    // Fetch large chunks of candle data. Returns an array of candle data.
 
-
-
+    const maxChunkSize = 500;
+    let remaining_count = total_count;
+    let lastFetchedTime: string | null = null;
+    const allCandles: any[] = [];
+  
+    while (remaining_count > 0) {
+      const currentChunkSize = Math.min(maxChunkSize, remaining_count);
+      const params: any = {
+        granularity,
+        price,
+        count: currentChunkSize,
+      };
+  
+      if (dateFrom && dateTo) {
+        params.from = dateFrom.toISOString();
+        params.to = dateTo.toISOString();
+      } else if (lastFetchedTime) {
+        params.to = lastFetchedTime;
+      }
+  
+      const [ok, data] = await this.makeRequest(`instruments/${pairName}/candles`, 'get', 200, params);
+      if (ok && data['candles']) {
+        allCandles.unshift(...data['candles']);
+        lastFetchedTime = data['candles'][0]?.time || null;
+        remaining_count -= currentChunkSize;
+      } else {
+        console.error('ERROR fetchCandles()', params, data);
+        break;
+      }
+    }
+    
+    return allCandles;
+  }
+  
 
   public async fetchCandles(pairName: string, count: number = 10, granularity: string = 'H1', price: string = 'MBA', dateFrom: Date | null = null, dateTo: Date | null = null) {
+    // Fetch candle data. Returns an array of candle data.
+
     const url = `instruments/${pairName}/candles`;
     const params: any = {
       granularity,
@@ -97,6 +147,8 @@ export class OandaApi {
   }
 
   public async getCandlesDF(pairName: string, count: number = 10, granularity: string = 'H1', price: string = 'MBA', dateFrom: Date | null = null, dateTo: Date | null = null) {
+    // Transform candle data into a more structured format. Returns an array of transformed data.
+
     const candles = await this.fetchCandles(pairName, count, granularity, price, dateFrom, dateTo);
     if (!candles) return null;
 
@@ -126,11 +178,15 @@ export class OandaApi {
     return finalData;
   }
 
-  public async getAccountSummary(account_id: string) {
+  public async getAccountSummary(account_id: string = this.account_id) {
+    // Fetch account summary. Returns account summary data.
+
     return this.getAccountEP("summary", "account", account_id);
   }
+  
+  public async getPositionSummary(account_id: string = this.account_id) {
+    // Fetch position summary. Returns the first position if available.
 
-  public async getPositionSummary(account_id: string) {
     const data = await this.getAccountEP("openPositions", "positions", account_id);
     if (Array.isArray(data) && data.length > 0) {
       return data[0];
@@ -138,11 +194,15 @@ export class OandaApi {
     return null;
   }
 
-  public async getAccountInstruments(account_id: string) {
+  public async getAccountInstruments(account_id: string = this.account_id) {
+    // Fetch account instruments. Returns an array of available instruments.
+
     return this.getAccountEP("instruments", "instruments", account_id);
   }
 
   public async getAskBid(instrumentsList: string[]) {
+    // Fetch ask and bid prices for given instruments. Returns ask and bid prices.
+
     const url = `accounts/${this.account_id}/pricing`;
     const params = {
       instruments: instrumentsList.join(","),
@@ -158,6 +218,8 @@ export class OandaApi {
   }
 
   public async getClose() {
+    // Fetch latest close price. Returns bid price of the latest close candle.
+
     const url = `accounts/${this.account_id}/candles/latest`;
     const params = {
       candleSpecifications: 'EUR_USD:S5:BM',
@@ -170,7 +232,9 @@ export class OandaApi {
     return null;
   }
 
-  public async getFilledOrders(account_id: string) {
+  public async getFilledOrders(account_id: string = this.account_id) {
+    // Fetch filled orders for the account. Returns the latest filled order if available.
+
     const url = `accounts/${account_id}/orders`;
     const params = {
       state: 'ALL',
@@ -192,6 +256,8 @@ export class OandaApi {
   }
 
   public async placeTrade(pairName: string, units: number, direction: number) {
+    // Place a trade order. Returns the ID of the filled order.
+
     const url = `accounts/${this.account_id}/orders`;
     units = Math.round(units);
     if (direction === -1) {
@@ -214,6 +280,8 @@ export class OandaApi {
   }
 
   public async closePosition(pairName: string, longUnits: number) {
+    // Close a position. Returns related transaction IDs.
+
     const url = `accounts/${this.account_id}/positions/${pairName}/close`;
     const data = longUnits > 0 ? { longUnits: 'ALL' } : { shortUnits: 'ALL' };
 
