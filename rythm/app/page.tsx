@@ -5,6 +5,7 @@ import Stream from "./components/Stream";
 import LineChart from "./components/LineChart";
 import { chartData } from './api/getData'; 
 import BoxChart from './components/BoxChart';
+import MasterProfile from './components/MasterProfile';
 
 const API_INTERVAL = 5000;  // 5 seconds
 const BOX_SIZE = 1;  // Define your box size here, assuming 10 for this example
@@ -41,8 +42,8 @@ function App() {
   return (
     <div>
       <Stream />
-     <BoxChart/>
-
+      <MasterProfile />
+      <BoxChart/>
       <LineChart data={candleData} />
       <DataTable />
     </div>
