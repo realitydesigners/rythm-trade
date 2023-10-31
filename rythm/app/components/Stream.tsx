@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useContext } from "react";
 import { ForexData } from  "@/types";
-import { OandaApiContext } from '../page';
+import { OandaApiContext } from '../api/OandaApi'; 
 
 function Stream() {
   const [prices, setPrices] = useState<ForexData | null>(null);

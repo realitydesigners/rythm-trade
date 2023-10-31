@@ -5,14 +5,10 @@ import Stream from "./components/Stream";
 import LineChart from "./components/LineChart";
 import BoxChart from './components/BoxChart';
 import MasterProfile from './components/MasterProfile';
-import { OandaApi } from './api/OandaApi';
+import { api, OandaApiContext } from './api/OandaApi';
 
 const API_INTERVAL = 5000;  // 5 seconds
 const BOX_SIZE = 1;  // Define your box size here, assuming 10 for this example
-
-export const OandaApiContext = createContext<OandaApi | null>(null);
-const api = new OandaApi();
-console.log("api", api)
 
 function App() {
   
@@ -45,7 +41,7 @@ function App() {
 
   return (
     <div>
-      <OandaApiContext.Provider value={api}> 
+      <OandaApiContext.Provider value={api}>
         <Stream />
         <MasterProfile />
         <BoxChart/>

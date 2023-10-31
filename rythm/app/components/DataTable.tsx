@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useContext } from "react";
-import { OandaApiContext } from '../page';
+import { OandaApiContext } from '../api/OandaApi'; 
 
 import { CandleData } from "@/types";
 

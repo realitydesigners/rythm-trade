@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { CandleData } from '../../types';
 import { findCurrentPrice, findHighest, findLowest } from '../api/priceAnalysis';
-import { OandaApiContext } from '../page';
+import { OandaApiContext } from '../api/OandaApi'; 
 
 interface Box {
     high: number;

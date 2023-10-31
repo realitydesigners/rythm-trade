@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { parseISO } from 'date-fns';
+import { createContext } from 'react';
 
 
 import {
@@ -372,3 +373,6 @@ export class OandaApi {
   }
   
 }
+
+export const OandaApiContext = createContext<OandaApi | null>(null);
+export const api = new OandaApi();

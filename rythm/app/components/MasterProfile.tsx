@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { OandaApiContext } from '../page'; 
+import { OandaApiContext } from '../api/OandaApi'; 
 
 const MasterProfile: React.FC = () => {
   const [accountSummary, setAccountSummary] = useState<any>(null);
