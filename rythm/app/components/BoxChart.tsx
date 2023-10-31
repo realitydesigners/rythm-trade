@@ -1,8 +1,8 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { CandleData } from '../../types';
-import { fetchData } from '../api/getData';
 import { findCurrentPrice, findHighest, findLowest } from '../api/priceAnalysis';
+import { OandaApiContext } from '../page';
 
 interface Box {
     high: number;
@@ -23,6 +23,8 @@ const symbolsToDigits = {
 };
 
 const BoxChart: React.FC = () => {
+    const api = useContext(OandaApiContext);  // Use the API context
+    
     const [currentClosePrice, setCurrentClosePrice] = useState<number | null>(null);
     const [currentDirection, setCurrentDirection] = useState<string | null>(null);
     const [boxArray, setBoxArray] = useState<Box[]>([]);
@@ -45,7 +47,7 @@ const BoxChart: React.FC = () => {
     useEffect(() => {
         const initializeData = async () => {
             try {
-                oandaData = await fetchData();
+                oandaData = await api?.fetchData()
 
                 if (oandaData && oandaData.length > 0) {
                     const currentPrice = findCurrentPrice(oandaData);

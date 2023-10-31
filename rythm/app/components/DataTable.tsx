@@ -1,6 +1,6 @@
 "use client";
-import { chartData } from "../api/getData";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { OandaApiContext } from '../page';
 
 import { CandleData } from "@/types";
 
@@ -8,13 +8,14 @@ import { CandleData } from "@/types";
 function DataTable() {
   const [data, setData] = useState<CandleData[]>([]);
   const [loading, setLoading] = useState(true);
-
+  const api = useContext(OandaApiContext);
+  
   useEffect(() => {
     const getData = async () => {
       try {
-        const result = await chartData();
-        const reversedData = result.candles.reverse(); // Reverse the order of the candles array
-        setData(reversedData);
+        const result = await api?.chartData();
+        const reversedData = result?.candles.reverse();
+        setData(reversedData || []);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -23,7 +24,7 @@ function DataTable() {
     };
 
     getData();
-  }, []);
+  }, [api]);
 
   return (
     <div className=" bg-black p-4 lg:p-8 shadow-lg">

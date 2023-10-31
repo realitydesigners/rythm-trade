@@ -22,12 +22,12 @@ function App() {
   useEffect(() => {
     const fetchCandleData = async () => {
       try {
-        const data = await chartData();
+
+        const data = await api.chartData();
         const candles = data?.candles;
 
         setCandleData(candles || []);
-
-        // Update the current price based on the last available candle's close price
+        
         const latestPrice = candles?.[candles.length - 1]?.close?.out; 
         if (latestPrice) {
           setCurrentPrice(latestPrice);
@@ -42,7 +42,7 @@ function App() {
 
     return () => clearInterval(interval);
   }, []);
-  
+
   return (
     <div>
       <OandaApiContext.Provider value={api}> 
