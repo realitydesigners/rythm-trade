@@ -3,7 +3,6 @@ import React, { useState, useEffect, createContext, useContext } from 'react';
 import DataTable from "./components/DataTable";
 import Stream from "./components/Stream";
 import LineChart from "./components/LineChart";
-import { chartData } from './api/getData'; 
 import BoxChart from './components/BoxChart';
 import MasterProfile from './components/MasterProfile';
 import { OandaApi } from './api/OandaAPI';

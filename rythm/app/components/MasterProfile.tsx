@@ -27,7 +27,6 @@ const MasterProfile: React.FC = () => {
           <div><span className='text-gray-400 font-bold'>ID:</span> {accountSummary.id}</div>
           <div><span className='text-gray-400 font-bold'>Balance:</span> {accountSummary.balance}</div>
           <div><span className='text-gray-400 font-bold'>Currency:</span> {accountSummary.currency}</div>
-          <div><span className='text-gray-400 font-bold'>Margin Rate:</span> {accountSummary.marginRate}</div>
           <div><span className='text-gray-400 font-bold'>Unrealized Profit:</span> {accountSummary.unrealizedPL}</div>
           <div><span className='text-gray-400 font-bold'>NAV:</span> {accountSummary.NAV}</div>
           <div><span className='text-gray-400 font-bold'>Financing:</span> {accountSummary.financing}</div>

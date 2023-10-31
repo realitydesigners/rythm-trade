@@ -2,15 +2,15 @@
 
 import { useEffect, useState, useContext } from "react";
 import { ForexData } from  "@/types";
-import { OandaApiContext } from '../page';  // Import the OandaApiContext
+import { OandaApiContext } from '../page';
 
 function Stream() {
   const [prices, setPrices] = useState<ForexData | null>(null);
-  const api = useContext(OandaApiContext);  // Access the OandaApi instance from the context
+  const api = useContext(OandaApiContext);
 
   useEffect(() => {
     if (api) {
-      api.startStreaming('GBP_USD', (data) => {  // Assuming you have a 'startStreaming' method in your OandaApi class
+      api.startStreaming('GBP_USD', (data) => {
         if (data.type === "PRICE") {
           setPrices((prevPrices) => ({
             ...prevPrices,
@@ -22,7 +22,7 @@ function Stream() {
         }
       });
     }
-  }, [api]);  // Add api to the dependency array
+  }, [api]);
 
   return (
     <div className="p-3 sm:p-8 items-center bg-black">
