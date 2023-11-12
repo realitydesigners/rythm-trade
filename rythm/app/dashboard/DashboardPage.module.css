@@ -1,0 +1,42 @@
+.dashboardContainer {
+    width: 100%;
+    padding: 20px;
+    background-color: #1c1c2d;
+  }
+  
+  .favoritePairs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  
+  .favoritePair {
+    display: block;
+    padding: 20px;
+    border: 1px solid #29d9b9;
+    border-radius: 10px;
+    background-color: #252540;
+    color: #a9feff;
+    font-size: 1.2rem;
+    text-decoration: none;
+  }
+  
+  .allPairs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  
+  .pairContainer {
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #2e2e3e;
+  }
+  
+  .pairLink {
+    color: #a9feff;
+    font-size: 0.8rem;
+    text-decoration: none;
+  }
+  

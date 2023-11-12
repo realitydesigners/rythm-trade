@@ -1,0 +1,28 @@
+.masterProfileContainer {
+  width: 100%;
+  padding: 10px 20px;
+  background-color: #1c1c2d;
+  color: #29d9b9;
+  font-family: 'Orbitron', sans-serif;
+  border: 1px solid #2e2e3e;
+  margin-bottom: 20px;
+}
+
+.accountSummary {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #29d9b9;
+  text-shadow: 0 0 5px #0d7377;
+}
+
+.label {
+  font-weight: bold;
+  color: #a9feff;
+  font-size: 1rem;
+}
