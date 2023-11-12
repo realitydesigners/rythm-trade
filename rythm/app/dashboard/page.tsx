@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from 'react';
 import Stream from '../components/Stream';
 import MasterProfile from '../components/MasterProfile';
