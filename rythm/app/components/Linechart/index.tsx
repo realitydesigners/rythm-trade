@@ -60,10 +60,16 @@ const LineChart: React.FC<{ data: CandleData[] }> = ({ data }) => {
     container.selectAll('*').remove();
 
     container.append("g")
-        .attr("transform", `translate(${margin.left},0)`)
-        .call(d3.axisLeft(y).tickFormat(d => (d as number).toFixed(5)))
-        .selectAll("text")
-        .attr("fill", LIGHT_THEME.textColor);
+      .attr("transform", `translate(${margin.left},0)`)
+      .call(d3.axisLeft(y).tickFormat((d) => {
+        const value = d as number;
+        if (Math.abs(value) >= 100) {
+          return d3.format(".4s")(value);
+        }
+        return d3.format(".5f")(value);
+      }))
+      .selectAll("text")
+      .attr("fill", LIGHT_THEME.textColor);
 
     container.append("g")
         .attr("class", "grid")

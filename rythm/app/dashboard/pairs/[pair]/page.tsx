@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import DataTable from "../../../components/DataTable";
 import Stream from "../../../components/Stream";
-import LineChart from "../../../components/LineChart";
+import LineChart from "../../../components/Linechart";
 import BoxChart from '../../../components/BoxChart';
 import { OandaApiContext, api } from '../../../api/OandaApi';
 import styles from './PairPage.module.css';
@@ -48,6 +48,7 @@ const PairPage = () => {
         <Stream pair={pair} />
         <BoxChart />
         <LineChart data={candleData} />
+        
         <DataTable pair={pair} />
       </div>
     </OandaApiContext.Provider>
