@@ -22,6 +22,8 @@ export interface Price {
 }
 
 export interface ForexData {
+  [key: string]: Price | undefined;
+
   GBP_USD?: Price;
   USD_JPY?: Price;
   // Add more properties for other currency pairs if needed

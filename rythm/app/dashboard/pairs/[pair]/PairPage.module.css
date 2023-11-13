@@ -1,0 +1,25 @@
+.container {
+    width: 100%;
+    padding: 20px;
+    background-color: #000;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    font-family: 'Mono', sans-serif;
+  }
+  
+  .title {
+    color: #ccc;
+    font-weight: bold;
+    border-bottom: 1px solid #666;
+    margin-bottom: 20px;
+  }
+  
+  .backLink {
+    color: #0c9f89;
+    font-weight: bold;
+    text-decoration: none;
+    margin-bottom: 10px;
+    display: inline-block;
+  }
+  
