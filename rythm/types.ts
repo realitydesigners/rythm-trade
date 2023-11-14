@@ -28,3 +28,11 @@ export interface ForexData {
   USD_JPY?: Price;
   // Add more properties for other currency pairs if needed
 }
+
+export interface Box {
+  high: number;
+  low: number;
+  boxMovedUp: boolean;
+  boxMovedDn: boolean;
+  rngSize: number;
+}
