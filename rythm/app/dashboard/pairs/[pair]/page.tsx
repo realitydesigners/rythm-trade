@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation';
 import DataTable from "../../../components/DataTable";
 import Stream from "../../../components/Stream";
 import LineChart from "../../../components/Linechart";
-import BoxChart from '../../../components/BoxChart';
+import BoxModel from '../../../components/BoxModel';
 import { OandaApiContext, api } from '../../../api/OandaApi';
 import styles from './PairPage.module.css';
 
@@ -46,7 +46,7 @@ const PairPage = () => {
       <div className={styles.container}>
         <h1 className={styles.title}>{pair}</h1>
         <Stream pair={pair} />
-        <BoxChart />
+        <BoxModel pair={pair} />
         <LineChart data={candleData} />
         
         <DataTable pair={pair} />
