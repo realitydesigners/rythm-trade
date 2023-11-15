@@ -36,3 +36,8 @@ export interface Box {
   boxMovedDn: boolean;
   rngSize: number;
 }
+
+// Updated BoxArrays interface to hold a single Box per key
+export interface BoxArrays {
+  [key: number]: Box;
+}
