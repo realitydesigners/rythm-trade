@@ -83,44 +83,52 @@ export class OandaApi {
       return null;
     }
   }
-  
-  public async fetchLargeCandles(pairName: string, total_count: number = 1000, granularity: string = 'H1', price: string = 'MBA', dateFrom: Date | null = null, dateTo: Date | null = null) {
-    // Fetch large chunks of candle data. Returns an array of candle data.
-
+  public async fetchLargeCandles(pairName: string, total_count: number = 6000, granularity: string = 'M1', price: string = 'MBA') {
     const maxChunkSize = 500;
-    let remaining_count = total_count;
-    let lastFetchedTime: string | null = null;
+    const minutesPerCandle = 1;
+
+    const toDate = new Date(); 
+    const fromDate = new Date(toDate.getTime() - total_count * minutesPerCandle * 60000);
+
     const allCandles: any[] = [];
-  
-    while (remaining_count > 0) {
-      const currentChunkSize = Math.min(maxChunkSize, remaining_count);
-      const params: any = {
-        granularity,
-        price,
-        count: currentChunkSize,
-      };
-  
-      if (dateFrom && dateTo) {
-        params.from = dateFrom.toISOString();
-        params.to = dateTo.toISOString();
-      } else if (lastFetchedTime) {
-        params.to = lastFetchedTime;
-      }
-  
-      const [ok, data] = await this.makeRequest(`instruments/${pairName}/candles`, 'get', 200, params);
-      if (ok && data['candles']) {
-        allCandles.unshift(...data['candles']);
-        lastFetchedTime = data['candles'][0]?.time || null;
-        remaining_count -= currentChunkSize;
-      } else {
-        console.error('ERROR fetchCandles()', params, data);
-        break;
-      }
+    let remaining_count = total_count;
+    let currentToDate = new Date(toDate);
+
+    while (remaining_count > 0 && fromDate < currentToDate) { 
+        const chunkSize = Math.min(remaining_count, maxChunkSize);
+        let chunkFromDate = new Date(currentToDate.getTime() - chunkSize * minutesPerCandle * 60000);
+
+        if (chunkFromDate < fromDate) {
+            chunkFromDate = new Date(fromDate);
+        } 
+        const params: any = {
+            granularity,
+            price,
+            from: chunkFromDate.toISOString(),
+            to: currentToDate.toISOString()
+        };
+
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        const [ok, data] = await this.makeRequest(`instruments/${pairName}/candles`, 'get', 200, params);
+        if (ok && data['candles']) {
+            const fetchedCandles = data['candles']; 
+            allCandles.unshift(...fetchedCandles);
+
+            remaining_count -= fetchedCandles.length;
+        } else {
+            console.error('ERROR fetchLargeCandles()', params, data);
+            remaining_count -= chunkSize;
+        }
+
+        currentToDate = new Date(chunkFromDate.getTime());
+
     }
-    
+
+    console.log('Total fetched candles:', allCandles.length);
     return allCandles;
-  }
-  
+}
+
 
   public async fetchCandles(pairName: string, count: number = 10, granularity: string = 'H1', price: string = 'MBA', dateFrom: Date | null = null, dateTo: Date | null = null) {
     // Fetch candle data. Returns an array of candle data.

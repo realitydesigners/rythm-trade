@@ -1,3 +1,6 @@
+// BoxesModel Component: Displays boxes representing price ranges for a given currency pair.
+// The boxes are calculated based on historical candle data fetched from Oanda API.
+// Each box represents a specific range of prices and is updated based on new candle data.
 
 "use client";
 
@@ -12,6 +15,7 @@ interface BoxModelProps {
     pair: string;
 }
 
+// generateBoxSizes: Generates a map of box sizes based on the provided point sizes and currency pair. 
 const generateBoxSizes = (pair: string, pointSizes: number[], symbolsToDigits: SymbolsToDigits): Map<number, number> => {
     const { point: pointValue } = symbolsToDigits[pair] || { point: 0.00001 };
     let boxSizeMap = new Map<number, number>();
@@ -26,72 +30,67 @@ const BoxesModel: React.FC<BoxModelProps> = ({ pair }) => {
     const [currentClosePrice, setCurrentClosePrice] = useState<number | null>(null);
     const [boxArrays, setBoxArrays] = useState<BoxArrays>({});
     const [initializationComplete, setInitializationComplete] = useState<boolean>(false);
-
+    
+    // calculateAllBoxes: Calculates the high and low values for each box size based on the candle data. 
     const calculateAllBoxes = useCallback((C: number, oandaData: CandleData[], boxSizeMap: Map<number, number>) => {
         const newBoxArrays: BoxArrays = {};
-
+    
+        // Initialize boxes with the last candle's data
+        const latestCandle = oandaData[oandaData.length - 1];
         boxSizeMap.forEach((decimalSize, wholeNumberSize) => {
-            let box: Box = boxArrays[wholeNumberSize] || {
-                high: C,
-                low: C - decimalSize,
+            const latestPrice = parseFloat(latestCandle.mid.c);
+            newBoxArrays[wholeNumberSize] = {
+                high: latestPrice,
+                low: latestPrice - decimalSize,
                 boxMovedUp: false,
                 boxMovedDn: false,
                 rngSize: decimalSize
             };
-
-            if (!initializationComplete) {
-                // Initialization logic
-                const highestHigh = findHighest(oandaData, 0, oandaData.length - 1) || C;
-                const lowestLow = findLowest(oandaData, 0, oandaData.length - 1) || C;
-                const RNG = highestHigh - lowestLow;
-
-                if (RNG >= decimalSize) {
-                    box.high = highestHigh;
-                    box.low = highestHigh - decimalSize;
-                    box.boxMovedUp = true;
-                    box.boxMovedDn = false;
-                } else {
-                    box.low = lowestLow;
-                    box.high = lowestLow + decimalSize;
-                    box.boxMovedUp = false;
-                    box.boxMovedDn = true;
-                }
-            } else {
-                // Update the existing box based on current price
-                if (C > box.high) {
-                    box.high = C;
-                    box.low = C - decimalSize;
-                    box.boxMovedUp = true;
-                    box.boxMovedDn = false;
-                } else if (C < box.low) {
-                    box.low = C;
-                    box.high = C + decimalSize;
-                    box.boxMovedUp = false;
-                    box.boxMovedDn = true;
-                }
-            }
-
-            box.rngSize = box.high - box.low;
-            newBoxArrays[wholeNumberSize] = box;
         });
-
+    
+        // Iterate over each candle in reverse to update boxes
+        for (let i = oandaData.length - 1; i >= 0; i--) {
+            const currentPrice = parseFloat(oandaData[i].mid.c);
+    
+            boxSizeMap.forEach((decimalSize, wholeNumberSize) => {
+                let box = newBoxArrays[wholeNumberSize];
+    
+                if (currentPrice > box.high) {
+                    box.high = currentPrice;
+                    box.low = currentPrice - decimalSize;
+                    box.boxMovedUp = true;
+                    box.boxMovedDn = false;
+                } else if (currentPrice < box.low) {
+                    box.low = currentPrice;
+                    box.high = currentPrice + decimalSize;
+                    box.boxMovedUp = false;
+                    box.boxMovedDn = true;
+                }
+    
+                newBoxArrays[wholeNumberSize] = box;
+            });
+        }
+    
         setBoxArrays(newBoxArrays);
         if (!initializationComplete) {
             setInitializationComplete(true);
         }
-    }, [initializationComplete, boxArrays]);
-
+    }, [initializationComplete]);
+    
+    
+    
+    // useEffect: Fetches candle data at regular intervals and calculates boxes based on this data. 
     useEffect(() => {
         let intervalId: string | number | NodeJS.Timeout | undefined;
 
         const fetchAndCalculateBoxes = async () => {
             try {
-                const oandaData = await api?.fetchCandles(pair, 300, 'M1');
+                const oandaData = await api?.fetchLargeCandles(pair, 6000, 'M1');
+                console.log(oandaData)
                 if (oandaData && oandaData.length > 0) {
                     const currentPrice = findCurrentPrice(oandaData);
                     if (currentPrice !== undefined) {
                         setCurrentClosePrice(currentPrice);
-
                         const boxSizes = generateBoxSizes(pair, [
                             1000, 900, 810, 730, 656, 590, 
                             531, 478, 430, 387, 348, 313, 
@@ -120,8 +119,9 @@ const BoxesModel: React.FC<BoxModelProps> = ({ pair }) => {
         return () => {
             clearInterval(intervalId);
         };
-    }, [api, pair, calculateAllBoxes]);
-
+    }, [pair]);
+    
+    // Render: Displays the current close price and a list of boxes with their respective sizes and states. 
     return (
         <div className={styles.container}>
             <div><span className={styles.title}>Current Close Price:</span> {currentClosePrice}</div>

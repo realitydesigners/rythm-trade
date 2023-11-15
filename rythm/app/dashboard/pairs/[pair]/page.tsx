@@ -8,7 +8,7 @@ import BoxesModel from '@/app/components/BoxesModel';
 import { OandaApiContext, api } from '@/app/api/OandaApi';
 import styles from './PairPage.module.css';
 
-const API_INTERVAL = 5000;
+const API_INTERVAL = 60000;
 
 const PairPage = () => {
   const params = useParams();
