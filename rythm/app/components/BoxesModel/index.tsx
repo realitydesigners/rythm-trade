@@ -10,6 +10,7 @@ import { CandleData, Box, BoxArrays } from '../../../types';
 import { findCurrentPrice, findHighest, findLowest } from '../../api/priceAnalysis';
 import { OandaApiContext } from '../../api/OandaApi';
 import { SymbolsToDigits, symbolsToDigits } from '../../utils/constants';
+import BoxChart from '../BoxChart';
 
 interface BoxModelProps {
     pair: string;
@@ -134,9 +135,10 @@ const BoxesModel: React.FC<BoxModelProps> = ({ pair }) => {
                         </li>
                     </ul>
                 </div>
-            ))} 
+            ))}
+
+            <BoxChart boxArrays={boxArrays} />
         </div>
     );
 };
-
 export default BoxesModel;
