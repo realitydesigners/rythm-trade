@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { BoxArrays } from '../../../types';
 import styles from './styles.module.css';
@@ -7,12 +7,20 @@ interface BoxChartProps {
     boxArrays: BoxArrays;
 }
 
+
 const BoxChart: React.FC<BoxChartProps> = ({ boxArrays }) => {
     const svgRef = useRef<SVGSVGElement | null>(null);
-    
-    useEffect(() => {
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const [containerWidth, setContainerWidth] = useState<number>(800);
+
+    const drawChart = (width: number) => {
         if (!svgRef.current) return;
-        d3.select(svgRef.current).selectAll("*").remove();
+        d3.select(svgRef.current).selectAll("*").remove(); 
+        const chartWidth = Math.min(width, 800);
+        const margin = { top: 20, right: 10, bottom: 40, left: 10 };
+        const adjustedWidth = chartWidth - margin.left - margin.right -100;
+        const height = 500 - margin.top - margin.bottom;
+
 
         const data = Object.entries(boxArrays).map(([size, box]) => ({
             size: parseInt(size),
@@ -20,19 +28,17 @@ const BoxChart: React.FC<BoxChartProps> = ({ boxArrays }) => {
             low: box.low,
             boxMovedUp: box.boxMovedUp,
             boxMovedDn: box.boxMovedDn
-        })).sort((a, b) => a.size - b.size); 
-        const margin = { top: 20, right: 30, bottom: 40, left: 50 };
-        const width = 800 - margin.left - margin.right;
-        const height = 500 - margin.top - margin.bottom;
+        })).sort((a, b) => a.size - b.size);
 
         const svg = d3.select(svgRef.current)
-            .attr("width", width + margin.left + margin.right)
+            .attr("width", adjustedWidth)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
+
         const x = d3.scaleBand()
-            .range([0, width])
+            .range([0, adjustedWidth])
             .padding(0.1)
             .domain(data.map(d => d.size.toString()));
 
@@ -64,10 +70,28 @@ const BoxChart: React.FC<BoxChartProps> = ({ boxArrays }) => {
             .attr("y", d => y(d.high))
             .attr("height", d => y(d.low) - y(d.high))
             .attr("fill", d => d.boxMovedUp ? "#00FF6E" : d.boxMovedDn ? "pink" : "#6E6E6E");
-    }, [boxArrays]);
+    }
+
+    
+    useEffect(() => {
+        const updateWidth = () => {
+            if (containerRef.current) {
+                setContainerWidth(containerRef.current.offsetWidth);
+            }
+        };
+
+        window.addEventListener('resize', updateWidth);
+        updateWidth();
+
+        return () => window.removeEventListener('resize', updateWidth);
+    }, []);
+
+    useEffect(() => {
+        drawChart(containerWidth);
+    }, [boxArrays, containerWidth]);
 
     return (
-        <div className={styles.chartContainer}>
+        <div ref={containerRef} className={styles.chartContainer}>
             <svg ref={svgRef}></svg>
         </div>
     );
