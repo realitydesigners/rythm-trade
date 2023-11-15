@@ -1,0 +1,77 @@
+.container {
+    max-width: 1200px;
+    margin-top: 20px;
+    margin: auto;
+    display: block;
+    padding: 20px;
+    background-color: #1c1c2d;
+    color: #a9feff;
+    font-size: small;
+    font-family: 'Orbitron', monospace;
+    border: 1px solid #29d9b9;
+    border-radius: 10px;
+    box-shadow: 0px 0px 2px 1px #3a3a3a;
+}
+
+.title {
+    color: #ffc5f7;
+    font-weight: bold;
+    text-shadow: 0px 0px 1px #000000;
+}
+
+.loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #dafff3;
+    font-size: larger;
+    background-color: #252540;
+}
+
+.box {
+    background-color: #2e2e3e;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 3px #32cd32;
+}
+
+.boxTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.9em;
+    min-width: 400px;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.boxTable thead tr {
+    background-color: #9329d9;
+    color: #000000;
+    text-align: left;
+}
+
+.boxTable th,
+.boxTable td {
+    padding: 12px 15px;
+}
+
+.boxTable tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.boxTable tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.boxTable tbody tr:last-of-type {
+    border-bottom: 2px solid #29d9b9;
+}
+
+.boxTable tbody tr.active-row {
+    font-weight: bold;
+    color: #29d9b9;
+}

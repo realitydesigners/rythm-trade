@@ -1,14 +1,14 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import DataTable from "../../../components/DataTable";
-import Stream from "../../../components/Stream";
-import LineChart from "../../../components/Linechart";
-import BoxChart from '../../../components/BoxChart';
-import { OandaApiContext, api } from '../../../api/OandaApi';
+import DataTable from '@/app/components/DataTable';
+import Stream from '@/app/components/Stream';
+import LineChart from '@/app/components/Linechart';
+import BoxesModel from '@/app/components/BoxesModel';
+import { OandaApiContext, api } from '@/app/api/OandaApi';
 import styles from './PairPage.module.css';
 
-const API_INTERVAL = 5000;
+const API_INTERVAL = 60000;
 
 const PairPage = () => {
   const params = useParams();
@@ -46,7 +46,7 @@ const PairPage = () => {
       <div className={styles.container}>
         <h1 className={styles.title}>{pair}</h1>
         <Stream pair={pair} />
-        <BoxChart />
+        <BoxesModel pair={pair} />
         <LineChart data={candleData} />
         
         <DataTable pair={pair} />

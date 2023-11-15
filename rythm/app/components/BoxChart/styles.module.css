@@ -1,0 +1,29 @@
+.chartContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #1c1c2d;
+  padding: 20px;
+  border: 1px solid #29d9b9;
+  border-radius: 10px;
+  box-shadow: 0px 0px 1px 1px #ffffff;
+  margin: auto;
+  max-width: 1200px;
+}
+
+.chartContainer svg {
+  overflow: visible;
+}
+
+.chartContainer .axis path,
+.chartContainer .axis line {
+  fill: none;
+  stroke: #a9feff;
+}
+
+.chartContainer .axis text {
+  fill: #a9feff;
+  font-family: 'Orbitron', monospace;
+}
+
