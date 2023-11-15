@@ -42,14 +42,15 @@ const PairPage = () => {
 
   return (
     <OandaApiContext.Provider value={api}>
-      <a href="/" className={styles.backLink}>BACK</a>
+      
       <div className={styles.container}>
+      <a href="/" className={styles.backLink}> --BACK</a>
         <h1 className={styles.title}>{pair}</h1>
         <Stream pair={pair} />
         <BoxesModel pair={pair} />
-        <LineChart data={candleData} />
+        {/* <LineChart data={candleData} /> */}
         
-        <DataTable pair={pair} />
+        {/* <DataTable pair={pair} /> */}
       </div>
     </OandaApiContext.Provider>
   );
