@@ -108,7 +108,7 @@ export class OandaApi {
             to: currentToDate.toISOString()
         };
 
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise(resolve => setTimeout(resolve, 10));
 
         const [ok, data] = await this.makeRequest(`instruments/${pairName}/candles`, 'get', 200, params);
         if (ok && data['candles']) {

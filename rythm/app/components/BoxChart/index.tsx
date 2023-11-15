@@ -12,6 +12,7 @@ const BoxChart: React.FC<BoxChartProps> = ({ boxArrays }) => {
     
     useEffect(() => {
         if (!svgRef.current) return;
+        d3.select(svgRef.current).selectAll("*").remove();
 
         const data = Object.entries(boxArrays).map(([size, box]) => ({
             size: parseInt(size),
@@ -62,7 +63,7 @@ const BoxChart: React.FC<BoxChartProps> = ({ boxArrays }) => {
             .attr("width", x.bandwidth())
             .attr("y", d => y(d.high))
             .attr("height", d => y(d.low) - y(d.high))
-            .attr("fill", d => d.boxMovedUp ? "#2E8B57" : d.boxMovedDn ? "pink" : "#69b3a2");
+            .attr("fill", d => d.boxMovedUp ? "#00FF6E" : d.boxMovedDn ? "pink" : "#6E6E6E");
     }, [boxArrays]);
 
     return (

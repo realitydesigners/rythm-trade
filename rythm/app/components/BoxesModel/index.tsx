@@ -122,23 +122,42 @@ const BoxesModel: React.FC<BoxModelProps> = ({ pair }) => {
         };
     }, [pair]);
     
+
+    // Render
+    if (!initializationComplete) {
+        return (
+            <div className={styles.loadingContainer}>
+                Loading...
+            </div>
+        );
+    }
     // Render: Displays the current close price and a list of boxes with their respective sizes and states. 
     return (
         <div className={styles.container}>
-            <div><span className={styles.title}>Current Close Price:</span> {currentClosePrice}</div>
-            {Object.entries(boxArrays).map(([size, box]) => (
-                <div key={size}>
-                    <span className={styles.title}>Box Size: {size}</span>
-                    <ul>
-                        <li>
-                            Box: {box.boxMovedUp ? "UP" : box.boxMovedDn ? "DOWN" : "STABLE"} (High: {box.high}, Low: {box.low})
-                        </li>
-                    </ul>
-                </div>
-            ))}
-
             <BoxChart boxArrays={boxArrays} />
+            <div><span className={styles.title}>Current Close Price:</span> {currentClosePrice}</div>
+            <table className={styles.boxTable}>
+                <thead>
+                    <tr>
+                        <th>Box Size</th>
+                        <th>Status</th>
+                        <th>High</th>
+                        <th>Low</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {Object.entries(boxArrays).map(([size, box]) => (
+                        <tr key={size}>
+                            <td>{size}</td>
+                            <td>{box.boxMovedUp ? "UP" : box.boxMovedDn ? "DOWN" : "STABLE"}</td>
+                            <td>{box.high}</td>
+                            <td>{box.low}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 };
+
 export default BoxesModel;
