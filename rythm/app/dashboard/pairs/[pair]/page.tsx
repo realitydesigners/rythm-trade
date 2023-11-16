@@ -16,37 +16,34 @@ const PairPage = () => {
 
   const [candleData, setCandleData] = useState([]);
   const [currentPrice, setCurrentPrice] = useState(0);
+  const [streamData, setStreamData] = useState<{ [pair: string]: any }>({});
+
+
 
   useEffect(() => {
-    const fetchCandleData = async () => {
-      try {
-        const candles = await api?.fetchCandles(pair, 300, 'M1');
-
-        if (candles) {
-          setCandleData(candles);
-          const latestPrice = candles[candles.length - 1]?.mid?.c; 
-          if (latestPrice) {
-            setCurrentPrice(latestPrice);
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching candle data:', error);
+    const handleStreamData = (data: any, pair: string) => {   
+      if (data.type !== "HEARTBEAT") {
+        setStreamData((prevData) => ({
+          ...prevData,
+          [pair]: data,
+        }));
       }
     };
-
-    fetchCandleData();
-    const interval = setInterval(fetchCandleData, API_INTERVAL);
-
-    return () => clearInterval(interval);
+  
+    api.subscribeToPairs([pair], handleStreamData);
+  
+    return () => {
+      api.unsubscribeFromPairs([pair]);
+    };
   }, [pair]);
-
+  
   return (
     <OandaApiContext.Provider value={api}>
       
       <div className={styles.container}>
       <a href="/" className={styles.backLink}> --BACK</a>
         <h1 className={styles.title}>{pair}</h1>
-        <Stream pair={pair} />
+        <Stream pair={pair} data={streamData[pair]} /> {/* Use streamData[pair] */}
         <BoxesModel pair={pair} />
         {/* <LineChart data={candleData} /> */}
         

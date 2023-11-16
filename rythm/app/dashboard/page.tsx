@@ -55,6 +55,7 @@ const DashboardPage = () => {
   const [allPairs, setAllPairs] = useState<string[]>([]);
   const [showProfile, setShowProfile] = useState(false);
   const [numDisplayedFavorites, setNumDisplayedFavorites] = useState<number>(8);
+  const [streamData, setStreamData] = useState<{ [pair: string]: any }>({});
 
   const toggleProfile = () => {
     setShowProfile(prevShow => !prevShow);
@@ -74,6 +75,25 @@ const DashboardPage = () => {
     };
     fetchInstruments();
   }, []);
+
+  useEffect(() => {
+    const handleStreamData = (data: any, pair: string) => {
+      if (data.type !== "HEARTBEAT") {
+        setStreamData((prevData) => ({
+          ...prevData,
+          [pair]: data,
+        }));
+      }
+    };
+  
+    api.subscribeToPairs(favoritePairs, handleStreamData);
+  
+    return () => {
+      api.unsubscribeFromPairs(favoritePairs);
+    };
+  }, [favoritePairs]);
+  
+  
 
   useEffect(() => {
     const filteredPairs = allPairs.filter(
@@ -179,7 +199,7 @@ const DashboardPage = () => {
               onDragStart={() => handleDragStart(pair)}
             >
               <a href={`/dashboard/pairs/${pair}`}>
-                <Stream pair={pair} />
+                <Stream pair={pair} data={streamData[pair]} />
               </a>
               <ResoModel pair={pair} />
               <Select
@@ -202,6 +222,7 @@ const DashboardPage = () => {
             </div>
           ))}
         </div>
+
       </div>
     </OandaApiContext.Provider>
   );

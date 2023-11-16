@@ -17,6 +17,7 @@ export interface StreamData {
 }
 
 export interface Price {
+  value: any;
   bid: string | null;
   ask: string | null;
 }

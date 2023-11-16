@@ -15,6 +15,7 @@ export class OandaApi {
   private api_key: string;
   private oanda_url: string;
   private account_id: string;
+  private activeStreams: Map<string, ReadableStreamDefaultReader<Uint8Array>> = new Map();
 
   constructor(api_key: string = OANDA_TOKEN, oanda_url: string = OANDA_BASE_URL, account_id: string = ACCOUNT_ID) {
     // Initialize Oanda API with optional API key, base URL, and account ID. 
@@ -24,6 +25,72 @@ export class OandaApi {
     this.account_id = account_id;
   }
 
+  public async subscribeToPairs(pairs: string[], onData: (data: any, pair: string) => void) {
+    for (const pair of pairs) {
+      if (!this.activeStreams.has(pair)) {
+        try {
+          const response = await fetch(`${OANDA_STREAM_URL}/accounts/${this.account_id}/pricing/stream?instruments=${pair}`, {
+            headers: {
+              Authorization: `Bearer ${this.api_key}`,
+              "Content-Type": "application/json",
+            },
+          });
+  
+          if (!response.ok) {
+            throw new Error(`Failed to fetch data for pair: ${pair}`);
+          }
+  
+          const reader = response.body?.getReader();
+  
+          if (reader) {
+            this.activeStreams.set(pair, reader);
+            this.streamData(pair, reader, onData);
+          } else {
+            console.error(`Failed to get reader for pair: ${pair}`);
+          }
+        } catch (error) {
+          console.error(`Error while subscribing to pair ${pair}: ${error}`);
+        }
+      }
+    }
+  }
+  
+
+  public unsubscribeFromPairs(pairs: string[]) {
+    for (const pair of pairs) {
+      const reader = this.activeStreams.get(pair);
+      if (reader) {
+        reader.cancel();
+        this.activeStreams.delete(pair);
+      }
+    }
+  }
+  
+  private async streamData(pair: string, reader: ReadableStreamDefaultReader<Uint8Array>, onData: (data: any, pair: string) => void) {
+    let buffer = "";
+    try {
+      while (true) {
+        const result = await reader.read();
+        if (result.done) break;
+        buffer += new TextDecoder().decode(result.value);
+  
+        let newlineIndex = buffer.indexOf("\n");
+        while (newlineIndex !== -1) {
+          const singleJSON = buffer.slice(0, newlineIndex);
+          try {
+            const data = JSON.parse(singleJSON);
+            onData(data, pair);
+          } catch (error) {
+            console.error("Error parsing JSON:", error);
+          }
+          buffer = buffer.slice(newlineIndex + 1);
+          newlineIndex = buffer.indexOf("\n");
+        }
+      }
+    } catch (error) {
+      console.error("Error in streamData:", error);
+    }
+  }
   private async makeRequest(url: string, method: 'get' | 'post' | 'put' = 'get', expectedStatusCode: number = 200, params: any = {}, data: any = {}): Promise<[boolean, any]> {
     // Perform an HTTP request. Returns a tuple [success: boolean, data: any].
 
