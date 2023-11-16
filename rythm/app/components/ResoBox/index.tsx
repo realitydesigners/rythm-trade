@@ -20,6 +20,8 @@ const ResoBox: React.FC<BoxChartProps> = ({ boxArrays }) => {
     const sortedData = data.sort((a, b) => b.size - a.size);
     const scaleFactor = size / sortedData[0].size;
   
+    const biggestBoxMovedUp = sortedData[0].boxMovedUp;
+
     sortedData.forEach((d, index) => {
       svg.append('rect')
         .attr('x', currentX)
@@ -27,15 +29,15 @@ const ResoBox: React.FC<BoxChartProps> = ({ boxArrays }) => {
         .attr('width', d.size * scaleFactor)
         .attr('height', d.size * scaleFactor)
         .attr('fill', d.boxMovedUp ? "#51966F" : "#660050")
-        .attr('stroke', 'black')
-        .attr('stroke-width', 2);
-  
-      if (index > 0 && lastBoxMovedUp !== null) {
-        if ((d.boxMovedUp && !lastBoxMovedUp) || (d.boxMovedDn && lastBoxMovedUp)) {
-          corner = (corner + 1) % 4;
+        .attr('stroke', biggestBoxMovedUp ? 'white' : 'black')
+        .attr('stroke-width', 1);
+    
+        if (index > 0 && lastBoxMovedUp !== null) {
+          if ((d.boxMovedUp && !lastBoxMovedUp) || (d.boxMovedDn && lastBoxMovedUp)) {
+            corner = (corner + 1) % 4;
+          }
         }
-      }
-  
+    
       lastBoxMovedUp = d.boxMovedUp;
   
       if (index < sortedData.length - 1) {
