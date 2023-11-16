@@ -1,7 +1,7 @@
 .dashboardContainer {
   width: 100%;
   padding: 20px;
-  background-color: #1c1c2d;
+  background-color: #2d1c2b;
 }
 
 .favoritePairs {
@@ -10,23 +10,25 @@
   gap: 20px;
   margin-bottom: 30px;
 }
+@media (max-width: 1200px) {
+  .favoritePairs {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+}
+
+@media (max-width: 900px) {
+  .favoritePairs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
 
 @media (max-width: 768px) {
   .favoritePairs {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
-  .allPairs {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
 
-@media (max-width: 480px) {
-  .favoritePairs {
-    grid-template-columns: 1fr;
-  }
-  .allPairs {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 320px) {
@@ -140,4 +142,37 @@
 
 .replaceOptions button:hover {
   background-color: #4c4c6d;
+}
+.pairDropdown {
+  background-color: #1c1c2d;
+  color: #a9feff;
+  border: 1px solid #29d9b9;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: small;
+  margin-top: 10px; /* Adjust as needed */
+  cursor: pointer;
+  width: 100%; /* Adjust as needed */
+}
+
+.masterProfile {
+  transition: max-height 0.5s ease-in-out;
+  overflow: hidden;
+  max-height: 500px; /* Adjust based on the content size */
+}
+
+.masterProfileHidden {
+  transition: max-height 0.5s ease-in-out;
+  overflow: hidden;
+  max-height: 0;
+}
+
+.toggleProfileButton {
+  /* Style your toggle button */
+  background-color: #3b3b58;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
 }

@@ -10,7 +10,7 @@ interface BoxChartProps {
 const ResoBox: React.FC<BoxChartProps> = ({ boxArrays }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [containerWidth, setContainerWidth] = useState<number>(800);
+  const [containerWidth, setContainerWidth] = useState<number>(100);
 
   const drawNestedBoxes = (data: any[], svg: d3.Selection<SVGGElement, unknown, null, undefined>, size: number) => {
     let currentX = 0, currentY = 0;
@@ -63,16 +63,11 @@ const ResoBox: React.FC<BoxChartProps> = ({ boxArrays }) => {
   
     d3.select(svgRef.current).selectAll("*").remove();
     
-    const size = Math.min(containerWidth, 500);
-  
-    const margin = { top: 20, right: 20, bottom: 20, left: 20 };
-    const adjustedSize = size - margin.left - margin.right;
-  
+    const size = Math.min(containerWidth, 500); 
     const svg = d3.select(svgRef.current)
-      .attr('width', adjustedSize)
-      .attr('height', adjustedSize)
+      .attr('width', size)
+      .attr('height', size)
       .append('g')
-      .attr('transform', `translate(${margin.left},${margin.top})`);
   
     const data = Object.entries(boxArrays)
       .map(([size, box]) => ({
@@ -84,7 +79,7 @@ const ResoBox: React.FC<BoxChartProps> = ({ boxArrays }) => {
       }))
       .sort((a, b) => b.size - a.size);
   
-    drawNestedBoxes(data, svg, adjustedSize);
+    drawNestedBoxes(data, svg, size);
   };
   
   useEffect(() => {
