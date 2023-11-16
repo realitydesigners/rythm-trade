@@ -20,10 +20,9 @@ const DashboardPage = () => {
   const [currencyPairs, setCurrencyPairs] = useState<string[]>([]);
   const [favoritePairs, setFavoritePairs] = useState<string[]>(initialFavorites);
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
-  const [dropdownOpen, setDropdownOpen] = useState<Record<string, boolean>>({});
   const [allPairs, setAllPairs] = useState<string[]>([]);
-  const [selectedPair, setSelectedPair] = useState<string>('');
   const [showProfile, setShowProfile] = useState(true);
+  const [numDisplayedFavorites, setNumDisplayedFavorites] = useState<number>(favoritePairs.length);
 
   const toggleProfile = () => {
     setShowProfile(prevShow => !prevShow);
@@ -47,33 +46,25 @@ const DashboardPage = () => {
     setCurrencyPairs(filteredPairs);
   }, [favoritePairs, allPairs]);
 
-  const toggleDropdown = (pair: string) => {
-    setDropdownOpen(prev => ({ ...prev, [pair]: !prev[pair] }));
+
+  const handleNumFavoritesChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setNumDisplayedFavorites(parseInt(event.target.value, 10));
   };
-  
-  const replaceFavorite = (pair: string, slot: number) => {
-    setFavoritePairs(prev => {
-        const newFavorites = [...prev];
-        const existingIndex = newFavorites.indexOf(pair);
-        if (existingIndex !== -1) {
-    
-            [newFavorites[slot - 1], newFavorites[existingIndex]] = [newFavorites[existingIndex], newFavorites[slot - 1]];
-        } else {
-            newFavorites[slot - 1] = pair;
-        }
-        return newFavorites;
-    });
-    toggleDropdown(pair);
-};
-  // Function to handle replacement from the dropdown
+
   const handleReplaceFavorite = (selectedPair: string, index: number) => {
     setFavoritePairs(prev => {
-      const newFavorites = [...prev];
+      const newFavorites = [...prev]
       newFavorites[index] = selectedPair;
       return newFavorites;
     });
   };
-
+  const getFavoritePairsOptions = () => {
+    const options = [];
+    for (let i = 1; i <= favoritePairs.length; i++) {
+      options.push(i);
+    }
+    return options;
+  };
   const handleDragStart = (pair: string) => {
     setDraggedItem(pair);
   };
@@ -114,9 +105,19 @@ const DashboardPage = () => {
         <div className={showProfile ? styles.masterProfile : styles.masterProfileHidden}>
           <MasterProfile />
         </div>
+        <div className={styles.numFavoritesSelector}>
+          <label>
+            Number of Favorite Pairs to Display:
+            <select onChange={handleNumFavoritesChange} value={numDisplayedFavorites}>
+              {getFavoritePairsOptions().map(n => (
+                <option key={n} value={n}>{n}</option>
+              ))}
+            </select>
+          </label>
+        </div>
+
         <div className={styles.favoritePairs}>
-          
-          {favoritePairs.map((pair, index) => (
+          {favoritePairs.slice(0, numDisplayedFavorites).map((pair, index) => (
             <div key={pair} className={styles.favoritePair}
                 onDrop={(e) => handleDrop(e, 'favorites', index)}
                 onDragOver={handleDragOver} draggable
