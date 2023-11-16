@@ -26,7 +26,7 @@ const ResoBox: React.FC<BoxChartProps> = ({ boxArrays }) => {
         .attr('y', currentY)
         .attr('width', d.size * scaleFactor)
         .attr('height', d.size * scaleFactor)
-        .attr('fill', d.boxMovedUp ? "#00FF6E" : d.boxMovedDn ? "pink" : "#6E6E6E")
+        .attr('fill', d.boxMovedUp ? "#51966F" : "#660050")
         .attr('stroke', 'black')
         .attr('stroke-width', 2);
   

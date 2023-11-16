@@ -64,7 +64,7 @@
 }
 
 .boxTable tbody tr:nth-of-type(even) {
-    background-color: #f3f3f3;
+    background-color: #252525;
 }
 
 .boxTable tbody tr:last-of-type {
@@ -90,8 +90,8 @@
 }
 
 .toggleButton {
-    background-color: #000000;
-    color: #1c1c2d;
+    background-color: #363636;
+    color: #ffffff;
     border: none;
     padding: 10px 20px;
     margin: 0 10px;
