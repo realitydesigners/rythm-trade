@@ -182,23 +182,27 @@ const ResoModel: React.FC<ResoModelProps> = ({ pair }) => {
   };
 
   return (
-    <div className="max-w-[200px]">
+    <div className="w-full h-auto">
       {initializationComplete ? (
         <>
-          <Select onValueChange={handleDropdownChange} value={selectedBoxArray}>
-            <SelectTrigger>
-              <SelectValue>{selectedBoxArray}</SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              {['default', 'array1', 'array2', 'array3'].map(arrayKey => (
-                <SelectItem key={arrayKey} value={arrayKey}>
-                  {arrayKey}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <div className="bg-white w-full">
-            <ResoBox boxArrays={boxArrays} />
+          <ResoBox boxArrays={boxArrays} />
+
+          <div className="mb-4">
+            <Select
+              onValueChange={handleDropdownChange}
+              value={selectedBoxArray}
+            >
+              <SelectTrigger>
+                <SelectValue>{selectedBoxArray}</SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                {['default', 'array1', 'array2', 'array3'].map(arrayKey => (
+                  <SelectItem key={arrayKey} value={arrayKey}>
+                    {arrayKey}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </>
       ) : (
