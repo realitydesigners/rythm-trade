@@ -2,8 +2,6 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
-const inter = Inter({ subsets: ['latin'] });
-
 export const metadata: Metadata = {
   title: 'RYTHM - High Precision Algorithmic Trading',
   description:
@@ -17,8 +15,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <div className="bg-black p-2 ">{children}</div>
+      <body className="bg-black">
+        <div>{children}</div>
       </body>
     </html>
   );
