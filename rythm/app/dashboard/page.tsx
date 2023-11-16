@@ -82,10 +82,8 @@ const DashboardPage = () => {
     setCurrencyPairs(filteredPairs);
   }, [favoritePairs, allPairs]);
 
-  const handleNumFavoritesChange = (
-    event: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    setNumDisplayedFavorites(parseInt(event.target.value, 10));
+  const handleNumFavoritesChange = (newValue: string) => {
+    setNumDisplayedFavorites(parseInt(newValue, 10));
   };
 
   const handleReplaceFavorite = (selectedPair: string, index: number) => {
@@ -153,13 +151,16 @@ const DashboardPage = () => {
           </DialogContent>
         </Dialog>
         <div className="w-full  mt-4 mb-4">
-          <Select>
+          <Select
+            onValueChange={handleNumFavoritesChange}
+            value={numDisplayedFavorites.toString()}
+          >
             <SelectTrigger>
-              <SelectValue placeholder="Number of Favorites" />
+              <SelectValue>{numDisplayedFavorites} Favorites</SelectValue>{' '}
             </SelectTrigger>
             <SelectContent>
               {getFavoritePairsOptions().map(n => (
-                <SelectItem key={String(n)} value={String(n)}>
+                <SelectItem key={n} value={n.toString()}>
                   {n}
                 </SelectItem>
               ))}
