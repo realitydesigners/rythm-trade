@@ -21,8 +21,13 @@ const ResoBox: React.FC<BoxChartProps> = ({ boxArrays }) => {
     const scaleFactor = size / sortedData[0].size;
   
     const biggestBoxMovedUp = sortedData[0].boxMovedUp;
-
     sortedData.forEach((d, index) => {
+      if (index > 0) {
+        const prevBox = sortedData[index - 1];
+        currentX += (prevBox.size * scaleFactor - d.size * scaleFactor);
+        currentY += (prevBox.size * scaleFactor - d.size * scaleFactor);
+      }
+    
       svg.append('rect')
         .attr('x', currentX)
         .attr('y', currentY)
@@ -32,34 +37,47 @@ const ResoBox: React.FC<BoxChartProps> = ({ boxArrays }) => {
         .attr('stroke', biggestBoxMovedUp ? 'white' : 'black')
         .attr('stroke-width', 1);
     
-        if (index === 0) {
-          corner = 2;
-        } else if (index > 0 && lastBoxMovedUp !== null) {
-          if ((d.boxMovedUp && !lastBoxMovedUp) || (d.boxMovedDn && lastBoxMovedUp)) {
-            corner = (corner + 1) % 4;
-          }
-        }
-    
       lastBoxMovedUp = d.boxMovedUp;
-  
-      if (index < sortedData.length - 1) {
-        const nextBox = sortedData[index + 1];
-        switch (corner) {
-          case 0:
-            break;
-          case 1:
-            currentX += (d.size * scaleFactor - nextBox.size * scaleFactor);
-            break;
-          case 2:
-            currentX += (d.size * scaleFactor - nextBox.size * scaleFactor);
-            currentY += (d.size * scaleFactor - nextBox.size * scaleFactor);
-            break;
-          case 3:
-            currentY += (d.size * scaleFactor - nextBox.size * scaleFactor);
-            break;
-        }
-      }
     });
+    
+    // sortedData.forEach((d, index) => {
+    //   svg.append('rect')
+    //     .attr('x', currentX)
+    //     .attr('y', currentY)
+    //     .attr('width', d.size * scaleFactor)
+    //     .attr('height', d.size * scaleFactor)
+    //     .attr('fill', d.boxMovedUp ? "#51966F" : "#660050")
+    //     .attr('stroke', biggestBoxMovedUp ? 'white' : 'black')
+    //     .attr('stroke-width', 1);
+    
+    //     if (index === 0) {
+    //       corner = 2;
+    //     } else if (index > 0 && lastBoxMovedUp !== null) {
+    //       if ((d.boxMovedUp && !lastBoxMovedUp) || (d.boxMovedDn && lastBoxMovedUp)) {
+    //         corner = (corner + 1) % 4;
+    //       }
+    //     }
+    
+    //   lastBoxMovedUp = d.boxMovedUp;
+  
+    //   if (index < sortedData.length - 1) {
+    //     const nextBox = sortedData[index + 1];
+    //     switch (corner) {
+    //       case 0:
+    //         break;
+    //       case 1:
+    //         currentX += (d.size * scaleFactor - nextBox.size * scaleFactor);
+    //         break;
+    //       case 2:
+    //         currentX += (d.size * scaleFactor - nextBox.size * scaleFactor);
+    //         currentY += (d.size * scaleFactor - nextBox.size * scaleFactor);
+    //         break;
+    //       case 3:
+    //         currentY += (d.size * scaleFactor - nextBox.size * scaleFactor);
+    //         break;
+    //     }
+    //   }
+    // });
   };
   
   const drawChart = () => {
