@@ -69,7 +69,7 @@ const BoxChart: React.FC<BoxChartProps> = ({ boxArrays }) => {
             .attr("width", x.bandwidth())
             .attr("y", d => y(d.high))
             .attr("height", d => y(d.low) - y(d.high))
-            .attr("fill", d => d.boxMovedUp ? "#00FF6E" : d.boxMovedDn ? "pink" : "#6E6E6E");
+            .attr("fill", d => d.boxMovedUp ? "#51966F" : "#660050");
     }
 
     
