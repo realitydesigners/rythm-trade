@@ -14,28 +14,26 @@
   .favoritePairs {
     grid-template-columns: repeat(3, 1fr);
   }
-
 }
 
 @media (max-width: 900px) {
   .favoritePairs {
     grid-template-columns: repeat(2, 1fr);
   }
-
 }
 
 @media (max-width: 768px) {
   .favoritePairs {
     grid-template-columns: 1fr;
   }
-
 }
 
 @media (max-width: 320px) {
   .dashboardContainer {
     padding: 10px;
   }
-  .favoritePair, .pairContainer {
+  .favoritePair,
+  .pairContainer {
     padding: 8px;
   }
   .favoritePair {
@@ -82,7 +80,6 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
-
 
 .pairContainer {
   border-radius: 5px;
@@ -146,19 +143,5 @@
   border: none;
   padding: 10px 20px;
   margin-bottom: 20px;
-  cursor: pointer;
-}
-
-.numFavoritesSelector {
-  margin-bottom: 20px;
-}
-
-.numFavoritesSelector select {
-  background-color: #000000;
-  color: #ffffff;
-  border: 1px solid #d9298a;
-  border-radius: 5px;
-  padding: 5px 10px;
-  font-size: small;
   cursor: pointer;
 }
