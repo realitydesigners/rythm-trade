@@ -75,3 +75,67 @@
     font-weight: bold;
     color: #29d9b9;
 }
+
+.buttonContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+.toggleButton.active {
+    background-color: #29d9b9;
+    color: #1c1c2d;
+    cursor: default;
+    opacity: 0.7;
+}
+
+.toggleButton {
+    background-color: #000000;
+    color: #1c1c2d;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Orbitron', monospace;
+    font-size: 1em;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+@media (max-width: 768px) {
+    .boxTable {
+        min-width: 200px;
+    }
+
+    .boxTable th,
+    .boxTable td {
+        padding: 8px 6px;
+        font-size: 0.8em;
+    }
+
+    .boxTable thead tr {
+        background-color: #9329d9;
+    }
+
+    .toggleButton {
+        padding: 5px 10px;
+        font-size: 0.8em;
+    }
+}
+
+@media (max-width: 480px) {
+    .boxTable {
+        min-width: 100%;
+    }
+
+    .boxTable th,
+    .boxTable td {
+        padding: 6px 4px;
+        font-size: 0.6em;
+    }
+
+    .toggleButton {
+        padding: 4px 8px;
+        font-size: 0.6em;
+    }
+}

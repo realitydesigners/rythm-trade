@@ -9,8 +9,9 @@ import styles from './styles.module.css';
 import { CandleData, Box, BoxArrays } from '../../../types';
 import { findCurrentPrice, findHighest, findLowest } from '../../api/priceAnalysis';
 import { OandaApiContext } from '../../api/OandaApi';
-import { SymbolsToDigits, symbolsToDigits } from '../../utils/constants';
+import { SymbolsToDigits, symbolsToDigits, BOX_SIZES } from '../../utils/constants';
 import BoxChart from '../BoxChart';
+import ResoBox from '../ResoBox';
 
 interface BoxModelProps {
     pair: string;
@@ -31,7 +32,18 @@ const BoxesModel: React.FC<BoxModelProps> = ({ pair }) => {
     const [currentClosePrice, setCurrentClosePrice] = useState<number | null>(null);
     const [boxArrays, setBoxArrays] = useState<BoxArrays>({});
     const [initializationComplete, setInitializationComplete] = useState<boolean>(false);
-    
+    const [selectedBoxArray, setSelectedBoxArray] = useState<string>('default');
+
+    // Function to switch between arrays
+    const switchBoxArray = (arrayKey: string) => {
+        if (selectedBoxArray === arrayKey) {
+            // Do nothing if the selected array is already active
+            return;
+        }
+        setInitializationComplete(false);
+        setSelectedBoxArray(arrayKey);
+    };
+
     // calculateAllBoxes: Calculates the high and low values for each box size based on the candle data. 
     const calculateAllBoxes = useCallback((C: number, oandaData: CandleData[], boxSizeMap: Map<number, number>) => {
         const newBoxArrays: BoxArrays = {};
@@ -76,51 +88,30 @@ const BoxesModel: React.FC<BoxModelProps> = ({ pair }) => {
         if (!initializationComplete) {
             setInitializationComplete(true);
         }
-    }, [initializationComplete]);
-    
-    
+    }, [initializationComplete]); 
     
     // useEffect: Fetches candle data at regular intervals and calculates boxes based on this data. 
     useEffect(() => {
-        let intervalId: string | number | NodeJS.Timeout | undefined;
+        let intervalId: NodeJS.Timeout;
 
         const fetchAndCalculateBoxes = async () => {
-            try {
-                const oandaData = await api?.fetchLargeCandles(pair, 6000, 'M1');
-                console.log(oandaData)
-                if (oandaData && oandaData.length > 0) {
-                    const currentPrice = findCurrentPrice(oandaData);
-                    if (currentPrice !== undefined) {
-                        setCurrentClosePrice(currentPrice);
-                        const boxSizes = generateBoxSizes(pair, [
-                            1000, 900, 810, 730, 656, 590, 
-                            531, 478, 430, 387, 348, 313, 
-                            282, 254, 228, 205, 185, 166, 
-                            150, 135, 121, 109, 100, 90, 
-                            81, 73, 65, 60, 53, 47, 43, 
-                            387, 348, 31, 28, 25, 23, 20, 
-                            18, 16, 15, 14, 12, 11, 10 
-                        ], symbolsToDigits)
-
-                        calculateAllBoxes(currentPrice, oandaData, boxSizes);
-                    }
-                } else {
-                    console.log("No valid data received.");
+            const oandaData = await api?.fetchLargeCandles(pair, 6000, 'M1');
+            if (oandaData && oandaData.length > 0) {
+                const currentPrice = findCurrentPrice(oandaData);
+                if (currentPrice !== undefined) {
+                    const boxSizes = generateBoxSizes(pair, BOX_SIZES[selectedBoxArray], symbolsToDigits);
+                    calculateAllBoxes(currentPrice, oandaData, boxSizes);
                 }
-            } catch (error) {
-                console.error("Error fetching data:", error);
+            } else {
+                console.log("No valid data received.");
             }
-        }; 
-
-        fetchAndCalculateBoxes(); 
-        intervalId = setInterval(() => {
-            fetchAndCalculateBoxes();
-        }, 60000);
-
-        return () => {
-            clearInterval(intervalId);
         };
-    }, [pair]);
+
+        fetchAndCalculateBoxes();
+        intervalId = setInterval(fetchAndCalculateBoxes, 60000);
+
+        return () => clearInterval(intervalId);
+    }, [pair, selectedBoxArray]);
     
 
     // Render
@@ -131,31 +122,64 @@ const BoxesModel: React.FC<BoxModelProps> = ({ pair }) => {
             </div>
         );
     }
+
+    /* Modify renderToggleButtons function to apply active class */
+    const renderToggleButtons = () => {
+        return (
+            <div className={styles.buttonContainer}>
+                <button onClick={() => switchBoxArray('default')} 
+                        className={`${styles.toggleButton} ${selectedBoxArray === 'default' ? styles.active : ''}`}>
+                    MysticRex
+                </button>
+                <button onClick={() => switchBoxArray('array1')} 
+                        className={`${styles.toggleButton} ${selectedBoxArray === 'array1' ? styles.active : ''}`}>
+                    SpiritBronto
+                </button>
+                <button onClick={() => switchBoxArray('array2')} 
+                        className={`${styles.toggleButton} ${selectedBoxArray === 'array2' ? styles.active : ''}`}>
+                    ZenSaur
+                </button>
+                <button onClick={() => switchBoxArray('array3')} 
+                        className={`${styles.toggleButton} ${selectedBoxArray === 'array3' ? styles.active : ''}`}>
+                    AuraRaptor
+                </button>
+            </div>
+        );
+    };
+
     // Render: Displays the current close price and a list of boxes with their respective sizes and states. 
     return (
         <div className={styles.container}>
-            <BoxChart boxArrays={boxArrays} />
-            <div><span className={styles.title}>Current Close Price:</span> {currentClosePrice}</div>
-            <table className={styles.boxTable}>
-                <thead>
-                    <tr>
-                        <th>Box Size</th>
-                        <th>Status</th>
-                        <th>High</th>
-                        <th>Low</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {Object.entries(boxArrays).map(([size, box]) => (
-                        <tr key={size}>
-                            <td>{size}</td>
-                            <td>{box.boxMovedUp ? "UP" : box.boxMovedDn ? "DOWN" : "STABLE"}</td>
-                            <td>{box.high}</td>
-                            <td>{box.low}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            {initializationComplete ? (
+                <>
+                    <BoxChart boxArrays={boxArrays} />
+                    <ResoBox boxArrays={boxArrays} />
+                    {renderToggleButtons()}
+                    <div><span className={styles.title}>Current Close Price:</span> {currentClosePrice}</div>
+                    <table className={styles.boxTable}>
+                        <thead>
+                            <tr>
+                                <th>Box Size</th>
+                                <th>Status</th>
+                                <th>High</th>
+                                <th>Low</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {Object.entries(boxArrays).map(([size, box]) => (
+                                <tr key={size}>
+                                    <td>{size}</td>
+                                    <td>{box.boxMovedUp ? "UP" : box.boxMovedDn ? "DOWN" : "STABLE"}</td>
+                                    <td>{box.high}</td>
+                                    <td>{box.low}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </>
+            ) : (
+                <div className={styles.loadingContainer}>Loading...</div>
+            )}
         </div>
     );
 };

@@ -6,7 +6,14 @@ import MasterProfile from '../components/MasterProfile';
 import { OandaApiContext, api } from '../api/OandaApi';
 import styles from './DashboardPage.module.css';
 
-const initialFavorites = ['EUR_USD', 'USD_JPY', 'GBP_USD', 'AUD_CAD'];
+const initialFavorites = [
+  'EUR_USD', 'USD_JPY', 'GBP_USD', 'AUD_CAD',
+  'USD_SGD', 'EUR_SEK', 'HKD_JPY', 'AUD_USD',
+  'USD_CAD', 'NZD_USD', 'NZD_SGD', 'USD_NOK',
+  'USD_CNH', 'SGD_CHF', 'GBP_JPY', 'USD_TRY',
+  'AUD_JPY', 'ZAR_JPY', 'SGD_JPY', 'GBP_ZAR'
+];
+
 
 const DashboardPage = () => {
   const [currencyPairs, setCurrencyPairs] = useState<string[]>([]);
@@ -105,7 +112,7 @@ const DashboardPage = () => {
                 </button>
                 {dropdownOpen[pair] && (
                   <div className={styles.replaceOptions}>
-                    {Array.from({ length: 4 }, (_, i) => (
+                    {Array.from({ length: 20 }, (_, i) => (
                       <button key={i} onClick={() => replaceFavorite(pair, i + 1)}>
                         Replace {i + 1}
                       </button>
