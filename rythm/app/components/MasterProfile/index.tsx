@@ -2,6 +2,16 @@ import React, { useEffect, useState, useContext } from 'react';
 import { OandaApiContext } from '../../api/OandaApi';
 import styles from './styles.module.css';
 
+import { Label } from '@/components/ui/label';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+
 const MasterProfile: React.FC = () => {
   const [accountSummary, setAccountSummary] = useState<any>(null);
   const api = useContext(OandaApiContext);
@@ -17,21 +27,50 @@ const MasterProfile: React.FC = () => {
   }, [api]);
 
   return (
-    <div className={styles.masterProfileContainer}>
+    <div>
       {accountSummary ? (
-        <div className={styles.accountSummary}>
-          <h2 className={styles.title}>Account Summary</h2>
-          <div><span className={styles.label}>ID:</span> {accountSummary.id}</div>
-          <div><span className={styles.label}>Balance:</span> {accountSummary.balance}</div>
-          <div><span className={styles.label}>Currency:</span> {accountSummary.currency}</div>
-          <div><span className={styles.label}>Unrealized Profit:</span> {accountSummary.unrealizedPL}</div>
-          <div><span className={styles.label}>NAV:</span> {accountSummary.NAV}</div>
-          <div><span className={styles.label}>Financing:</span> {accountSummary.financing}</div>
-          <div><span className={styles.label}>Margin Available:</span> {accountSummary.marginAvailable}</div>
-          <div><span className={styles.label}>Margin Closeout Percent:</span> {accountSummary.marginCloseoutPercent}</div>
-          <div><span className={styles.label}>Open Position Count:</span> {accountSummary.openPositionCount}</div>
-          <div><span className={styles.label}>Open Trade Count:</span> {accountSummary.openTradeCount}</div>
-          <div><span className={styles.label}>PL (Profit/Loss):</span> {accountSummary.pl}</div>
+        <div>
+          <h2 className="title text-white font-mono mb-4 uppercase font-bold">
+            Account Summary
+          </h2>
+
+          <div className="flex-col gap-2 flex flex-wrap">
+            <Label>
+              ID: <span>{accountSummary.id}</span>
+            </Label>
+            <Label>
+              Balance: <span>{accountSummary.balance}</span>
+            </Label>
+            <Label>
+              Currency: <span>{accountSummary.currency}</span>
+            </Label>
+            <Label>
+              Unrealized Profit: <span>{accountSummary.unrealizedPL}</span>
+            </Label>
+            <Label>
+              NAV: <span>{accountSummary.NAV}</span>
+            </Label>
+            <Label>
+              Financing: <span>{accountSummary.financing}</span>
+            </Label>
+            <Label>
+              Margin Available: <span>{accountSummary.marginAvailable}</span>
+            </Label>
+            <Label>
+              Margin Closeout Percent:{' '}
+              <span>{accountSummary.marginCloseoutPercent}</span>
+            </Label>
+            <Label>
+              Open Position Count:{' '}
+              <span>{accountSummary.openPositionCount}</span>
+            </Label>
+            <Label>
+              Open Trade Count: <span>{accountSummary.openTradeCount}</span>
+            </Label>
+            <Label>
+              PL (Profit/Loss): <span>{accountSummary.pl}</span>
+            </Label>
+          </div>
         </div>
       ) : (
         <p>Loading...</p>

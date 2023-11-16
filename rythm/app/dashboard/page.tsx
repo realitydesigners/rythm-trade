@@ -160,7 +160,7 @@ const DashboardPage = () => {
             <SelectContent>
               {getFavoritePairsOptions().map(n => (
                 <SelectItem key={String(n)} value={String(n)}>
-                  {n} Pairs
+                  {n}
                 </SelectItem>
               ))}
             </SelectContent>
