@@ -1,16 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { OandaApiContext } from '../../api/OandaApi';
-import styles from './styles.module.css';
 
 import { Label } from '@/components/ui/label';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 
 const MasterProfile: React.FC = () => {
   const [accountSummary, setAccountSummary] = useState<any>(null);
@@ -33,7 +24,6 @@ const MasterProfile: React.FC = () => {
           <h2 className="title text-white font-mono mb-4 uppercase font-bold">
             Account Summary
           </h2>
-
           <div className="flex-col gap-2 flex flex-wrap">
             <Label>
               ID: <span>{accountSummary.id}</span>

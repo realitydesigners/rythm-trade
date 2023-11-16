@@ -182,17 +182,23 @@ const DashboardPage = () => {
                 <Stream pair={pair} />
               </a>
               <ResoModel pair={pair} />
-              <select
-                onChange={e => handleReplaceFavorite(e.target.value, index)}
+              <Select
                 value={pair}
-                className={styles.pairDropdown}
+                onValueChange={newValue =>
+                  handleReplaceFavorite(newValue, index)
+                }
               >
-                {currencyPairs.map(p => (
-                  <option key={p} value={p}>
-                    {p}
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger>
+                  <SelectValue>{pair}</SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {currencyPairs.map(p => (
+                    <SelectItem key={p} value={p}>
+                      {p}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           ))}
         </div>
