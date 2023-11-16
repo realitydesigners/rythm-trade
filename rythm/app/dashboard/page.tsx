@@ -21,8 +21,8 @@ const DashboardPage = () => {
   const [favoritePairs, setFavoritePairs] = useState<string[]>(initialFavorites);
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const [allPairs, setAllPairs] = useState<string[]>([]);
-  const [showProfile, setShowProfile] = useState(true);
-  const [numDisplayedFavorites, setNumDisplayedFavorites] = useState<number>(favoritePairs.length);
+  const [showProfile, setShowProfile] = useState(false);
+  const [numDisplayedFavorites, setNumDisplayedFavorites] = useState<number>(8);
 
   const toggleProfile = () => {
     setShowProfile(prevShow => !prevShow);
@@ -98,7 +98,7 @@ const DashboardPage = () => {
   return (
     <OandaApiContext.Provider value={api}>
       <div className={styles.dashboardContainer}>
-        <button onClick={toggleProfile} className={styles.toggleProfileButton}>
+        <button onClick={toggleProfile} className={styles.dropdownToggle}>
             {showProfile ? 'Hide' : 'Show'} Account Summary
         </button>
 
@@ -107,7 +107,6 @@ const DashboardPage = () => {
         </div>
         <div className={styles.numFavoritesSelector}>
           <label>
-            Number of Favorite Pairs to Display:
             <select onChange={handleNumFavoritesChange} value={numDisplayedFavorites}>
               {getFavoritePairsOptions().map(n => (
                 <option key={n} value={n}>{n}</option>

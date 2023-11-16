@@ -1,10 +1,10 @@
 .masterProfileContainer {
   width: 100%;
   padding: 10px 20px;
-  background-color: #1c1c2d;
-  color: #29d9b9;
+  background-color: #000000;
+  color: #ffffff;
   font-family: 'Orbitron', sans-serif;
-  border: 1px solid #2e2e3e;
+  border: 1px solid #d9298a;
   margin-bottom: 20px;
 }
 
@@ -17,12 +17,12 @@
 .title {
   font-size: 1.4rem;
   font-weight: bold;
-  color: #29d9b9;
-  text-shadow: 0 0 5px #0d7377;
+  color: rgb(164, 217, 41);
+  text-shadow: 0 0 5px #555555;
 }
 
 .label {
   font-weight: bold;
-  color: #a9feff;
+  color: #acacac;
   font-size: 1rem;
 }

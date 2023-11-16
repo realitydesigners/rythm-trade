@@ -4,17 +4,17 @@
     margin: auto;
     display: block;
     padding: 20px;
-    background-color: #1c1c2d;
-    color: #a9feff;
+    background-color: #000000;
+    color: #ffffff;
     font-size: small;
     font-family: 'Orbitron', monospace;
-    border: 1px solid #29d9b9;
+    border: 1px solid #d9298a;
     border-radius: 10px;
     box-shadow: 0px 0px 2px 1px #3a3a3a;
 }
 
 .title {
-    color: #ffc5f7;
+    color: #ffffff;
     font-weight: bold;
     text-shadow: 0px 0px 1px #000000;
 }
@@ -26,11 +26,11 @@
     height: 100vh;
     color: #dafff3;
     font-size: larger;
-    background-color: #252540;
+    background-color: rgb(64, 37, 55);
 }
 
 .box {
-    background-color: #2e2e3e;
+    background-color: #000000;
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 5px;
@@ -83,7 +83,7 @@
     margin-top: 20px;
 }
 .toggleButton.active {
-    background-color: #29d9b9;
+    background-color: #bfd929;
     color: #1c1c2d;
     cursor: default;
     opacity: 0.7;
