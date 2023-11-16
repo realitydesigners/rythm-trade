@@ -5,7 +5,7 @@
 'use client';
 
 import React, { useState, useEffect, useContext, useCallback } from 'react';
-import styles from './styles.module.css';
+
 import { CandleData, Box, BoxArrays } from '../../../types';
 import {
   findCurrentPrice,
@@ -18,8 +18,15 @@ import {
   symbolsToDigits,
   BOX_SIZES,
 } from '../../utils/constants';
-import BoxChart from '../BoxChart';
 import ResoBox from '../ResoBox';
+
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from '@/components/ui/select';
 
 interface ResoModelProps {
   pair: string;
@@ -170,38 +177,32 @@ const ResoModel: React.FC<ResoModelProps> = ({ pair }) => {
   }
 
   // Function to handle dropdown change
-  const handleDropdownChange = (
-    event: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    const selectedKey = event.target.value;
-    switchBoxArray(selectedKey);
-  };
-
-  const renderDropdown = () => {
-    return (
-      <select
-        onChange={handleDropdownChange}
-        value={selectedBoxArray}
-        className={styles.dropdown}
-      >
-        {['default', 'array1', 'array2', 'array3'].map(arrayKey => (
-          <option key={arrayKey} value={arrayKey}>
-            {arrayKey}
-          </option>
-        ))}
-      </select>
-    );
+  const handleDropdownChange = (selectedKey: string) => {
+    setSelectedBoxArray(selectedKey); // Update the selectedBoxArray state
   };
 
   return (
-    <div className={styles.container}>
+    <div className="max-w-[200px]">
       {initializationComplete ? (
         <>
-          <ResoBox boxArrays={boxArrays} />
-          {renderDropdown()}
+          <Select onValueChange={handleDropdownChange} value={selectedBoxArray}>
+            <SelectTrigger>
+              <SelectValue>{selectedBoxArray}</SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              {['default', 'array1', 'array2', 'array3'].map(arrayKey => (
+                <SelectItem key={arrayKey} value={arrayKey}>
+                  {arrayKey}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <div className="bg-white w-full">
+            <ResoBox boxArrays={boxArrays} />
+          </div>
         </>
       ) : (
-        <div className={styles.loadingContainer}>Loading...</div>
+        <div>Loading...</div>
       )}
     </div>
   );
