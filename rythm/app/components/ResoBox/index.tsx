@@ -25,7 +25,6 @@ const ResoBox: React.FC<BoxChartProps> = ({ boxArrays }) => {
       if (index > 0) {
         const prevBox = sortedData[index - 1];
         currentX += (prevBox.size * scaleFactor - d.size * scaleFactor);
-        currentY += (prevBox.size * scaleFactor - d.size * scaleFactor);
       }
     
       svg.append('rect')
@@ -39,6 +38,7 @@ const ResoBox: React.FC<BoxChartProps> = ({ boxArrays }) => {
     
       lastBoxMovedUp = d.boxMovedUp;
     });
+    
     
     // sortedData.forEach((d, index) => {
     //   svg.append('rect')
