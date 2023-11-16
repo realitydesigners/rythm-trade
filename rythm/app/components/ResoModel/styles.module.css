@@ -1,0 +1,76 @@
+.container {
+    max-width: 200px;
+    margin-top: 20px;
+    margin: auto;
+    display: block;
+    padding: 20px;
+    background-color: #000000;
+    color: #a9feff;
+    font-size: small;
+    font-family: 'Orbitron', monospace;
+    /* border: 1px solid #d9298a; */
+    border-radius: 10px;
+    /* box-shadow: 0px 0px 2px 1px #3a3a3a; */
+}
+
+.title {
+    color: #ffc5f7;
+    font-weight: bold;
+    text-shadow: 0px 0px 1px #000000;
+}
+
+.loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #dafff3;
+    font-size: larger;
+    background-color: #0000ff;
+}
+
+.box {
+    background-color: #2e2e3e;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 3px #32cd32;
+}
+
+
+.buttonContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+
+.dropdown {
+    background-color: #000000;
+    color: #ff00d0;
+    border-top: 0.5px solid #d9298a;
+    justify-content: center;
+
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Orbitron', monospace;
+    font-size: 1em;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+@media (max-width: 768px) {
+
+    .toggleButton {
+        padding: 5px 10px;
+        font-size: 0.8em;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .toggleButton {
+        padding: 4px 8px;
+        font-size: 0.6em;
+    }
+}

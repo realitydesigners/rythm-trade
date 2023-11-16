@@ -2,52 +2,69 @@
 
 import React, { useEffect, useState } from 'react';
 import Stream from '../components/Stream';
+import ResoModel from '../components/ResoModel';
 import MasterProfile from '../components/MasterProfile';
 import { OandaApiContext, api } from '../api/OandaApi';
 import styles from './DashboardPage.module.css';
 
-const initialFavorites = ['EUR_USD', 'USD_JPY', 'GBP_USD', 'AUD_CAD'];
+const initialFavorites = [
+  'EUR_USD', 'USD_JPY', 'GBP_USD', 'AUD_CAD',
+  'USD_SGD', 'EUR_SEK', 'HKD_JPY', 'AUD_USD',
+  'USD_CAD', 'NZD_USD', 'NZD_SGD', 'USD_NOK',
+  'USD_CNH', 'SGD_CHF', 'GBP_JPY', 'USD_TRY',
+  'AUD_JPY', 'ZAR_JPY', 'SGD_JPY', 'GBP_ZAR'
+];
+
 
 const DashboardPage = () => {
   const [currencyPairs, setCurrencyPairs] = useState<string[]>([]);
-  const [favoritePairs, setFavoritePairs] = useState<string[]>([]);
+  const [favoritePairs, setFavoritePairs] = useState<string[]>(initialFavorites);
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
-  const [dropdownOpen, setDropdownOpen] = useState<Record<string, boolean>>({});
+  const [allPairs, setAllPairs] = useState<string[]>([]);
+  const [showProfile, setShowProfile] = useState(false);
+  const [numDisplayedFavorites, setNumDisplayedFavorites] = useState<number>(8);
 
+  const toggleProfile = () => {
+    setShowProfile(prevShow => !prevShow);
+  };
   useEffect(() => {
     const fetchInstruments = async () => {
       if (api) {
         const instruments = await api.getAccountInstruments();
         if (instruments) {
-          const allPairs = instruments.map((inst: { name: string; }) => inst.name);
-          setCurrencyPairs(allPairs);
-          setFavoritePairs(initialFavorites);
+          const allPairsFetched = instruments.map((inst: { name: string; }) => inst.name);
+          setAllPairs(allPairsFetched);
+          setCurrencyPairs(allPairsFetched);
         }
       }
     };
     fetchInstruments();
   }, []);
 
-  const toggleDropdown = (pair: string) => {
-    setDropdownOpen(prev => ({ ...prev, [pair]: !prev[pair] }));
+  useEffect(() => {
+    const filteredPairs = allPairs.filter(pair => !favoritePairs.includes(pair));
+    setCurrencyPairs(filteredPairs);
+  }, [favoritePairs, allPairs]);
+
+
+  const handleNumFavoritesChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setNumDisplayedFavorites(parseInt(event.target.value, 10));
   };
-  
-  const replaceFavorite = (pair: string, slot: number) => {
+
+  const handleReplaceFavorite = (selectedPair: string, index: number) => {
     setFavoritePairs(prev => {
-        const newFavorites = [...prev];
-        const existingIndex = newFavorites.indexOf(pair);
-        if (existingIndex !== -1) {
-    
-            [newFavorites[slot - 1], newFavorites[existingIndex]] = [newFavorites[existingIndex], newFavorites[slot - 1]];
-        } else {
-            newFavorites[slot - 1] = pair;
-        }
-        return newFavorites;
+      const newFavorites = [...prev]
+      newFavorites[index] = selectedPair;
+      return newFavorites;
     });
-    toggleDropdown(pair);
-};
-
-
+  };
+  const getFavoritePairsOptions = () => {
+    const options = [];
+    for (let i = 1; i <= favoritePairs.length; i++) {
+      options.push(i);
+    }
+    return options;
+  };
   const handleDragStart = (pair: string) => {
     setDraggedItem(pair);
   };
@@ -81,38 +98,41 @@ const DashboardPage = () => {
   return (
     <OandaApiContext.Provider value={api}>
       <div className={styles.dashboardContainer}>
-        <MasterProfile />
-        <div className={styles.favoritePairs}>
-          {favoritePairs.map((pair, index) => (
-            <a key={pair} href={`/dashboard/pairs/${pair}`} className={styles.favoritePair}
-               onDrop={(e) => handleDrop(e, 'favorites', index)}
-               onDragOver={handleDragOver} draggable
-               onDragStart={() => handleDragStart(pair)}>
-              <Stream pair={pair} />
-            </a>
-          ))}
+        <button onClick={toggleProfile} className={styles.dropdownToggle}>
+            {showProfile ? 'Hide' : 'Show'} Account Summary
+        </button>
+
+        <div className={showProfile ? styles.masterProfile : styles.masterProfileHidden}>
+          <MasterProfile />
         </div>
-        <div className={styles.allPairs}>
-          {currencyPairs.map(pair => (
-            <div key={pair} className={styles.pairContainer} draggable
-                 onDragStart={() => handleDragStart(pair)}>
-              <a href={`/dashboard/pairs/${pair}`} className={styles.pairLink}>
-                {pair}
+        <div className={styles.numFavoritesSelector}>
+          <label>
+            <select onChange={handleNumFavoritesChange} value={numDisplayedFavorites}>
+              {getFavoritePairsOptions().map(n => (
+                <option key={n} value={n}>{n}</option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        <div className={styles.favoritePairs}>
+          {favoritePairs.slice(0, numDisplayedFavorites).map((pair, index) => (
+            <div key={pair} className={styles.favoritePair}
+                onDrop={(e) => handleDrop(e, 'favorites', index)}
+                onDragOver={handleDragOver} draggable
+                onDragStart={() => handleDragStart(pair)}> 
+              <a href={`/dashboard/pairs/${pair}`}>
+                <Stream pair={pair} />
               </a>
-              <div className={styles.dropdown}>
-                <button className={styles.dropdownToggle} onClick={() => toggleDropdown(pair)}>
-                  &#9660;
-                </button>
-                {dropdownOpen[pair] && (
-                  <div className={styles.replaceOptions}>
-                    {Array.from({ length: 4 }, (_, i) => (
-                      <button key={i} onClick={() => replaceFavorite(pair, i + 1)}>
-                        Replace {i + 1}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+              <ResoModel pair={pair}/>
+              <select 
+                onChange={(e) => handleReplaceFavorite(e.target.value, index)}
+                value={pair}
+                className={styles.pairDropdown}>
+                {currencyPairs.map(p => (
+                  <option key={p} value={p}>{p}</option>
+                ))}
+              </select>
             </div>
           ))}
         </div>

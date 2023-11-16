@@ -4,9 +4,7 @@
   justify-content: center;
   align-items: center;
   background-color: #000000;
-  padding: 20px;
-  border-bottom: 1px solid #d9298a;
-  border-radius: 10px;
+  padding: 20px; 
   margin: auto;
   max-width: 1200px;
 }
@@ -18,11 +16,11 @@
 .chartContainer .axis path,
 .chartContainer .axis line {
   fill: none;
-  stroke: #fff9a9;
+  stroke: #a9feff;
 }
 
 .chartContainer .axis text {
-  fill: #f6ffa9;
+  fill: #a9feff;
   font-family: 'Orbitron', monospace;
 }
 

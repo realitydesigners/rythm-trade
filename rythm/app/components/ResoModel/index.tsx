@@ -13,7 +13,7 @@ import { SymbolsToDigits, symbolsToDigits, BOX_SIZES } from '../../utils/constan
 import BoxChart from '../BoxChart';
 import ResoBox from '../ResoBox';
 
-interface BoxModelProps {
+interface ResoModelProps {
     pair: string;
 }
 
@@ -27,7 +27,7 @@ const generateBoxSizes = (pair: string, pointSizes: number[], symbolsToDigits: S
     return boxSizeMap;
 };
 
-const BoxesModel: React.FC<BoxModelProps> = ({ pair }) => {
+const ResoModel: React.FC<ResoModelProps> = ({ pair }) => {
     const api = useContext(OandaApiContext);
     const [currentClosePrice, setCurrentClosePrice] = useState<number | null>(null);
     const [boxArrays, setBoxArrays] = useState<BoxArrays>({});
@@ -123,65 +123,34 @@ const BoxesModel: React.FC<BoxModelProps> = ({ pair }) => {
         );
     }
 
-    /* Modify renderToggleButtons function to apply active class */
-    const renderToggleButtons = () => {
-        return (
-            <div className={styles.buttonContainer}>
-                <button onClick={() => switchBoxArray('default')} 
-                        className={`${styles.toggleButton} ${selectedBoxArray === 'default' ? styles.active : ''}`}>
-                    MysticRex
-                </button>
-                <button onClick={() => switchBoxArray('array1')} 
-                        className={`${styles.toggleButton} ${selectedBoxArray === 'array1' ? styles.active : ''}`}>
-                    SpiritBronto
-                </button>
-                <button onClick={() => switchBoxArray('array2')} 
-                        className={`${styles.toggleButton} ${selectedBoxArray === 'array2' ? styles.active : ''}`}>
-                    ZenSaur
-                </button>
-                <button onClick={() => switchBoxArray('array3')} 
-                        className={`${styles.toggleButton} ${selectedBoxArray === 'array3' ? styles.active : ''}`}>
-                    AuraRaptor
-                </button>
-            </div>
-        );
+    // Function to handle dropdown change
+    const handleDropdownChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedKey = event.target.value;
+        switchBoxArray(selectedKey);
     };
 
-    // Render: Displays the current close price and a list of boxes with their respective sizes and states. 
+    const renderDropdown = () => {
+        return (
+        <select onChange={handleDropdownChange} value={selectedBoxArray} className={styles.dropdown}>
+            {['default', 'array1', 'array2', 'array3'].map(arrayKey => (
+            <option key={arrayKey} value={arrayKey}>{arrayKey}</option>
+            ))}
+        </select>
+        );
+    };
+    
     return (
         <div className={styles.container}>
-            {initializationComplete ? (
-                <>
-                    <BoxChart boxArrays={boxArrays} />
-                    <ResoBox boxArrays={boxArrays} />
-                    {renderToggleButtons()}
-                    <div><span className={styles.title}>Current Close Price:</span> {currentClosePrice}</div>
-                    <table className={styles.boxTable}>
-                        <thead>
-                            <tr>
-                                <th>Box Size</th>
-                                <th>Status</th>
-                                <th>High</th>
-                                <th>Low</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {Object.entries(boxArrays).map(([size, box]) => (
-                                <tr key={size}>
-                                    <td>{size}</td>
-                                    <td>{box.boxMovedUp ? "UP" : box.boxMovedDn ? "DOWN" : "STABLE"}</td>
-                                    <td>{box.high}</td>
-                                    <td>{box.low}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </>
-            ) : (
-                <div className={styles.loadingContainer}>Loading...</div>
-            )}
+          {initializationComplete ? (
+            <>
+              <ResoBox boxArrays={boxArrays} />
+              {renderDropdown()}
+            </>
+          ) : (
+            <div className={styles.loadingContainer}>Loading...</div>
+          )}
         </div>
-    );
-};
-
-export default BoxesModel;
+      );
+    };
+    
+export default ResoModel;

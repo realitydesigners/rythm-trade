@@ -28,7 +28,7 @@ const BoxChart: React.FC<BoxChartProps> = ({ boxArrays }) => {
             low: box.low,
             boxMovedUp: box.boxMovedUp,
             boxMovedDn: box.boxMovedDn
-        })).sort((a, b) => a.size - b.size);
+        })).sort((a, b) => b.size - a.size);
 
         const svg = d3.select(svgRef.current)
             .attr("width", adjustedWidth)
@@ -69,7 +69,7 @@ const BoxChart: React.FC<BoxChartProps> = ({ boxArrays }) => {
             .attr("width", x.bandwidth())
             .attr("y", d => y(d.high))
             .attr("height", d => y(d.low) - y(d.high))
-            .attr("fill", d => d.boxMovedUp ? "#00FF6E" : d.boxMovedDn ? "pink" : "#6E6E6E");
+            .attr("fill", d => d.boxMovedUp ? "#51966F" : "#660050");
     }
 
     
