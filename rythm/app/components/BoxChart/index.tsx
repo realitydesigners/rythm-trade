@@ -28,7 +28,7 @@ const BoxChart: React.FC<BoxChartProps> = ({ boxArrays }) => {
             low: box.low,
             boxMovedUp: box.boxMovedUp,
             boxMovedDn: box.boxMovedDn
-        })).sort((a, b) => a.size - b.size);
+        })).sort((a, b) => b.size - a.size);
 
         const svg = d3.select(svgRef.current)
             .attr("width", adjustedWidth)

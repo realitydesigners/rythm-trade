@@ -32,7 +32,9 @@ const ResoBox: React.FC<BoxChartProps> = ({ boxArrays }) => {
         .attr('stroke', biggestBoxMovedUp ? 'white' : 'black')
         .attr('stroke-width', 1);
     
-        if (index > 0 && lastBoxMovedUp !== null) {
+        if (index === 0) {
+          corner = 2;
+        } else if (index > 0 && lastBoxMovedUp !== null) {
           if ((d.boxMovedUp && !lastBoxMovedUp) || (d.boxMovedDn && lastBoxMovedUp)) {
             corner = (corner + 1) % 4;
           }
