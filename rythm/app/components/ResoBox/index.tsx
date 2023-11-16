@@ -12,90 +12,96 @@ const ResoBox: React.FC<BoxChartProps> = ({ boxArrays }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [containerWidth, setContainerWidth] = useState<number>(100);
 
-  const drawNestedBoxes = (data: any[], svg: d3.Selection<SVGGElement, unknown, null, undefined>, size: number) => {
-    let currentX = 0, currentY = 0;
+  const drawNestedBoxes = (
+    data: any[],
+    svg: d3.Selection<SVGGElement, unknown, null, undefined>,
+    size: number,
+  ) => {
+    let currentX = 0,
+      currentY = 0;
     let corner = 0;
     let lastBoxMovedUp: boolean | null = null;
-  
+
     const sortedData = data.sort((a, b) => b.size - a.size);
     const scaleFactor = size / sortedData[0].size;
-  
-    const biggestBoxMovedUp = sortedData[0].boxMovedUp; 
+
+    const biggestBoxMovedUp = sortedData[0].boxMovedUp;
     sortedData.forEach((d, index) => {
-      svg.append('rect')
+      svg
+        .append('rect')
         .attr('x', currentX)
         .attr('y', currentY)
         .attr('width', d.size * scaleFactor)
         .attr('height', d.size * scaleFactor)
-        .attr('fill', d.boxMovedUp ? "#51966F" : "#660050")
-        .attr('stroke', biggestBoxMovedUp ? 'white' : 'black')
-        .attr('stroke-width', 1);
-    
+        .attr('fill', d.boxMovedUp ? '#52F5D5' : '#F55552')
+        .attr('stroke', biggestBoxMovedUp ? 'black' : 'black')
+        .attr('stroke-width', 0.5);
+
       if (d.boxMovedUp) {
         corner = 1;
       } else if (d.boxMovedDn) {
         corner = 2;
       }
-    
+
       lastBoxMovedUp = d.boxMovedUp;
-    
+
       if (index < sortedData.length - 1) {
         const nextBox = sortedData[index + 1];
         switch (corner) {
           case 1:
-            currentX += (d.size * scaleFactor - nextBox.size * scaleFactor);
+            currentX += d.size * scaleFactor - nextBox.size * scaleFactor;
             break;
           case 2:
-            currentX += (d.size * scaleFactor - nextBox.size * scaleFactor);
-            currentY += (d.size * scaleFactor - nextBox.size * scaleFactor);
-            break; 
+            currentX += d.size * scaleFactor - nextBox.size * scaleFactor;
+            currentY += d.size * scaleFactor - nextBox.size * scaleFactor;
+            break;
         }
       }
     });
-    
   };
-  
+
   const drawChart = () => {
     if (!svgRef.current) return;
-  
-    d3.select(svgRef.current).selectAll("*").remove();
-    
-    const size = Math.min(containerWidth, 500); 
-    const svg = d3.select(svgRef.current)
+
+    d3.select(svgRef.current).selectAll('*').remove();
+
+    const size = Math.min(containerWidth, 500);
+    const svg = d3
+      .select(svgRef.current)
       .attr('width', size)
       .attr('height', size)
-      .append('g')
-  
+      .append('g');
+
     const data = Object.entries(boxArrays)
       .map(([size, box]) => ({
         size: parseInt(size),
         high: box.high,
         low: box.low,
         boxMovedUp: box.boxMovedUp,
-        boxMovedDn: box.boxMovedDn
+        boxMovedDn: box.boxMovedDn,
       }))
       .sort((a, b) => b.size - a.size);
-  
+
     drawNestedBoxes(data, svg, size);
   };
-  
+
   useEffect(() => {
     const updateWidth = () => {
       if (containerRef.current) {
         setContainerWidth(containerRef.current.offsetWidth);
       }
     };
-  
+
     window.addEventListener('resize', updateWidth);
     updateWidth();
-  
+
     return () => window.removeEventListener('resize', updateWidth);
   }, []);
-  
+
   useEffect(() => {
     drawChart();
   }, [boxArrays, containerWidth]);
-  
+
   return (
     <div ref={containerRef} className={styles.chartContainer}>
       <svg ref={svgRef}></svg>
