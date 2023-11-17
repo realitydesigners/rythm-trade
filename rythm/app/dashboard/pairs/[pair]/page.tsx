@@ -8,17 +8,11 @@ import BoxesModel from '@/app/components/BoxesModel';
 import { OandaApiContext, api } from '@/app/api/OandaApi';
 import styles from './PairPage.module.css';
 
-const API_INTERVAL = 60000;
 
 const PairPage = () => {
   const params = useParams();
-  let pair = Array.isArray(params.pair) ? params.pair[0] : params.pair || '';
-
-  const [candleData, setCandleData] = useState([]);
-  const [currentPrice, setCurrentPrice] = useState(0);
-  const [streamData, setStreamData] = useState<{ [pair: string]: any }>({});
-
-
+  let pair = Array.isArray(params.pair) ? params.pair[0] : params.pair || ''; 
+  const [streamData, setStreamData] = useState<{ [pair: string]: any }>({}); 
 
   useEffect(() => {
     const handleStreamData = (data: any, pair: string) => {   
@@ -43,11 +37,8 @@ const PairPage = () => {
       <div className={styles.container}>
       <a href="/" className={styles.backLink}> --BACK</a>
         <h1 className={styles.title}>{pair}</h1>
-        <Stream pair={pair} data={streamData[pair]} /> {/* Use streamData[pair] */}
-        <BoxesModel pair={pair} />
-        {/* <LineChart data={candleData} /> */}
-        
-        {/* <DataTable pair={pair} /> */}
+        <Stream pair={pair} data={streamData[pair]} />
+        <BoxesModel pair={pair} streamData={streamData[pair]} />
       </div>
     </OandaApiContext.Provider>
   );

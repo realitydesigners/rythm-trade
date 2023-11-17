@@ -165,7 +165,7 @@ const DashboardPage = () => {
           <Dialog>
             <DialogTrigger asChild>
               <Button onClick={toggleProfile}>
-                {showProfile ? 'Hide' : 'Show'} Account Summary
+                Account Summary
               </Button>
             </DialogTrigger>
             <DialogContent>
@@ -203,7 +203,7 @@ const DashboardPage = () => {
               <a href={`/dashboard/pairs/${pair}`}>
                 <Stream pair={pair} data={streamData[pair]} />
               </a>
-              <ResoModel pair={pair} />
+              <ResoModel pair={pair} streamData={streamData[pair]} />
               <Select
                 value={pair}
                 onValueChange={newValue =>

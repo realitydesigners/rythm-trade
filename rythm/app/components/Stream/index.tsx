@@ -1,15 +1,10 @@
 import React from 'react';
 import styles from './styles.module.css';
 import { Label } from '@/components/ui/label';
+import { StreamData } from '@/types';
 
-interface PriceDetail {
-  price: string;
-}
 
-interface StreamData {
-  bids?: PriceDetail[];
-  asks?: PriceDetail[];
-}
+
 
 interface StreamProps {
   pair: string;

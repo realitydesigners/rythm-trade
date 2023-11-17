@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 
-import { CandleData, Box, BoxArrays } from '../../../types';
+import { CandleData, Box, BoxArrays, StreamData } from '../../../types';
 import {
   findCurrentPrice,
   findHighest,
@@ -30,8 +30,8 @@ import {
 
 interface ResoModelProps {
   pair: string;
+  streamData: StreamData | null;
 }
-
 // generateBoxSizes: Generates a map of box sizes based on the provided point sizes and currency pair.
 const generateBoxSizes = (
   pair: string,
@@ -46,7 +46,7 @@ const generateBoxSizes = (
   return boxSizeMap;
 };
 
-const ResoModel: React.FC<ResoModelProps> = ({ pair }) => {
+const ResoModel: React.FC<ResoModelProps> = ({ pair, streamData }) => {
   const api = useContext(OandaApiContext);
   const [currentClosePrice, setCurrentClosePrice] = useState<number | null>(
     null,
@@ -90,6 +90,11 @@ const ResoModel: React.FC<ResoModelProps> = ({ pair }) => {
 
         boxSizeMap.forEach((decimalSize, wholeNumberSize) => {
           let box = newBoxArrays[wholeNumberSize];
+        
+          if (!box) {
+            console.error(`Box not defined for size: ${wholeNumberSize}`);
+            return;
+          }
 
           if (currentPrice > box.high) {
             box.high = currentPrice;
@@ -142,6 +147,60 @@ const ResoModel: React.FC<ResoModelProps> = ({ pair }) => {
     return () => clearInterval(intervalId);
   }, [pair, selectedBoxArray]);
 
+  const updateBoxesWithCurrentPrice = useCallback(
+    (currentPrice: number) => {
+      if (!initializationComplete) {
+        return;
+      }
+      setBoxArrays(prevBoxArrays => {
+        const newBoxArrays = { ...prevBoxArrays };
+        let isUpdated = false;
+  
+        const boxSizes = generateBoxSizes(
+          pair,
+          BOX_SIZES[selectedBoxArray],
+          symbolsToDigits
+        );
+  
+        boxSizes.forEach((decimalSize, wholeNumberSize) => {
+          let box = newBoxArrays[wholeNumberSize];
+          if (!box) {
+            console.error(`Box not defined for size: ${wholeNumberSize}`);
+            return;
+          }
+          if (currentPrice > box.high) {
+            box.high = currentPrice;
+            box.low = currentPrice - decimalSize;
+            box.boxMovedUp = true;
+            box.boxMovedDn = false;
+            isUpdated = true;
+          } else if (currentPrice < box.low) {
+            box.low = currentPrice;
+            box.high = currentPrice + decimalSize;
+            box.boxMovedUp = false;
+            box.boxMovedDn = true;
+            isUpdated = true;
+          }
+        });
+  
+        return isUpdated ? newBoxArrays : prevBoxArrays;
+      });
+    },
+    [pair, selectedBoxArray]
+  );
+  
+  useEffect(() => {
+    if (streamData && initializationComplete) {
+      const bidPrice = streamData.bids?.[0]?.price ? parseFloat(streamData.bids[0].price) : null;
+      const askPrice = streamData.asks?.[0]?.price ? parseFloat(streamData.asks[0].price) : null;
+  
+      if (bidPrice !== null && askPrice !== null) {
+        const currentPrice = (bidPrice + askPrice) / 2;
+        console.log('update with stream');
+        updateBoxesWithCurrentPrice(currentPrice);
+      }
+    }
+  }, [streamData, updateBoxesWithCurrentPrice, initializationComplete]);
   // Render
   if (!initializationComplete) {
     return (

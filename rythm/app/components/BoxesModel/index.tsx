@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import styles from './styles.module.css';
-import { CandleData, Box, BoxArrays } from '../../../types';
+import { CandleData, Box, BoxArrays, StreamData } from '../../../types';
 import {
   findCurrentPrice,
   findHighest,
@@ -23,7 +23,9 @@ import ResoBox from '../ResoBox';
 
 interface BoxModelProps {
   pair: string;
+  streamData: StreamData | null;
 }
+
 
 // generateBoxSizes: Generates a map of box sizes based on the provided point sizes and currency pair.
 const generateBoxSizes = (
@@ -39,7 +41,7 @@ const generateBoxSizes = (
   return boxSizeMap;
 };
 
-const BoxesModel: React.FC<BoxModelProps> = ({ pair }) => {
+const BoxesModel: React.FC<BoxModelProps> = ({ pair, streamData }) => {
   const api = useContext(OandaApiContext);
   const [currentClosePrice, setCurrentClosePrice] = useState<number | null>(
     null,
@@ -83,7 +85,10 @@ const BoxesModel: React.FC<BoxModelProps> = ({ pair }) => {
 
         boxSizeMap.forEach((decimalSize, wholeNumberSize) => {
           let box = newBoxArrays[wholeNumberSize];
-
+          if (!box) {
+            console.error(`Box not defined for size: ${wholeNumberSize}`);
+            return;
+          }
           if (currentPrice > box.high) {
             box.high = currentPrice;
             box.low = currentPrice - decimalSize;
@@ -106,8 +111,7 @@ const BoxesModel: React.FC<BoxModelProps> = ({ pair }) => {
       }
     },
     [initializationComplete],
-  );
-
+  ); 
   // useEffect: Fetches candle data at regular intervals and calculates boxes based on this data.
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -135,6 +139,62 @@ const BoxesModel: React.FC<BoxModelProps> = ({ pair }) => {
     return () => clearInterval(intervalId);
   }, [pair, selectedBoxArray]);
 
+  const updateBoxesWithCurrentPrice = useCallback(
+    (currentPrice: number) => {
+      if (!initializationComplete) {
+        return;
+      }
+      setBoxArrays(prevBoxArrays => {
+        const newBoxArrays = { ...prevBoxArrays };
+        let isUpdated = false;
+  
+        const boxSizes = generateBoxSizes(
+          pair,
+          BOX_SIZES[selectedBoxArray],
+          symbolsToDigits
+        );
+  
+        boxSizes.forEach((decimalSize, wholeNumberSize) => {
+          let box = newBoxArrays[wholeNumberSize];
+          if (!box) {
+            console.error(`Box not defined for size: ${wholeNumberSize}`);
+            return;
+          }
+          if (currentPrice > box.high) {
+            box.high = currentPrice;
+            box.low = currentPrice - decimalSize;
+            box.boxMovedUp = true;
+            box.boxMovedDn = false;
+            isUpdated = true;
+          } else if (currentPrice < box.low) {
+            box.low = currentPrice;
+            box.high = currentPrice + decimalSize;
+            box.boxMovedUp = false;
+            box.boxMovedDn = true;
+            isUpdated = true;
+          }
+        });
+  
+        return isUpdated ? newBoxArrays : prevBoxArrays;
+      });
+    },
+    [pair, selectedBoxArray]
+  );
+  
+  useEffect(() => {
+    if (streamData && initializationComplete) {
+      const bidPrice = streamData.bids?.[0]?.price ? parseFloat(streamData.bids[0].price) : null;
+      const askPrice = streamData.asks?.[0]?.price ? parseFloat(streamData.asks[0].price) : null;
+  
+      if (bidPrice !== null && askPrice !== null) {
+        const currentPrice = (bidPrice + askPrice) / 2;
+        console.log('update with stream');
+        updateBoxesWithCurrentPrice(currentPrice);
+      }
+    }
+  }, [streamData, updateBoxesWithCurrentPrice, initializationComplete]);
+  
+  
   // Render
   if (!initializationComplete) {
     return (
