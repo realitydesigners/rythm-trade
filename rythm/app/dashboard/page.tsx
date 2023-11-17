@@ -190,7 +190,7 @@ const DashboardPage = () => {
           {favoritePairs.slice(0, numDisplayedFavorites).map((pair, index) => (
             <div
               key={pair}
-              className="w-full p-3 lg:p-6 border border-gray-600 h-[375px] lg:h-[550px] rounded-lg"
+              className="w-full p-3 lg:p-6 border border-gray-600 h-[400px] lg:h-[550px] rounded-lg"
               onDrop={e => handleDrop(e, 'favorites', index)}
               onDragOver={handleDragOver}
               draggable
