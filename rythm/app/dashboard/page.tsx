@@ -68,16 +68,16 @@ const DashboardPage = () => {
       if (api) {
         const instruments = await api.getAccountInstruments();
         if (instruments) {
-          const allPairsFetched = instruments.map(
-            (inst: { name: string }) => inst.name,
-          );
-          setAllPairs(allPairsFetched);
-          setCurrencyPairs(allPairsFetched);
+          const allPairsFetched = instruments.map((inst: { name: string }) => inst.name); 
+          const sortedPairs = allPairsFetched.sort((a: string, b: any) => a.localeCompare(b)); 
+          setAllPairs(sortedPairs);
+          setCurrencyPairs(sortedPairs);
         }
       }
     };
     fetchInstruments();
   }, []);
+  
 
   useEffect(() => {
     const handleStreamData = (data: any, pair: string) => {
