@@ -97,11 +97,11 @@ const DashboardPage = () => {
   }, [favoritePairs]);
 
   useEffect(() => {
-    const filteredPairs = allPairs.filter(
-      pair => !favoritePairs.includes(pair),
-    );
+    const displayedFavorites = favoritePairs.slice(0, numDisplayedFavorites);
+    const filteredPairs = allPairs.filter(pair => !displayedFavorites.includes(pair));
     setCurrencyPairs(filteredPairs);
-  }, [favoritePairs, allPairs]);
+  }, [favoritePairs, allPairs, numDisplayedFavorites]);
+  
 
   const handleNumFavoritesChange = (newValue: string) => {
     setNumDisplayedFavorites(parseInt(newValue, 10));
