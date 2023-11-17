@@ -25,11 +25,13 @@ import {
 import { Button, buttonVariants } from '@/components/ui/button';
 
 const initialFavorites = [
-  'EUR_USD',
-  'USD_JPY',
   'GBP_USD',
+  'USD_JPY',
+  'AUD_USD',
+  'EUR_JPY',
   'AUD_CAD',
   'USD_SGD',
+  'EUR_USD',
   'EUR_SEK',
   'HKD_JPY',
   'AUD_USD',
@@ -54,7 +56,7 @@ const DashboardPage = () => {
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const [allPairs, setAllPairs] = useState<string[]>([]);
   const [showProfile, setShowProfile] = useState(false);
-  const [numDisplayedFavorites, setNumDisplayedFavorites] = useState<number>(8);
+  const [numDisplayedFavorites, setNumDisplayedFavorites] = useState<number>(4);
   const [streamData, setStreamData] = useState<{ [pair: string]: any }>({});
 
   const toggleProfile = () => {
