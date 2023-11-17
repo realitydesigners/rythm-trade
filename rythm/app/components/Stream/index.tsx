@@ -22,14 +22,15 @@ const Stream: React.FC<StreamProps> = ({ pair, data }) => {
 
   return (
     <div className="w-full justify-center flex">
-      <div className="w-full">
+      <div className="w-full ">
         <Label className="font-bold">
           {pair}:
           {data ? (
             <>
               <br />
               <Label className="text-teal-400 font-bold">Bid:</Label>{' '}
-              <Label>{bid}</Label>{' '}
+              <Label>{bid}</Label>
+              <br />
               <Label className="text-red-400 font-bold">Ask:</Label>{' '}
               <Label>{ask}</Label>{' '}
             </>
