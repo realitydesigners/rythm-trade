@@ -59,6 +59,16 @@ const DashboardPage = () => {
   const [numDisplayedFavorites, setNumDisplayedFavorites] = useState<number>(4);
   const [streamData, setStreamData] = useState<{ [pair: string]: any }>({});
   const [isLoading, setIsLoading] = useState(true); // Initialize as true to show loading by default
+  const [selectedBoxArrayTypes, setSelectedBoxArrayTypes] = useState(
+    Object.fromEntries(initialFavorites.map(pair => [pair, 'default']))
+  );
+
+  const handleBoxArrayChange = (pair: string, selectedKey: string) => {
+    setSelectedBoxArrayTypes(prev => ({
+      ...prev,
+      [pair]: selectedKey
+    }));
+  };
 
   const toggleProfile = () => {
     setShowProfile(prevShow => !prevShow);
@@ -203,7 +213,7 @@ const DashboardPage = () => {
               <a href={`/dashboard/pairs/${pair}`}>
                 <Stream pair={pair} data={streamData[pair]} />
               </a>
-              <ResoModel pair={pair} streamData={streamData[pair]} />
+              <ResoModel pair={pair} streamData={streamData[pair]} selectedBoxArrayType={selectedBoxArrayTypes[pair]} />
               <Select
                 value={pair}
                 onValueChange={newValue =>
@@ -221,6 +231,21 @@ const DashboardPage = () => {
                   ))}
                 </SelectContent>
               </Select>
+              <div className="mb-4">
+              <Select value={selectedBoxArrayTypes[pair]} onValueChange={newValue => handleBoxArrayChange(pair, newValue)}>
+
+                  <SelectTrigger>
+                    <SelectValue>{selectedBoxArrayTypes[pair]}</SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    {['default', 'array1', 'array2', 'array3'].map(arrayKey => (
+                      <SelectItem key={arrayKey} value={arrayKey}>
+                        {arrayKey}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           ))}
         </div>

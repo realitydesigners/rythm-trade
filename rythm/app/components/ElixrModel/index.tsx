@@ -27,7 +27,7 @@ import {
   SelectContent,
   SelectItem,
 } from '@/components/ui/select';
-interface ResoModelProps {
+interface ElixrModelProps {
   pair: string;
   streamData: StreamData | null;
   selectedBoxArrayType: string;
@@ -46,7 +46,7 @@ const generateBoxSizes = (
   return boxSizeMap;
 };
 
-const ResoModel: React.FC<ResoModelProps> = ({ pair, streamData, selectedBoxArrayType }) => {
+const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData, selectedBoxArrayType }) => {
   console.log(selectedBoxArrayType)
   const api = useContext(OandaApiContext);
   const [currentClosePrice, setCurrentClosePrice] = useState<number | null>(
@@ -243,4 +243,4 @@ const ResoModel: React.FC<ResoModelProps> = ({ pair, streamData, selectedBoxArra
   );
 };
 
-export default ResoModel;
+export default ElixrModel;
