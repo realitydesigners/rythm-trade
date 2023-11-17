@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 
-import { CandleData, Box, BoxArrays } from '../../../types';
+import { CandleData, Box, BoxArrays, StreamData } from '../../../types';
 import {
   findCurrentPrice,
   findHighest,
@@ -27,11 +27,11 @@ import {
   SelectContent,
   SelectItem,
 } from '@/components/ui/select';
-
 interface ResoModelProps {
   pair: string;
+  streamData: StreamData | null;
+  selectedBoxArrayType: string;
 }
-
 // generateBoxSizes: Generates a map of box sizes based on the provided point sizes and currency pair.
 const generateBoxSizes = (
   pair: string,
@@ -46,7 +46,8 @@ const generateBoxSizes = (
   return boxSizeMap;
 };
 
-const ResoModel: React.FC<ResoModelProps> = ({ pair }) => {
+const ResoModel: React.FC<ResoModelProps> = ({ pair, streamData, selectedBoxArrayType }) => {
+  console.log(selectedBoxArrayType)
   const api = useContext(OandaApiContext);
   const [currentClosePrice, setCurrentClosePrice] = useState<number | null>(
     null,
@@ -54,17 +55,8 @@ const ResoModel: React.FC<ResoModelProps> = ({ pair }) => {
   const [boxArrays, setBoxArrays] = useState<BoxArrays>({});
   const [initializationComplete, setInitializationComplete] =
     useState<boolean>(false);
-  const [selectedBoxArray, setSelectedBoxArray] = useState<string>('default');
 
-  // Function to switch between arrays
-  const switchBoxArray = (arrayKey: string) => {
-    if (selectedBoxArray === arrayKey) {
-      // Do nothing if the selected array is already active
-      return;
-    }
-    setInitializationComplete(false);
-    setSelectedBoxArray(arrayKey);
-  };
+
 
   // calculateAllBoxes: Calculates the high and low values for each box size based on the candle data.
   const calculateAllBoxes = useCallback(
@@ -90,6 +82,11 @@ const ResoModel: React.FC<ResoModelProps> = ({ pair }) => {
 
         boxSizeMap.forEach((decimalSize, wholeNumberSize) => {
           let box = newBoxArrays[wholeNumberSize];
+        
+          if (!box) {
+            console.error(`Box not defined for size: ${wholeNumberSize}`);
+            return;
+          }
 
           if (currentPrice > box.high) {
             box.high = currentPrice;
@@ -126,7 +123,7 @@ const ResoModel: React.FC<ResoModelProps> = ({ pair }) => {
         if (currentPrice !== undefined) {
           const boxSizes = generateBoxSizes(
             pair,
-            BOX_SIZES[selectedBoxArray],
+            BOX_SIZES[selectedBoxArrayType],
             symbolsToDigits,
           );
           calculateAllBoxes(currentPrice, oandaData, boxSizes);
@@ -140,8 +137,62 @@ const ResoModel: React.FC<ResoModelProps> = ({ pair }) => {
     intervalId = setInterval(fetchAndCalculateBoxes, 60000);
 
     return () => clearInterval(intervalId);
-  }, [pair, selectedBoxArray]);
+  }, [pair, selectedBoxArrayType]);
 
+  const updateBoxesWithCurrentPrice = useCallback(
+    (currentPrice: number) => {
+      if (!initializationComplete) {
+        return;
+      }
+      setBoxArrays(prevBoxArrays => {
+        const newBoxArrays = { ...prevBoxArrays };
+        let isUpdated = false;
+  
+        const boxSizes = generateBoxSizes(
+          pair,
+          BOX_SIZES[selectedBoxArrayType],
+          symbolsToDigits
+        );
+  
+        boxSizes.forEach((decimalSize, wholeNumberSize) => {
+          let box = newBoxArrays[wholeNumberSize];
+          if (!box) {
+            console.error(`Box not defined for size: ${wholeNumberSize}`);
+            return;
+          }
+          if (currentPrice > box.high) {
+            box.high = currentPrice;
+            box.low = currentPrice - decimalSize;
+            box.boxMovedUp = true;
+            box.boxMovedDn = false;
+            isUpdated = true;
+          } else if (currentPrice < box.low) {
+            box.low = currentPrice;
+            box.high = currentPrice + decimalSize;
+            box.boxMovedUp = false;
+            box.boxMovedDn = true;
+            isUpdated = true;
+          }
+        });
+  
+        return isUpdated ? newBoxArrays : prevBoxArrays;
+      });
+    },
+    [pair, selectedBoxArrayType]
+  );
+  
+  useEffect(() => {
+    if (streamData && initializationComplete) {
+      const bidPrice = streamData.bids?.[0]?.price ? parseFloat(streamData.bids[0].price) : null;
+      const askPrice = streamData.asks?.[0]?.price ? parseFloat(streamData.asks[0].price) : null;
+  
+      if (bidPrice !== null && askPrice !== null) {
+        const currentPrice = (bidPrice + askPrice) / 2;
+        console.log('update with stream');
+        updateBoxesWithCurrentPrice(currentPrice);
+      }
+    }
+  }, [streamData, updateBoxesWithCurrentPrice, initializationComplete]);
   // Render
   if (!initializationComplete) {
     return (
@@ -176,10 +227,6 @@ const ResoModel: React.FC<ResoModelProps> = ({ pair }) => {
     );
   }
 
-  // Function to handle dropdown change
-  const handleDropdownChange = (selectedKey: string) => {
-    setSelectedBoxArray(selectedKey); // Update the selectedBoxArray state
-  };
 
   return (
     <div className="w-full h-auto">
@@ -187,23 +234,7 @@ const ResoModel: React.FC<ResoModelProps> = ({ pair }) => {
         <>
           <ResoBox boxArrays={boxArrays} />
 
-          <div className="mb-4">
-            <Select
-              onValueChange={handleDropdownChange}
-              value={selectedBoxArray}
-            >
-              <SelectTrigger>
-                <SelectValue>{selectedBoxArray}</SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                {['default', 'array1', 'array2', 'array3'].map(arrayKey => (
-                  <SelectItem key={arrayKey} value={arrayKey}>
-                    {arrayKey}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+
         </>
       ) : (
         <div>Loading...</div>

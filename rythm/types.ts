@@ -9,11 +9,13 @@ export interface CandleData {
   symbol: string; // Add the symbol property to represent the currency pair
 }
 
+interface PriceDetail {
+  price: string;
+}
+
 export interface StreamData {
-  type: string;
-  time: string;
-  symbol: string;
-  price: number;
+  bids?: PriceDetail[];
+  asks?: PriceDetail[];
 }
 
 export interface Price {

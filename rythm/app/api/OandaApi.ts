@@ -3,33 +3,33 @@ import { parseISO } from 'date-fns';
 import { createContext } from 'react';
 
 
-import {
-  OANDA_BASE_URL,
-  OANDA_STREAM_URL,
-  OANDA_TOKEN,
-  ACCOUNT_ID,
-  INSTRUMENT,
-} from "../../index";
+const key = process.env.NEXT_PUBLIC_OANDA_TOKEN as string;
+const acc_id = process.env.NEXT_PUBLIC_ACCOUNT_ID as string;
+const base_url = process.env.NEXT_PUBLIC_OANDA_BASE_URL as string;
+const stream_url = process.env.NEXT_PUBLIC_OANDA_STREAM_URL as string;
 
 export class OandaApi {
   private api_key: string;
   private oanda_url: string;
   private account_id: string;
+  private stream_link: string;
   private activeStreams: Map<string, ReadableStreamDefaultReader<Uint8Array>> = new Map();
 
-  constructor(api_key: string = OANDA_TOKEN, oanda_url: string = OANDA_BASE_URL, account_id: string = ACCOUNT_ID) {
+  constructor(api_key: string = key, oanda_url: string = base_url, account_id: string = acc_id, stream_link: string = stream_url) {
     // Initialize Oanda API with optional API key, base URL, and account ID. 
 
     this.api_key = api_key;
     this.oanda_url = oanda_url;
     this.account_id = account_id;
+    this.stream_link = stream_link;
+
   }
 
   public async subscribeToPairs(pairs: string[], onData: (data: any, pair: string) => void) {
     for (const pair of pairs) {
       if (!this.activeStreams.has(pair)) {
         try {
-          const response = await fetch(`${OANDA_STREAM_URL}/accounts/${this.account_id}/pricing/stream?instruments=${pair}`, {
+          const response = await fetch(`${this.stream_link}/accounts/${this.account_id}/pricing/stream?instruments=${pair}`, {
             headers: {
               Authorization: `Bearer ${this.api_key}`,
               "Content-Type": "application/json",
@@ -220,40 +220,7 @@ export class OandaApi {
       console.error('ERROR fetchCandles()', params, data);
       return null;
     }
-  }
-
-  public async getCandlesDF(pairName: string, count: number = 10, granularity: string = 'H1', price: string = 'MBA', dateFrom: Date | null = null, dateTo: Date | null = null) {
-    // Transform candle data into a more structured format. Returns an array of transformed data.
-
-    const candles = await this.fetchCandles(pairName, count, granularity, price, dateFrom, dateTo);
-    if (!candles) return null;
-
-    const finalData: any[] = [];
-
-    for (const candle of candles) {
-      if (!candle.complete) continue;
-
-      const newDict: any = {};
-      newDict.time = parseISO(candle.time);
-      newDict.volume = candle.volume;
-
-      const prices = ['mid', 'bid', 'ask'];
-      const ohlc = ['o', 'h', 'l', 'c'];
-
-      for (const p of prices) {
-        if (candle[p]) {
-          for (const o of ohlc) {
-            newDict[`${p}_${o}`] = parseFloat(candle[p][o]);
-          }
-        }
-      }
-
-      finalData.push(newDict);
-    }
-
-    return finalData;
-  }
-
+  } 
   public async getAccountSummary(account_id: string = this.account_id) {
     // Fetch account summary. Returns account summary data.
 
@@ -367,86 +334,7 @@ export class OandaApi {
     }
     return null;
   }
-  
-  public async startStreaming(instrument: string, onData: (data: any) => void) { 
-    // Start streaming price data for a given instrument. Calls onData with each new data point.
 
-    try {
-      const response = await fetch(
-        `${OANDA_STREAM_URL}/accounts/${this.account_id}/pricing/stream?instruments=${instrument}`,
-        {
-          headers: {
-            Authorization: `Bearer ${this.api_key}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      const reader = response?.body?.getReader();
-      let buffer = "";
-
-      while (true) {
-        const result = await (reader?.read() as Promise<ReadableStreamReadResult<Uint8Array>>);
-        if (result?.done) {
-          console.log("WebSocket connection closed.");
-          break;
-        }
-        buffer += new TextDecoder().decode(result?.value);
-
-        let newlineIndex = buffer.indexOf("\n");
-        while (newlineIndex !== -1) {
-          const singleJSON = buffer.slice(0, newlineIndex);
-          try {
-            const data = JSON.parse(singleJSON);
-            onData(data);
-          } catch (error) {
-            console.error("Error parsing JSON:", error);
-          }
-
-          buffer = buffer.slice(newlineIndex + 1);
-          newlineIndex = buffer.indexOf("\n");
-        }
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }
-  
-  public async fetchData() { 
-    // Fetch candle data with granularity M1 and count 300. Returns an array of candle data.
-
-    const url = `accounts/${this.account_id}/instruments/${INSTRUMENT}/candles?granularity=M1&count=300`;
-    const [ok, data] = await this.makeRequest(url);
-    if (ok && data['candles']) {
-      return data['candles'].map((candle: any) => ({
-        time: candle.time,
-        mid: {
-          o: candle.mid.o,
-          c: candle.mid.c,
-          h: candle.mid.h,
-          l: candle.mid.l,
-        },
-      }));
-    } else {
-      console.error("Error fetching data:", data);
-      return null;
-    }
-  }
-
-  
-  public async chartData() {
-    // Fetch GBP_USD candle data with granularity M1 and count 300. Returns raw data.
-
-    const url = `accounts/${this.account_id}/instruments/GBP_USD/candles?granularity=M1&count=300`;
-    const [ok, data] = await this.makeRequest(url);
-    if (ok && data) {
-      return data;
-    } else {
-      console.error("Error fetching data:", data);
-      return null;
-    }
-  }
-  
 }
 
 export const OandaApiContext = createContext<OandaApi | null>(null);

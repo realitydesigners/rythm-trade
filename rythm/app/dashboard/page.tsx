@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import Stream from '../components/Stream';
 import ResoModel from '../components/ResoModel';
+import ElixrModel from '../components/ElixrModel';
+
 import MasterProfile from '../components/MasterProfile';
 import { OandaApiContext, api } from '../api/OandaApi';
 import styles from './DashboardPage.module.css';
@@ -59,6 +61,16 @@ const DashboardPage = () => {
   const [numDisplayedFavorites, setNumDisplayedFavorites] = useState<number>(4);
   const [streamData, setStreamData] = useState<{ [pair: string]: any }>({});
   const [isLoading, setIsLoading] = useState(true); // Initialize as true to show loading by default
+  const [selectedBoxArrayTypes, setSelectedBoxArrayTypes] = useState(
+    Object.fromEntries(initialFavorites.map(pair => [pair, 'default']))
+  );
+
+  const handleBoxArrayChange = (pair: string, selectedKey: string) => {
+    setSelectedBoxArrayTypes(prev => ({
+      ...prev,
+      [pair]: selectedKey
+    }));
+  };
 
   const toggleProfile = () => {
     setShowProfile(prevShow => !prevShow);
@@ -68,16 +80,16 @@ const DashboardPage = () => {
       if (api) {
         const instruments = await api.getAccountInstruments();
         if (instruments) {
-          const allPairsFetched = instruments.map(
-            (inst: { name: string }) => inst.name,
-          );
-          setAllPairs(allPairsFetched);
-          setCurrencyPairs(allPairsFetched);
+          const allPairsFetched = instruments.map((inst: { name: string }) => inst.name); 
+          const sortedPairs = allPairsFetched.sort((a: string, b: any) => a.localeCompare(b)); 
+          setAllPairs(sortedPairs);
+          setCurrencyPairs(sortedPairs);
         }
       }
     };
     fetchInstruments();
   }, []);
+  
 
   useEffect(() => {
     const handleStreamData = (data: any, pair: string) => {
@@ -97,11 +109,11 @@ const DashboardPage = () => {
   }, [favoritePairs]);
 
   useEffect(() => {
-    const filteredPairs = allPairs.filter(
-      pair => !favoritePairs.includes(pair),
-    );
+    const displayedFavorites = favoritePairs.slice(0, numDisplayedFavorites);
+    const filteredPairs = allPairs.filter(pair => !displayedFavorites.includes(pair));
     setCurrencyPairs(filteredPairs);
-  }, [favoritePairs, allPairs]);
+  }, [favoritePairs, allPairs, numDisplayedFavorites]);
+  
 
   const handleNumFavoritesChange = (newValue: string) => {
     setNumDisplayedFavorites(parseInt(newValue, 10));
@@ -165,7 +177,7 @@ const DashboardPage = () => {
           <Dialog>
             <DialogTrigger asChild>
               <Button onClick={toggleProfile}>
-                {showProfile ? 'Hide' : 'Show'} Account Summary
+                Account Summary
               </Button>
             </DialogTrigger>
             <DialogContent>
@@ -203,7 +215,8 @@ const DashboardPage = () => {
               <a href={`/dashboard/pairs/${pair}`}>
                 <Stream pair={pair} data={streamData[pair]} />
               </a>
-              <ResoModel pair={pair} />
+              <ResoModel pair={pair} streamData={streamData[pair]} selectedBoxArrayType={selectedBoxArrayTypes[pair]} />
+
               <Select
                 value={pair}
                 onValueChange={newValue =>
@@ -221,6 +234,22 @@ const DashboardPage = () => {
                   ))}
                 </SelectContent>
               </Select>
+              <div className="mb-4">
+              <Select value={selectedBoxArrayTypes[pair]} onValueChange={newValue => handleBoxArrayChange(pair, newValue)}> 
+                  <SelectTrigger>
+                    <SelectValue>{selectedBoxArrayTypes[pair]}</SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    {['default', 'array1', 'array2', 'array3'].map(arrayKey => (
+                      <SelectItem key={arrayKey} value={arrayKey}>
+                        {arrayKey}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <ElixrModel pair={pair} streamData={streamData[pair]} />
+
             </div>
           ))}
         </div>
