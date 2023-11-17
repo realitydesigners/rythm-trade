@@ -58,6 +58,7 @@ const DashboardPage = () => {
   const [showProfile, setShowProfile] = useState(false);
   const [numDisplayedFavorites, setNumDisplayedFavorites] = useState<number>(4);
   const [streamData, setStreamData] = useState<{ [pair: string]: any }>({});
+  const [isLoading, setIsLoading] = useState(true); // Initialize as true to show loading by default
 
   const toggleProfile = () => {
     setShowProfile(prevShow => !prevShow);
