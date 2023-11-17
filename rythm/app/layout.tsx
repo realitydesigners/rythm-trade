@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { ClerkProvider } from '@clerk/nextjs'
 
 export const metadata: Metadata = {
   title: 'RYTHM - High Precision Algorithmic Trading',
@@ -14,10 +15,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="bg-black">
-        <div>{children}</div>
-      </body>
-    </html>
+    <ClerkProvider> 
+      <html lang="en">
+        <body className="bg-black">
+          <div>{children}</div>
+        </body>
+      </html>
+    </ClerkProvider>
+
   );
 }
