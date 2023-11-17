@@ -157,18 +157,19 @@ const DashboardPage = () => {
 
   return (
     <OandaApiContext.Provider value={api}>
-      <div>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button onClick={toggleProfile}>
-              {showProfile ? 'Hide' : 'Show'} Account Summary
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <MasterProfile />
-          </DialogContent>
-        </Dialog>
-        <div className="w-full  mt-4 mb-4">
+      <div className="w-full flex flex-wrap">
+        <div className="w-full flex flex-wrap gap-2 mb-4">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button onClick={toggleProfile}>
+                {showProfile ? 'Hide' : 'Show'} Account Summary
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <MasterProfile />
+            </DialogContent>
+          </Dialog>
+
           <Select
             onValueChange={handleNumFavoritesChange}
             value={numDisplayedFavorites.toString()}
@@ -186,11 +187,11 @@ const DashboardPage = () => {
           </Select>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-4 w-full">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 lg:gap-4 w-full">
           {favoritePairs.slice(0, numDisplayedFavorites).map((pair, index) => (
             <div
               key={pair}
-              className="w-full p-3 lg:p-6 border border-gray-600 h-[400px] lg:h-[550px] rounded-lg"
+              className="w-full p-3 lg:p-6 border border-gray-600 h-[400px] sm:h-[550px] md:h-[550px] lg:h-[625px] rounded-lg"
               onDrop={e => handleDrop(e, 'favorites', index)}
               onDragOver={handleDragOver}
               draggable
