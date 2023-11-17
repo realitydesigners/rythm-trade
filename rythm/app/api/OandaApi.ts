@@ -3,33 +3,33 @@ import { parseISO } from 'date-fns';
 import { createContext } from 'react';
 
 
-import {
-  OANDA_BASE_URL,
-  OANDA_STREAM_URL,
-  OANDA_TOKEN,
-  ACCOUNT_ID,
-  INSTRUMENT,
-} from "../../index";
+const key = process.env.NEXT_PUBLIC_OANDA_TOKEN as string;
+const acc_id = process.env.NEXT_PUBLIC_ACCOUNT_ID as string;
+const base_url = process.env.NEXT_PUBLIC_OANDA_BASE_URL as string;
+const stream_url = process.env.NEXT_PUBLIC_OANDA_STREAM_URL as string;
 
 export class OandaApi {
   private api_key: string;
   private oanda_url: string;
   private account_id: string;
+  private stream_link: string;
   private activeStreams: Map<string, ReadableStreamDefaultReader<Uint8Array>> = new Map();
 
-  constructor(api_key: string = OANDA_TOKEN, oanda_url: string = OANDA_BASE_URL, account_id: string = ACCOUNT_ID) {
+  constructor(api_key: string = key, oanda_url: string = base_url, account_id: string = acc_id, stream_link: string = stream_url) {
     // Initialize Oanda API with optional API key, base URL, and account ID. 
 
     this.api_key = api_key;
     this.oanda_url = oanda_url;
     this.account_id = account_id;
+    this.stream_link = stream_link;
+
   }
 
   public async subscribeToPairs(pairs: string[], onData: (data: any, pair: string) => void) {
     for (const pair of pairs) {
       if (!this.activeStreams.has(pair)) {
         try {
-          const response = await fetch(`${OANDA_STREAM_URL}/accounts/${this.account_id}/pricing/stream?instruments=${pair}`, {
+          const response = await fetch(`${this.stream_link}/accounts/${this.account_id}/pricing/stream?instruments=${pair}`, {
             headers: {
               Authorization: `Bearer ${this.api_key}`,
               "Content-Type": "application/json",
