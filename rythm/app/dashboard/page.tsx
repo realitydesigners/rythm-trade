@@ -62,13 +62,13 @@ const DashboardPage = () => {
   const [streamData, setStreamData] = useState<{ [pair: string]: any }>({});
   const [isLoading, setIsLoading] = useState(true); // Initialize as true to show loading by default
   const [selectedBoxArrayTypes, setSelectedBoxArrayTypes] = useState(
-    Object.fromEntries(initialFavorites.map(pair => [pair, 'default']))
+    Object.fromEntries(initialFavorites.map(pair => [pair, 'default'])),
   );
 
   const handleBoxArrayChange = (pair: string, selectedKey: string) => {
     setSelectedBoxArrayTypes(prev => ({
       ...prev,
-      [pair]: selectedKey
+      [pair]: selectedKey,
     }));
   };
 
@@ -80,8 +80,12 @@ const DashboardPage = () => {
       if (api) {
         const instruments = await api.getAccountInstruments();
         if (instruments) {
-          const allPairsFetched = instruments.map((inst: { name: string }) => inst.name); 
-          const sortedPairs = allPairsFetched.sort((a: string, b: any) => a.localeCompare(b)); 
+          const allPairsFetched = instruments.map(
+            (inst: { name: string }) => inst.name,
+          );
+          const sortedPairs = allPairsFetched.sort((a: string, b: any) =>
+            a.localeCompare(b),
+          );
           setAllPairs(sortedPairs);
           setCurrencyPairs(sortedPairs);
         }
@@ -89,7 +93,6 @@ const DashboardPage = () => {
     };
     fetchInstruments();
   }, []);
-  
 
   useEffect(() => {
     const handleStreamData = (data: any, pair: string) => {
@@ -110,10 +113,11 @@ const DashboardPage = () => {
 
   useEffect(() => {
     const displayedFavorites = favoritePairs.slice(0, numDisplayedFavorites);
-    const filteredPairs = allPairs.filter(pair => !displayedFavorites.includes(pair));
+    const filteredPairs = allPairs.filter(
+      pair => !displayedFavorites.includes(pair),
+    );
     setCurrencyPairs(filteredPairs);
   }, [favoritePairs, allPairs, numDisplayedFavorites]);
-  
 
   const handleNumFavoritesChange = (newValue: string) => {
     setNumDisplayedFavorites(parseInt(newValue, 10));
@@ -176,9 +180,7 @@ const DashboardPage = () => {
         <div className="w-full flex flex-wrap gap-2 mb-4">
           <Dialog>
             <DialogTrigger asChild>
-              <Button onClick={toggleProfile}>
-                Account Summary
-              </Button>
+              <Button onClick={toggleProfile}>Account Summary</Button>
             </DialogTrigger>
             <DialogContent>
               <MasterProfile />
@@ -215,27 +217,36 @@ const DashboardPage = () => {
               <a href={`/dashboard/pairs/${pair}`}>
                 <Stream pair={pair} data={streamData[pair]} />
               </a>
-              <ResoModel pair={pair} streamData={streamData[pair]} selectedBoxArrayType={selectedBoxArrayTypes[pair]} />
+              <ResoModel
+                pair={pair}
+                streamData={streamData[pair]}
+                selectedBoxArrayType={selectedBoxArrayTypes[pair]}
+              />
+              <div className="w-full p-2 flex justify-center items-center gap-2">
+                <Select
+                  value={pair}
+                  onValueChange={newValue =>
+                    handleReplaceFavorite(newValue, index)
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue>{pair}</SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    {currencyPairs.map(p => (
+                      <SelectItem key={p} value={p}>
+                        {p}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
 
-              <Select
-                value={pair}
-                onValueChange={newValue =>
-                  handleReplaceFavorite(newValue, index)
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue>{pair}</SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  {currencyPairs.map(p => (
-                    <SelectItem key={p} value={p}>
-                      {p}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <div className="mb-4">
-              <Select value={selectedBoxArrayTypes[pair]} onValueChange={newValue => handleBoxArrayChange(pair, newValue)}> 
+                <Select
+                  value={selectedBoxArrayTypes[pair]}
+                  onValueChange={newValue =>
+                    handleBoxArrayChange(pair, newValue)
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue>{selectedBoxArrayTypes[pair]}</SelectValue>
                   </SelectTrigger>
@@ -249,7 +260,6 @@ const DashboardPage = () => {
                 </Select>
               </div>
               <ElixrModel pair={pair} streamData={streamData[pair]} />
-
             </div>
           ))}
         </div>
