@@ -78,22 +78,20 @@ const DashboardPage = () => {
 
   useEffect(() => {
     const handleStreamData = (data: any, pair: string) => {
-      if (data.type !== "HEARTBEAT") {
-        setStreamData((prevData) => ({
+      if (data.type !== 'HEARTBEAT') {
+        setStreamData(prevData => ({
           ...prevData,
           [pair]: data,
         }));
       }
     };
-  
+
     api.subscribeToPairs(favoritePairs, handleStreamData);
-  
+
     return () => {
       api.unsubscribeFromPairs(favoritePairs);
     };
   }, [favoritePairs]);
-  
-  
 
   useEffect(() => {
     const filteredPairs = allPairs.filter(
@@ -192,7 +190,7 @@ const DashboardPage = () => {
           {favoritePairs.slice(0, numDisplayedFavorites).map((pair, index) => (
             <div
               key={pair}
-              className="w-full p-6 border border-gray-200 rounded-lg"
+              className="w-full p-6 border border-gray-600 h-[550px] lg:h-[550px] rounded-lg"
               onDrop={e => handleDrop(e, 'favorites', index)}
               onDragOver={handleDragOver}
               draggable
@@ -222,7 +220,6 @@ const DashboardPage = () => {
             </div>
           ))}
         </div>
-
       </div>
     </OandaApiContext.Provider>
   );
