@@ -26,7 +26,6 @@ interface BoxModelProps {
   streamData: StreamData | null;
 }
 
-
 // generateBoxSizes: Generates a map of box sizes based on the provided point sizes and currency pair.
 const generateBoxSizes = (
   pair: string,
@@ -49,7 +48,7 @@ const BoxesModel: React.FC<BoxModelProps> = ({ pair, streamData }) => {
   const [boxArrays, setBoxArrays] = useState<BoxArrays>({});
   const [initializationComplete, setInitializationComplete] =
     useState<boolean>(false);
-  const [selectedBoxArray, setSelectedBoxArray] = useState<string>('default');
+  const [selectedBoxArray, setSelectedBoxArray] = useState<string>('d');
 
   // Function to switch between arrays
   const switchBoxArray = (arrayKey: string) => {
@@ -111,7 +110,7 @@ const BoxesModel: React.FC<BoxModelProps> = ({ pair, streamData }) => {
       }
     },
     [initializationComplete],
-  ); 
+  );
   // useEffect: Fetches candle data at regular intervals and calculates boxes based on this data.
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -147,13 +146,13 @@ const BoxesModel: React.FC<BoxModelProps> = ({ pair, streamData }) => {
       setBoxArrays(prevBoxArrays => {
         const newBoxArrays = { ...prevBoxArrays };
         let isUpdated = false;
-  
+
         const boxSizes = generateBoxSizes(
           pair,
           BOX_SIZES[selectedBoxArray],
-          symbolsToDigits
+          symbolsToDigits,
         );
-  
+
         boxSizes.forEach((decimalSize, wholeNumberSize) => {
           let box = newBoxArrays[wholeNumberSize];
           if (!box) {
@@ -174,18 +173,22 @@ const BoxesModel: React.FC<BoxModelProps> = ({ pair, streamData }) => {
             isUpdated = true;
           }
         });
-  
+
         return isUpdated ? newBoxArrays : prevBoxArrays;
       });
     },
-    [pair, selectedBoxArray]
+    [pair, selectedBoxArray],
   );
-  
+
   useEffect(() => {
     if (streamData && initializationComplete) {
-      const bidPrice = streamData.bids?.[0]?.price ? parseFloat(streamData.bids[0].price) : null;
-      const askPrice = streamData.asks?.[0]?.price ? parseFloat(streamData.asks[0].price) : null;
-  
+      const bidPrice = streamData.bids?.[0]?.price
+        ? parseFloat(streamData.bids[0].price)
+        : null;
+      const askPrice = streamData.asks?.[0]?.price
+        ? parseFloat(streamData.asks[0].price)
+        : null;
+
       if (bidPrice !== null && askPrice !== null) {
         const currentPrice = (bidPrice + askPrice) / 2;
         console.log('update with stream');
@@ -193,8 +196,7 @@ const BoxesModel: React.FC<BoxModelProps> = ({ pair, streamData }) => {
       }
     }
   }, [streamData, updateBoxesWithCurrentPrice, initializationComplete]);
-  
-  
+
   // Render
   if (!initializationComplete) {
     return (

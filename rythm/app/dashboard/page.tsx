@@ -62,7 +62,7 @@ const DashboardPage = () => {
   const [streamData, setStreamData] = useState<{ [pair: string]: any }>({});
   const [isLoading, setIsLoading] = useState(true); // Initialize as true to show loading by default
   const [selectedBoxArrayTypes, setSelectedBoxArrayTypes] = useState(
-    Object.fromEntries(initialFavorites.map(pair => [pair, 'default'])),
+    Object.fromEntries(initialFavorites.map(pair => [pair, 'd'])),
   );
 
   const handleBoxArrayChange = (pair: string, selectedKey: string) => {
@@ -208,7 +208,7 @@ const DashboardPage = () => {
           {favoritePairs.slice(0, numDisplayedFavorites).map((pair, index) => (
             <div
               key={pair}
-              className="w-full p-3 lg:p-6 border border-gray-600 h-[400px] sm:h-[550px] md:h-[550px] lg:h-[625px] rounded-lg"
+              className="w-full p-3 lg:p-6 border border-gray-600 h-[420px] sm:h-[550px] md:h-[575px] lg:h-[650px] rounded-lg"
               onDrop={e => handleDrop(e, 'favorites', index)}
               onDragOver={handleDragOver}
               draggable
@@ -222,7 +222,24 @@ const DashboardPage = () => {
                 streamData={streamData[pair]}
                 selectedBoxArrayType={selectedBoxArrayTypes[pair]}
               />
-              <div className="w-full p-2 flex justify-center items-center gap-2">
+              <div className="w-full  flex justify-center items-center gap-2">
+                <Select
+                  value={selectedBoxArrayTypes[pair]}
+                  onValueChange={newValue =>
+                    handleBoxArrayChange(pair, newValue)
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue>{selectedBoxArrayTypes[pair]}</SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    {['default', '1', '2', '3'].map(arrayKey => (
+                      <SelectItem key={arrayKey} value={arrayKey}>
+                        {arrayKey}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <Select
                   value={pair}
                   onValueChange={newValue =>
@@ -236,24 +253,6 @@ const DashboardPage = () => {
                     {currencyPairs.map(p => (
                       <SelectItem key={p} value={p}>
                         {p}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                <Select
-                  value={selectedBoxArrayTypes[pair]}
-                  onValueChange={newValue =>
-                    handleBoxArrayChange(pair, newValue)
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue>{selectedBoxArrayTypes[pair]}</SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    {['default', 'array1', 'array2', 'array3'].map(arrayKey => (
-                      <SelectItem key={arrayKey} value={arrayKey}>
-                        {arrayKey}
                       </SelectItem>
                     ))}
                   </SelectContent>
