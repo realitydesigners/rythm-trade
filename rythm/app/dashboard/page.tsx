@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import Stream from '../components/Stream';
 import ResoModel from '../components/ResoModel';
+import ElixrModel from '../components/ElixrModel';
+
 import MasterProfile from '../components/MasterProfile';
 import { OandaApiContext, api } from '../api/OandaApi';
 import styles from './DashboardPage.module.css';
@@ -214,6 +216,7 @@ const DashboardPage = () => {
                 <Stream pair={pair} data={streamData[pair]} />
               </a>
               <ResoModel pair={pair} streamData={streamData[pair]} selectedBoxArrayType={selectedBoxArrayTypes[pair]} />
+
               <Select
                 value={pair}
                 onValueChange={newValue =>
@@ -232,8 +235,7 @@ const DashboardPage = () => {
                 </SelectContent>
               </Select>
               <div className="mb-4">
-              <Select value={selectedBoxArrayTypes[pair]} onValueChange={newValue => handleBoxArrayChange(pair, newValue)}>
-
+              <Select value={selectedBoxArrayTypes[pair]} onValueChange={newValue => handleBoxArrayChange(pair, newValue)}> 
                   <SelectTrigger>
                     <SelectValue>{selectedBoxArrayTypes[pair]}</SelectValue>
                   </SelectTrigger>
@@ -246,6 +248,8 @@ const DashboardPage = () => {
                   </SelectContent>
                 </Select>
               </div>
+              <ElixrModel pair={pair} streamData={streamData[pair]} />
+
             </div>
           ))}
         </div>

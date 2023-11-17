@@ -1,244 +1,121 @@
-// BoxesModel Component: Displays boxes representing price ranges for a given currency pair.
-// The boxes are calculated based on historical candle data fetched from Oanda API.
-// Each box represents a specific range of prices and is updated based on new candle data.
-
 'use client';
 
-import React, { useState, useEffect, useContext, useCallback } from 'react';
-
-import { CandleData, Box, BoxArrays, StreamData } from '../../../types';
-import {
-  findCurrentPrice,
-  findHighest,
-  findLowest,
-} from '../../api/priceAnalysis';
+import React, { useState, useEffect, useContext } from 'react';
+import { CandleData, StreamData } from '../../../types';
 import { OandaApiContext } from '../../api/OandaApi';
-import {
-  SymbolsToDigits,
-  symbolsToDigits,
-  BOX_SIZES,
-} from '../../utils/constants';
-import ResoBox from '../ResoBox';
 
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from '@/components/ui/select';
 interface ElixrModelProps {
   pair: string;
   streamData: StreamData | null;
-  selectedBoxArrayType: string;
 }
-// generateBoxSizes: Generates a map of box sizes based on the provided point sizes and currency pair.
-const generateBoxSizes = (
-  pair: string,
-  pointSizes: number[],
-  symbolsToDigits: SymbolsToDigits,
-): Map<number, number> => {
-  const { point: pointValue } = symbolsToDigits[pair] || { point: 0.00001 };
-  let boxSizeMap = new Map<number, number>();
-  pointSizes.forEach(size => {
-    boxSizeMap.set(size, size * pointValue);
-  });
-  return boxSizeMap;
-};
-
-const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData, selectedBoxArrayType }) => {
-  console.log(selectedBoxArrayType)
+interface Elixr {
+  slope: number;
+  intercept: number;
+  touches: number;
+}
+const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
   const api = useContext(OandaApiContext);
-  const [currentClosePrice, setCurrentClosePrice] = useState<number | null>(
-    null,
-  );
-  const [boxArrays, setBoxArrays] = useState<BoxArrays>({});
-  const [initializationComplete, setInitializationComplete] =
-    useState<boolean>(false);
+  const [initializationComplete, setInitializationComplete] = useState<boolean>(false);
+  const [trendlines, setElixrs] = useState<{ elixrMax: Elixr[], elixrMin: Elixr[] } | null>(null);
 
-
-
-  // calculateAllBoxes: Calculates the high and low values for each box size based on the candle data.
-  const calculateAllBoxes = useCallback(
-    (C: number, oandaData: CandleData[], boxSizeMap: Map<number, number>) => {
-      const newBoxArrays: BoxArrays = {};
-
-      // Initialize boxes with the last candle's data
-      const latestCandle = oandaData[oandaData.length - 1];
-      boxSizeMap.forEach((decimalSize, wholeNumberSize) => {
-        const latestPrice = parseFloat(latestCandle.mid.c);
-        newBoxArrays[wholeNumberSize] = {
-          high: latestPrice,
-          low: latestPrice - decimalSize,
-          boxMovedUp: false,
-          boxMovedDn: false,
-          rngSize: decimalSize,
-        };
-      });
-
-      // Iterate over each candle in reverse to update boxes
-      for (let i = oandaData.length - 1; i >= 0; i--) {
-        const currentPrice = parseFloat(oandaData[i].mid.c);
-
-        boxSizeMap.forEach((decimalSize, wholeNumberSize) => {
-          let box = newBoxArrays[wholeNumberSize];
-        
-          if (!box) {
-            console.error(`Box not defined for size: ${wholeNumberSize}`);
-            return;
-          }
-
-          if (currentPrice > box.high) {
-            box.high = currentPrice;
-            box.low = currentPrice - decimalSize;
-            box.boxMovedUp = true;
-            box.boxMovedDn = false;
-          } else if (currentPrice < box.low) {
-            box.low = currentPrice;
-            box.high = currentPrice + decimalSize;
-            box.boxMovedUp = false;
-            box.boxMovedDn = true;
-          }
-
-          newBoxArrays[wholeNumberSize] = box;
-        });
+  const findLocalExtrema = (data: number[], findMax: boolean): number[] => {
+    const extrema: number[] = [];
+    for (let i = 1; i < data.length - 1; i++) {
+      if (findMax ? (data[i] > data[i - 1] && data[i] > data[i + 1]) : (data[i] < data[i - 1] && data[i] < data[i + 1])) {
+        extrema.push(i);
       }
-
-      setBoxArrays(newBoxArrays);
-      if (!initializationComplete) {
-        setInitializationComplete(true);
-      }
-    },
-    [initializationComplete],
-  );
-
-  // useEffect: Fetches candle data at regular intervals and calculates boxes based on this data.
+    }
+    return extrema;
+  }
+  const calculateSlope = (x: number[], y: number[]): { slope: number, intercept: number } => {
+    if (x.length !== 2 || y.length !== 2) {
+      throw new Error('calculateSlope function expects exactly two points');
+    }
+  
+    const [x1, x2] = x;
+    const [y1, y2] = y;
+    const slope = (y2 - y1) / (x2 - x1);
+    const intercept = y1 - slope * x1;
+  
+    return { slope, intercept };
+  }
+  
+  const calculateElixrs = (oandaData: CandleData[]): { elixrMax: Elixr[], elixrMin: Elixr[] } => {
+    // Ensure the mapping produces number arrays
+    const highs = oandaData.map(data => parseFloat(data.mid.h));
+    const lows = oandaData.map(data => parseFloat(data.mid.l));
+  
+    const maxIdx = findLocalExtrema(highs, true);
+    const minIdx = findLocalExtrema(lows, false);
+  
+    const elixrMax: Elixr[] = [];
+    const elixrMin: Elixr[] = [];
+  
+    // Calculate trendlines for maxima
+    for (let i = 0; i < maxIdx.length - 1; i++) {
+      const x = [maxIdx[i], maxIdx[i + 1]];
+      const y = [highs[x[0]], highs[x[1]]];
+      const { slope, intercept } = calculateSlope(x, y);
+      elixrMax.push({ slope, intercept, touches: 0 });
+    }
+  
+    // Calculate trendlines for minima
+    for (let i = 0; i < minIdx.length - 1; i++) {
+      const x = [minIdx[i], minIdx[i + 1]];
+      const y = [lows[x[0]], lows[x[1]]];
+      const { slope, intercept } = calculateSlope(x, y);
+      elixrMin.push({ slope, intercept, touches: 0 });
+    }
+  
+    return { elixrMax, elixrMin };
+  };
+  
+  // Fetches candle data at regular intervals and calculates trendlines based on this data.
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
 
-    const fetchAndCalculateBoxes = async () => {
+    const fetchAndCalculateElixrs = async () => {
       const oandaData = await api?.fetchLargeCandles(pair, 6000, 'M1');
       if (oandaData && oandaData.length > 0) {
-        const currentPrice = findCurrentPrice(oandaData);
-        if (currentPrice !== undefined) {
-          const boxSizes = generateBoxSizes(
-            pair,
-            BOX_SIZES[selectedBoxArrayType],
-            symbolsToDigits,
-          );
-          calculateAllBoxes(currentPrice, oandaData, boxSizes);
-        }
+        const calculatedElixrs = calculateElixrs(oandaData);
+        setElixrs(calculatedElixrs);
+        setInitializationComplete(true);
       } else {
         console.log('No valid data received.');
       }
     };
 
-    fetchAndCalculateBoxes();
-    intervalId = setInterval(fetchAndCalculateBoxes, 60000);
+    fetchAndCalculateElixrs();
+    intervalId = setInterval(fetchAndCalculateElixrs, 60000);
 
     return () => clearInterval(intervalId);
-  }, [pair, selectedBoxArrayType]);
+  }, [pair]);
 
-  const updateBoxesWithCurrentPrice = useCallback(
-    (currentPrice: number) => {
-      if (!initializationComplete) {
-        return;
-      }
-      setBoxArrays(prevBoxArrays => {
-        const newBoxArrays = { ...prevBoxArrays };
-        let isUpdated = false;
+  const renderElixrSummary = () => {
+    if (!trendlines) return <p>No trendlines calculated.</p>;
   
-        const boxSizes = generateBoxSizes(
-          pair,
-          BOX_SIZES[selectedBoxArrayType],
-          symbolsToDigits
-        );
+    return (
+      <>
+        <div><strong>Maxima Elixrs:</strong> Count - {trendlines.elixrMax.length}</div>
+        <div><strong>Minima Elixrs:</strong> Count - {trendlines.elixrMin.length}</div>
+      </>
+    );
+  };
   
-        boxSizes.forEach((decimalSize, wholeNumberSize) => {
-          let box = newBoxArrays[wholeNumberSize];
-          if (!box) {
-            console.error(`Box not defined for size: ${wholeNumberSize}`);
-            return;
-          }
-          if (currentPrice > box.high) {
-            box.high = currentPrice;
-            box.low = currentPrice - decimalSize;
-            box.boxMovedUp = true;
-            box.boxMovedDn = false;
-            isUpdated = true;
-          } else if (currentPrice < box.low) {
-            box.low = currentPrice;
-            box.high = currentPrice + decimalSize;
-            box.boxMovedUp = false;
-            box.boxMovedDn = true;
-            isUpdated = true;
-          }
-        });
-  
-        return isUpdated ? newBoxArrays : prevBoxArrays;
-      });
-    },
-    [pair, selectedBoxArrayType]
-  );
-  
-  useEffect(() => {
-    if (streamData && initializationComplete) {
-      const bidPrice = streamData.bids?.[0]?.price ? parseFloat(streamData.bids[0].price) : null;
-      const askPrice = streamData.asks?.[0]?.price ? parseFloat(streamData.asks[0].price) : null;
-  
-      if (bidPrice !== null && askPrice !== null) {
-        const currentPrice = (bidPrice + askPrice) / 2;
-        console.log('update with stream');
-        updateBoxesWithCurrentPrice(currentPrice);
-      }
-    }
-  }, [streamData, updateBoxesWithCurrentPrice, initializationComplete]);
+
   // Render
   if (!initializationComplete) {
     return (
-      <div className="w-full h-full flex items-center  justify-center">
-        <svg
-          width="50"
-          height="50"
-          viewBox="0 0 50 50"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <circle
-            cx="25"
-            cy="25"
-            r="20"
-            stroke="#333"
-            strokeWidth="5"
-            fill="none"
-            strokeDasharray="31.415, 31.415"
-            strokeDashoffset="0"
-          >
-            <animateTransform
-              attributeName="transform"
-              type="rotate"
-              from="0 25 25"
-              to="360 25 25"
-              dur="1s"
-              repeatCount="indefinite"
-            />
-          </circle>
-        </svg>
+      <div className="w-full h-full flex items-center justify-center">
+        <div>Loading...</div>
       </div>
     );
   }
 
-
   return (
-    <div className="w-full h-auto">
-      {initializationComplete ? (
-        <>
-          <ResoBox boxArrays={boxArrays} />
-
-
-        </>
-      ) : (
-        <div>Loading...</div>
-      )}
+    <div className="w-full h-auto text-teal-400 font-bold">
+      <div>just workshopping</div>
+      {initializationComplete ? renderElixrSummary() : <div>Loading...</div>}
     </div>
   );
 };
