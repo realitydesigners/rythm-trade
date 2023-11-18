@@ -25,6 +25,7 @@ import {
 } from '@/components/ui/dialog';
 
 import { Button, buttonVariants } from '@/components/ui/button';
+import { BOX_SIZES } from '../utils/constants';
 
 const initialFavorites = [
   'ETH_USD',
@@ -234,7 +235,7 @@ const DashboardPage = () => {
                     <SelectValue>{selectedBoxArrayTypes[pair]}</SelectValue>
                   </SelectTrigger>
                   <SelectContent>
-                    {['default', '1', '2', '3'].map(arrayKey => (
+                    {Object.keys(BOX_SIZES).map(arrayKey => (
                       <SelectItem key={arrayKey} value={arrayKey}>
                         {arrayKey}
                       </SelectItem>
