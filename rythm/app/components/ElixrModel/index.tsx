@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { CandleData, StreamData } from '../../../types';
 import { OandaApiContext } from '../../api/OandaApi';
+import { symbolsToDigits } from '@/app/utils/constants';
 
 interface ElixrModelProps {
   pair: string;
@@ -18,15 +19,51 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
   const [initializationComplete, setInitializationComplete] = useState<boolean>(false);
   const [trendlines, setElixrs] = useState<{ elixrMax: Elixr[], elixrMin: Elixr[] } | null>(null);
 
-  const findLocalExtrema = (data: number[], findMax: boolean): number[] => {
+  const findLocalExtrema = (data: number[], findMax: boolean, numCandles: number = 5): number[] => {
     const extrema: number[] = [];
-    for (let i = 1; i < data.length - 1; i++) {
-      if (findMax ? (data[i] > data[i - 1] && data[i] > data[i + 1]) : (data[i] < data[i - 1] && data[i] < data[i + 1])) {
+    for (let i = numCandles; i < data.length - numCandles; i++) {
+      let isExtrema = true;
+      for (let j = 1; j <= numCandles; j++) {
+        if (findMax) {
+          if (data[i] <= data[i - j] || data[i] <= data[i + j]) {
+            isExtrema = false;
+            break;
+          }
+        } else {
+          if (data[i] >= data[i - j] || data[i] >= data[i + j]) {
+            isExtrema = false;
+            break;
+          }
+        }
+      }
+      if (isExtrema) {
         extrema.push(i);
       }
     }
     return extrema;
   }
+  
+
+  // Retrieve point value for the current pair
+  const pairPointValue = symbolsToDigits[pair]?.point || 0.00001;
+
+  const checkTouch = (price: number, index: number, elixr: Elixr): boolean => {
+    const expectedPrice = elixr.slope * index + elixr.intercept;
+    const threshold = pairPointValue * 30;
+    return Math.abs(price - expectedPrice) < threshold;
+  };
+
+  const countTouches = (prices: number[], elixrs: Elixr[]): Elixr[] => {
+    return elixrs.map(elixr => {
+      let touchCount = 0;
+      prices.forEach((price, index) => {
+        if (checkTouch(price, index, elixr)) {
+          touchCount++;
+        }
+      });
+      return { ...elixr, touches: touchCount };
+    });
+  };
   const calculateSlope = (x: number[], y: number[]): { slope: number, intercept: number } => {
     if (x.length !== 2 || y.length !== 2) {
       throw new Error('calculateSlope function expects exactly two points');
@@ -67,7 +104,11 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
       elixrMin.push({ slope, intercept, touches: 0 });
     }
   
-    return { elixrMax, elixrMin };
+    // Count touches for maxima and minima
+    const touchedElixrMax = countTouches(highs, elixrMax).filter(elixr => elixr.touches >= 10);
+    const touchedElixrMin = countTouches(lows, elixrMin).filter(elixr => elixr.touches >= 10);
+
+    return { elixrMax: touchedElixrMax, elixrMin: touchedElixrMin };
   };
   
   // Fetches candle data at regular intervals and calculates trendlines based on this data.
@@ -114,7 +155,6 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
 
   return (
     <div className="w-full h-auto text-teal-400 font-bold">
-      <div>just workshopping</div>
       {initializationComplete ? renderElixrSummary() : <div>Loading...</div>}
     </div>
   );
