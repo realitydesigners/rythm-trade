@@ -30,6 +30,7 @@ export interface SymbolsToDigits {
 }
 
 export const symbolsToDigits: SymbolsToDigits = {
+  ETH_USD: { point: 0.01, digits: 2 },
   USD_SGD: { point: 0.00001, digits: 5 },
   EUR_SEK: { point: 0.00001, digits: 5 },
   HKD_JPY: { point: 0.001, digits: 5 },

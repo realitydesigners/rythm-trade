@@ -27,6 +27,7 @@ import {
 import { Button, buttonVariants } from '@/components/ui/button';
 
 const initialFavorites = [
+  'ETH_USD',
   'GBP_USD',
   'USD_JPY',
   'AUD_USD',
