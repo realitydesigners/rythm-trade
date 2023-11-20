@@ -89,8 +89,11 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
     return { slope, intercept };
   };
   function calculateElixrIntersection(elixrMax: { intercept: number; slope: number }, elixrMin: { intercept: number; slope: number }) {
-    const xIntersection = (elixrMin.intercept - elixrMax.intercept) / (elixrMax.slope - elixrMin.slope);
+    if (elixrMax.slope === elixrMin.slope || (elixrMax.slope < elixrMin.slope && elixrMax.intercept < elixrMin.intercept) || (elixrMax.slope > elixrMin.slope && elixrMax.intercept > elixrMin.intercept)) {
+      return null;
+    }
 
+    const xIntersection = (elixrMin.intercept - elixrMax.intercept) / (elixrMax.slope - elixrMin.slope);
     const intersectingPrice = elixrMax.slope * xIntersection + elixrMax.intercept;
 
     return intersectingPrice;
@@ -161,8 +164,11 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
     setElixrs({ elixrMax: [averageElixrMax], elixrMin: [averageElixrMin] });
 
     const intersectPrice = calculateElixrIntersection(averageElixrMax, averageElixrMin);
-    setIntersectingPrice(intersectPrice);
-
+    if (intersectPrice !== null) {
+      setIntersectingPrice(intersectPrice);
+    } else {
+      setIntersectingPrice(currentPrice);
+    }
     setInitializationComplete(true);
   };
 
