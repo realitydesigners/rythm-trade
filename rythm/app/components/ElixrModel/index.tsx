@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { CandleData, StreamData } from '../../../types';
 import { OandaApiContext } from '../../api/OandaApi';
 import { symbolsToDigits } from '@/app/utils/constants';
+import ElixrBot from '@/app/algorithms/elixir';
 
 interface ElixrModelProps {
   pair: string;
@@ -16,6 +17,8 @@ interface Elixr {
 }
 const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
   const api = useContext(OandaApiContext);
+  const elixrInstance = useRef<ElixrBot | null>(null);
+
   const [initializationComplete, setInitializationComplete] = useState<boolean>(false);
   const [trendlines, setElixrs] = useState<{
     elixrMax: Elixr[];
@@ -25,6 +28,11 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
   const [priceToElixrRatio, setPriceToElixrRatio] = useState<number>(0.5);
   const [intersectingPrice, setIntersectingPrice] = useState<number>(0);
 
+  useEffect(() => {
+    if (api) {
+      elixrInstance.current = new ElixrBot(pair, api);
+    }
+  }, [api, pair]);
   const findLocalExtrema = (data: number[], findMax: boolean, numCandles: number = 5): number[] => {
     const extrema: number[] = [];
     for (let i = numCandles; i < data.length - numCandles; i++) {
@@ -89,7 +97,6 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
   }
 
   const calculateElixrs = (oandaData: CandleData[]): { elixrMax: Elixr[]; elixrMin: Elixr[] } => {
-    console.log(oandaData);
     const highs = oandaData.map(data => parseFloat(data.mid.h));
     const lows = oandaData.map(data => parseFloat(data.mid.l));
 
@@ -153,9 +160,6 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
 
     setElixrs({ elixrMax: [averageElixrMax], elixrMin: [averageElixrMin] });
 
-    const latestPrice = parseFloat(oandaData[oandaData.length - 1].mid.c);
-    setCurrentPrice(latestPrice);
-
     const intersectPrice = calculateElixrIntersection(averageElixrMax, averageElixrMin);
     setIntersectingPrice(intersectPrice);
 
@@ -184,6 +188,20 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
   };
 
   useEffect(() => {
+    if (streamData && initializationComplete && elixrInstance.current) {
+      const bidPrice = streamData.bids?.[0]?.price ? parseFloat(streamData.bids[0].price) : null;
+      const askPrice = streamData.asks?.[0]?.price ? parseFloat(streamData.asks[0].price) : null;
+
+      if (bidPrice !== null && askPrice !== null) {
+        const currentPrice = (bidPrice + askPrice) / 2;
+        setCurrentPrice(currentPrice);
+
+        elixrInstance.current.onData(currentPrice, priceToElixrRatio, intersectingPrice);
+      }
+    }
+  }, [streamData, initializationComplete, currentPrice, priceToElixrRatio, intersectingPrice]);
+
+  useEffect(() => {
     let intervalId: NodeJS.Timeout;
 
     const fetchAndCalculateElixrs = async () => {
@@ -191,7 +209,6 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
       if (oandaData && oandaData.length > 0) {
         generateMasterElixrsAndUpdatePrice(oandaData);
       } else {
-        console.log('No valid data received.');
       }
     };
 
