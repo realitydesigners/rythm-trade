@@ -89,36 +89,38 @@ export class OandaApi {
       }
    }
    private async makeRequest(url: string, method: 'get' | 'post' | 'put' = 'get', expectedStatusCode: number = 200, params: any = {}, data: any = {}): Promise<[boolean, any]> {
-      // Perform an HTTP request. Returns a tuple [success: boolean, data: any].
-
-      const full_url = `${this.oanda_url}/${url}`;
+      let full_url = `${this.oanda_url}/${url}`;
 
       const headers = {
          Authorization: `Bearer ${this.api_key}`,
          'Content-Type': 'application/json',
       };
 
-      let response: AxiosResponse;
+      const options: RequestInit = {
+         method: method.toUpperCase(),
+         headers: headers,
+      };
+
+      if (method === 'get' && Object.keys(params).length > 0) {
+         const urlParams = new URLSearchParams(params).toString();
+         full_url += `?${urlParams}`;
+      } else if (method === 'post' || method === 'put') {
+         options.body = JSON.stringify(data);
+      }
 
       try {
-         if (method === 'get') {
-            response = await axios.get(full_url, { headers, params });
-         } else if (method === 'post') {
-            response = await axios.post(full_url, data, { headers, params });
-         } else if (method === 'put') {
-            response = await axios.put(full_url, data, { headers, params });
-         } else {
-            return [false, { error: 'HTTP verb not supported' }];
-         }
+         const response = await fetch(full_url, options);
 
          if (response.status === expectedStatusCode) {
-            return [true, response.data];
+            const responseData = await response.json();
+            return [true, responseData];
          } else {
-            return [false, response.data];
+            const errorData = await response.json();
+            return [false, errorData];
          }
       } catch (error) {
          console.error(`Error in makeRequest: ${error}`);
-         return [false, { error }];
+         return [false, { error: error instanceof Error ? error.message : 'Unknown error' }];
       }
    }
 
