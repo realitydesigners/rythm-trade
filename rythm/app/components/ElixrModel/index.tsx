@@ -6,13 +6,13 @@ import { OandaApiContext } from '../../api/OandaApi';
 import { symbolsToDigits } from '@/app/utils/constants';
 
 interface ElixrModelProps {
-  pair: string;
-  streamData: StreamData | null;
+   pair: string;
+   streamData: StreamData | null;
 }
 interface Elixr {
-  slope: number;
-  intercept: number;
-  touches: number;
+   slope: number;
+   intercept: number;
+   touches: number;
 }
 const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
   const api = useContext(OandaApiContext);
@@ -124,31 +124,59 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
       } else {
         console.log('No valid data received.');
       }
-    };
 
-    fetchAndCalculateElixrs();
-    intervalId = setInterval(fetchAndCalculateElixrs, 60000);
+      return { elixrMax, elixrMin };
+   };
 
-    return () => clearInterval(intervalId);
-  }, [pair]);
+   // Fetches candle data at regular intervals and calculates trendlines based on this data.
+   useEffect(() => {
+      let intervalId: NodeJS.Timeout;
 
-  const renderElixrSummary = () => {
-    if (!trendlines) return <p>No trendlines calculated.</p>;
-  
-    return (
-      <>
-        <div><strong>Maxima Elixrs:</strong> Count - {trendlines.elixrMax.length}</div>
-        <div><strong>Minima Elixrs:</strong> Count - {trendlines.elixrMin.length}</div>
-      </>
-    );
-  };
-  
+      const fetchAndCalculateElixrs = async () => {
+         const oandaData = await api?.fetchLargeCandles(pair, 6000, 'M1');
+         if (oandaData && oandaData.length > 0) {
+            const calculatedElixrs = calculateElixrs(oandaData);
+            setElixrs(calculatedElixrs);
+            setInitializationComplete(true);
+         } else {
+            console.log('No valid data received.');
+         }
+      };
 
-  // Render
-  if (!initializationComplete) {
-    return (
-      <div className="w-full h-full flex items-center justify-center">
-        <div>Loading...</div>
+      fetchAndCalculateElixrs();
+      intervalId = setInterval(fetchAndCalculateElixrs, 60000);
+
+      return () => clearInterval(intervalId);
+   }, [pair]);
+
+   const renderElixrSummary = () => {
+      if (!trendlines) return <p>No trendlines calculated.</p>;
+
+      return (
+         <>
+            <div>
+               <strong>Maxima Elixrs:</strong> Count - {trendlines.elixrMax.length}
+            </div>
+            <div>
+               <strong>Minima Elixrs:</strong> Count - {trendlines.elixrMin.length}
+            </div>
+         </>
+      );
+   };
+
+   // Render
+   if (!initializationComplete) {
+      return (
+         <div className="w-full h-full flex items-center justify-center">
+            <div>Loading...</div>
+         </div>
+      );
+   }
+
+   return (
+      <div className="w-full h-auto text-teal-400 font-bold">
+         <div>just workshopping</div>
+         {initializationComplete ? renderElixrSummary() : <div>Loading...</div>}
       </div>
     );
   }
