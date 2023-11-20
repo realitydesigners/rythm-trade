@@ -17,8 +17,8 @@ class ResoBot {
   }
 
   onData(currentPrice: number, boxArrays: BoxArrays) {
-    console.log('current Price: ' + currentPrice)
-    console.log('boxArrays: ' + boxArrays)
+    // console.log('current Price: ' + currentPrice)
+    // console.log('boxArrays: ' + boxArrays)
     if (this.shouldBuy(currentPrice, boxArrays)) {
       // Buy logic
     } else if (this.shouldSell(currentPrice, boxArrays)) {
