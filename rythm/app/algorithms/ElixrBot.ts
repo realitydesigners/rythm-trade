@@ -17,11 +17,11 @@ class ElixrBot {
 
    onData(currentPrice: number, priceToElixrRatio: number, intersectingPrice: number) {
       // Decide to buy or sell based on the strategy
-      console.log("currentPrice: " + currentPrice)
-      console.log("priceToElixrRatio: " + priceToElixrRatio)
-      console.log("intersectingPrice: " + intersectingPrice)
-      console.log(this.apiContext)
-      console.log(this.symbol)
+      // console.log("currentPrice: " + currentPrice)
+      // console.log("priceToElixrRatio: " + priceToElixrRatio)
+      // console.log("intersectingPrice: " + intersectingPrice)
+      // console.log(this.apiContext)
+      // console.log(this.symbol)
       // if (this.shouldBuy(currentPrice, priceToElixrRatio, intersectingPrice)) {
       //   this.apiContext.buy(this.symbol /*, other parameters as needed */);
       // } else if (this.shouldSell(currentPrice, priceToElixrRatio, intersectingPrice)) {
