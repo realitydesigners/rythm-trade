@@ -1,9 +1,9 @@
 .chartWrapper {
-    width: 100%;
-    height: auto;
-    background-color: #000;
-    padding-left: 16px;
-    padding-right: 16px;
-    display: flex;
-    justify-content: center;
-  }
+   width: 100%;
+   height: auto;
+   background-color: #000;
+   padding-left: 16px;
+   padding-right: 16px;
+   display: flex;
+   justify-content: center;
+}

@@ -1,141 +1,143 @@
 .container {
-    max-width: 1200px;
-    margin-top: 20px;
-    margin: auto;
-    display: block;
-    padding: 20px;
-    background-color: #000000;
-    color: #ffffff;
-    font-size: small;
-    font-family: 'Orbitron', monospace;
-    border: 1px solid #d9298a;
-    border-radius: 10px;
-    box-shadow: 0px 0px 2px 1px #3a3a3a;
+   max-width: 1200px;
+   margin-top: 20px;
+   margin: auto;
+   display: block;
+   padding: 20px;
+   background-color: #000000;
+   color: #ffffff;
+   font-size: small;
+   font-family: 'Orbitron', monospace;
+   border: 1px solid #d9298a;
+   border-radius: 10px;
+   box-shadow: 0px 0px 2px 1px #3a3a3a;
 }
 
 .title {
-    color: #ffffff;
-    font-weight: bold;
-    text-shadow: 0px 0px 1px #000000;
+   color: #ffffff;
+   font-weight: bold;
+   text-shadow: 0px 0px 1px #000000;
 }
 
 .loadingContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    color: #dafff3;
-    font-size: larger;
-    background-color: rgb(64, 37, 55);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   height: 100vh;
+   color: #dafff3;
+   font-size: larger;
+   background-color: rgb(64, 37, 55);
 }
 
 .box {
-    background-color: #000000;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 5px 3px #32cd32;
+   background-color: #000000;
+   padding: 10px;
+   margin-bottom: 10px;
+   border-radius: 5px;
+   box-shadow: 0px 0px 5px 3px #32cd32;
 }
 
 .boxTable {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 0.9em;
-    min-width: 400px;
-    border-radius: 5px;
-    overflow: hidden;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+   width: 100%;
+   border-collapse: collapse;
+   margin: 20px 0;
+   font-size: 0.9em;
+   min-width: 400px;
+   border-radius: 5px;
+   overflow: hidden;
+   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
 .boxTable thead tr {
-    background-color: #9329d9;
-    color: #000000;
-    text-align: left;
+   background-color: #9329d9;
+   color: #000000;
+   text-align: left;
 }
 
 .boxTable th,
 .boxTable td {
-    padding: 12px 15px;
+   padding: 12px 15px;
 }
 
 .boxTable tbody tr {
-    border-bottom: 1px solid #dddddd;
+   border-bottom: 1px solid #dddddd;
 }
 
 .boxTable tbody tr:nth-of-type(even) {
-    background-color: #252525;
+   background-color: #252525;
 }
 
 .boxTable tbody tr:last-of-type {
-    border-bottom: 2px solid #29d9b9;
+   border-bottom: 2px solid #29d9b9;
 }
 
 .boxTable tbody tr.active-row {
-    font-weight: bold;
-    color: #29d9b9;
+   font-weight: bold;
+   color: #29d9b9;
 }
 
 .buttonContainer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 20px;
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: center;
+   margin-top: 20px;
 }
 .toggleButton.active {
-    background-color: #bfd929;
-    color: #1c1c2d;
-    cursor: default;
-    opacity: 0.7;
+   background-color: #bfd929;
+   color: #1c1c2d;
+   cursor: default;
+   opacity: 0.7;
 }
 
 .toggleButton {
-    background-color: #363636;
-    color: #ffffff;
-    border: none;
-    padding: 10px 20px;
-    margin: 0 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-family: 'Orbitron', monospace;
-    font-size: 1em;
-    transition: background-color 0.3s, color 0.3s;
+   background-color: #363636;
+   color: #ffffff;
+   border: none;
+   padding: 10px 20px;
+   margin: 0 10px;
+   border-radius: 5px;
+   cursor: pointer;
+   font-family: 'Orbitron', monospace;
+   font-size: 1em;
+   transition:
+      background-color 0.3s,
+      color 0.3s;
 }
 
 @media (max-width: 768px) {
-    .boxTable {
-        min-width: 200px;
-    }
+   .boxTable {
+      min-width: 200px;
+   }
 
-    .boxTable th,
-    .boxTable td {
-        padding: 8px 6px;
-        font-size: 0.8em;
-    }
+   .boxTable th,
+   .boxTable td {
+      padding: 8px 6px;
+      font-size: 0.8em;
+   }
 
-    .boxTable thead tr {
-        background-color: #9329d9;
-    }
+   .boxTable thead tr {
+      background-color: #9329d9;
+   }
 
-    .toggleButton {
-        padding: 5px 10px;
-        font-size: 0.8em;
-    }
+   .toggleButton {
+      padding: 5px 10px;
+      font-size: 0.8em;
+   }
 }
 
 @media (max-width: 480px) {
-    .boxTable {
-        min-width: 100%;
-    }
+   .boxTable {
+      min-width: 100%;
+   }
 
-    .boxTable th,
-    .boxTable td {
-        padding: 6px 4px;
-        font-size: 0.6em;
-    }
+   .boxTable th,
+   .boxTable td {
+      padding: 6px 4px;
+      font-size: 0.6em;
+   }
 
-    .toggleButton {
-        padding: 4px 8px;
-        font-size: 0.6em;
-    }
+   .toggleButton {
+      padding: 4px 8px;
+      font-size: 0.6em;
+   }
 }
