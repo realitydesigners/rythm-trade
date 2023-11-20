@@ -14,7 +14,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Button, buttonVariants } from '@/components/ui/button';
 import { BOX_SIZES } from '../utils/constants';
 
-const initialFavorites = ['ETH_USD', 'GBP_USD', 'USD_JPY', 'AUD_USD', 'EUR_JPY', 'AUD_CAD', 'USD_SGD', 'EUR_USD', 'EUR_SEK', 'HKD_JPY', 'AUD_USD', 'USD_CAD', 'NZD_USD', 'NZD_SGD', 'USD_NOK', 'USD_CNH', 'SGD_CHF', 'GBP_JPY', 'USD_TRY', 'AUD_JPY', 'ZAR_JPY', 'SGD_JPY', 'GBP_ZAR'];
+const initialFavorites = ['GBP_USD', 'USD_JPY', 'AUD_USD', 'EUR_JPY', 'EUR_USD', 'AUD_USD', 'USD_CAD', 'NZD_USD', 'GBP_JPY'];
 
 const DashboardPage = () => {
    const [currencyPairs, setCurrencyPairs] = useState<string[]>([]);
