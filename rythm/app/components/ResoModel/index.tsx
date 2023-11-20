@@ -28,7 +28,6 @@ const generateBoxSizes = (pair: string, pointSizes: number[], symbolsToDigits: S
 };
 
 const ResoModel: React.FC<ResoModelProps> = ({ pair, streamData, selectedBoxArrayType }) => {
-   console.log(selectedBoxArrayType);
    const api = useContext(OandaApiContext);
    const [currentClosePrice, setCurrentClosePrice] = useState<number | null>(null);
    const [boxArrays, setBoxArrays] = useState<BoxArrays>({});
@@ -156,7 +155,6 @@ const ResoModel: React.FC<ResoModelProps> = ({ pair, streamData, selectedBoxArra
 
          if (bidPrice !== null && askPrice !== null) {
             const currentPrice = (bidPrice + askPrice) / 2;
-            console.log('update with stream');
             updateBoxesWithCurrentPrice(currentPrice);
          }
       }

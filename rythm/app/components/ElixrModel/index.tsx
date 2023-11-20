@@ -6,18 +6,24 @@ import { OandaApiContext } from '../../api/OandaApi';
 import { symbolsToDigits } from '@/app/utils/constants';
 
 interface ElixrModelProps {
-   pair: string;
-   streamData: StreamData | null;
+  pair: string;
+  streamData: StreamData | null;
 }
 interface Elixr {
-   slope: number;
-   intercept: number;
-   touches: number;
+  slope: number;
+  intercept: number;
+  touches: number;
 }
 const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
   const api = useContext(OandaApiContext);
   const [initializationComplete, setInitializationComplete] = useState<boolean>(false);
-  const [trendlines, setElixrs] = useState<{ elixrMax: Elixr[], elixrMin: Elixr[] } | null>(null);
+  const [trendlines, setElixrs] = useState<{
+    elixrMax: Elixr[];
+    elixrMin: Elixr[];
+  } | null>(null);
+  const [currentPrice, setCurrentPrice] = useState<number>(0);
+  const [priceToElixrRatio, setPriceToElixrRatio] = useState<number>(0.5);
+  const [intersectingPrice, setIntersectingPrice] = useState<number>(0);
 
   const findLocalExtrema = (data: number[], findMax: boolean, numCandles: number = 5): number[] => {
     const extrema: number[] = [];
@@ -41,10 +47,8 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
       }
     }
     return extrema;
-  }
-  
+  };
 
-  // Retrieve point value for the current pair
   const pairPointValue = symbolsToDigits[pair]?.point || 0.00001;
 
   const checkTouch = (price: number, index: number, elixr: Elixr): boolean => {
@@ -64,126 +68,153 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
       return { ...elixr, touches: touchCount };
     });
   };
-  const calculateSlope = (x: number[], y: number[]): { slope: number, intercept: number } => {
+  const calculateSlope = (x: number[], y: number[]): { slope: number; intercept: number } => {
     if (x.length !== 2 || y.length !== 2) {
       throw new Error('calculateSlope function expects exactly two points');
     }
-  
+
     const [x1, x2] = x;
     const [y1, y2] = y;
     const slope = (y2 - y1) / (x2 - x1);
     const intercept = y1 - slope * x1;
-  
+
     return { slope, intercept };
+  };
+  function calculateElixrIntersection(elixrMax: { intercept: number; slope: number }, elixrMin: { intercept: number; slope: number }) {
+    const xIntersection = (elixrMin.intercept - elixrMax.intercept) / (elixrMax.slope - elixrMin.slope);
+
+    const intersectingPrice = elixrMax.slope * xIntersection + elixrMax.intercept;
+
+    return intersectingPrice;
   }
-  
-  const calculateElixrs = (oandaData: CandleData[]): { elixrMax: Elixr[], elixrMin: Elixr[] } => {
-    // Ensure the mapping produces number arrays
+
+  const calculateElixrs = (oandaData: CandleData[]): { elixrMax: Elixr[]; elixrMin: Elixr[] } => {
+    console.log(oandaData);
     const highs = oandaData.map(data => parseFloat(data.mid.h));
     const lows = oandaData.map(data => parseFloat(data.mid.l));
-  
+
     const maxIdx = findLocalExtrema(highs, true);
     const minIdx = findLocalExtrema(lows, false);
-  
+
     const elixrMax: Elixr[] = [];
     const elixrMin: Elixr[] = [];
-  
-    // Calculate trendlines for maxima
+
     for (let i = 0; i < maxIdx.length - 1; i++) {
       const x = [maxIdx[i], maxIdx[i + 1]];
       const y = [highs[x[0]], highs[x[1]]];
       const { slope, intercept } = calculateSlope(x, y);
       elixrMax.push({ slope, intercept, touches: 0 });
     }
-  
-    // Calculate trendlines for minima
+
     for (let i = 0; i < minIdx.length - 1; i++) {
       const x = [minIdx[i], minIdx[i + 1]];
       const y = [lows[x[0]], lows[x[1]]];
       const { slope, intercept } = calculateSlope(x, y);
       elixrMin.push({ slope, intercept, touches: 0 });
     }
-  
-    // Count touches for maxima and minima
+
     const touchedElixrMax = countTouches(highs, elixrMax).filter(elixr => elixr.touches >= 10);
     const touchedElixrMin = countTouches(lows, elixrMin).filter(elixr => elixr.touches >= 10);
 
     return { elixrMax: touchedElixrMax, elixrMin: touchedElixrMin };
   };
-  
-  // Fetches candle data at regular intervals and calculates trendlines based on this data.
+
+  const calculateAverageElixr = (elixrs: Elixr[]): Elixr => {
+    const numElixrs = elixrs.length;
+    if (numElixrs === 0) {
+      return { slope: 0, intercept: 0, touches: 0 };
+    }
+
+    let totalSlope = 0;
+    let totalIntercept = 0;
+    let totalTouches = 0;
+
+    elixrs.forEach(elixr => {
+      totalSlope += elixr.slope;
+      totalIntercept += elixr.intercept;
+      totalTouches += elixr.touches;
+    });
+
+    const averageSlope = totalSlope / numElixrs;
+    const averageIntercept = totalIntercept / numElixrs;
+    const averageTouches = totalTouches / numElixrs;
+
+    return {
+      slope: averageSlope,
+      intercept: averageIntercept,
+      touches: averageTouches,
+    };
+  };
+  const generateMasterElixrsAndUpdatePrice = (oandaData: CandleData[]) => {
+    const elixrs = calculateElixrs(oandaData);
+
+    const averageElixrMax = calculateAverageElixr(elixrs.elixrMax);
+    const averageElixrMin = calculateAverageElixr(elixrs.elixrMin);
+
+    setElixrs({ elixrMax: [averageElixrMax], elixrMin: [averageElixrMin] });
+
+    const latestPrice = parseFloat(oandaData[oandaData.length - 1].mid.c);
+    setCurrentPrice(latestPrice);
+
+    const intersectPrice = calculateElixrIntersection(averageElixrMax, averageElixrMin);
+    setIntersectingPrice(intersectPrice);
+
+    setInitializationComplete(true);
+  };
+
+  const updatePriceToElixrRatio = () => {
+    if (trendlines && trendlines.elixrMax.length > 0 && trendlines.elixrMin.length > 0) {
+      const maxElixrLastIndex = trendlines.elixrMax.length - 1;
+      const minElixrLastIndex = trendlines.elixrMin.length - 1;
+      const maxElixrPrice = trendlines.elixrMax[0].slope * maxElixrLastIndex + trendlines.elixrMax[0].intercept;
+      const minElixrPrice = trendlines.elixrMin[0].slope * minElixrLastIndex + trendlines.elixrMin[0].intercept;
+
+      if (currentPrice > maxElixrPrice) {
+        setPriceToElixrRatio(1.0);
+      } else if (currentPrice < minElixrPrice) {
+        setPriceToElixrRatio(0.0);
+      } else {
+        const distanceToMax = Math.abs(currentPrice - maxElixrPrice);
+        const distanceToMin = Math.abs(currentPrice - minElixrPrice);
+        const totalDistance = distanceToMax + distanceToMin;
+        const ratio = totalDistance > 0 ? distanceToMin / totalDistance : 0.5;
+        setPriceToElixrRatio(ratio);
+      }
+    }
+  };
+
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
 
     const fetchAndCalculateElixrs = async () => {
       const oandaData = await api?.fetchLargeCandles(pair, 6000, 'M1');
       if (oandaData && oandaData.length > 0) {
-        const calculatedElixrs = calculateElixrs(oandaData);
-        setElixrs(calculatedElixrs);
-        setInitializationComplete(true);
+        generateMasterElixrsAndUpdatePrice(oandaData);
       } else {
         console.log('No valid data received.');
       }
+    };
 
-      return { elixrMax, elixrMin };
-   };
+    fetchAndCalculateElixrs();
+    intervalId = setInterval(fetchAndCalculateElixrs, 60000);
 
-   // Fetches candle data at regular intervals and calculates trendlines based on this data.
-   useEffect(() => {
-      let intervalId: NodeJS.Timeout;
+    return () => clearInterval(intervalId);
+  }, [pair]);
 
-      const fetchAndCalculateElixrs = async () => {
-         const oandaData = await api?.fetchLargeCandles(pair, 6000, 'M1');
-         if (oandaData && oandaData.length > 0) {
-            const calculatedElixrs = calculateElixrs(oandaData);
-            setElixrs(calculatedElixrs);
-            setInitializationComplete(true);
-         } else {
-            console.log('No valid data received.');
-         }
-      };
-
-      fetchAndCalculateElixrs();
-      intervalId = setInterval(fetchAndCalculateElixrs, 60000);
-
-      return () => clearInterval(intervalId);
-   }, [pair]);
-
-   const renderElixrSummary = () => {
-      if (!trendlines) return <p>No trendlines calculated.</p>;
-
-      return (
-         <>
-            <div>
-               <strong>Maxima Elixrs:</strong> Count - {trendlines.elixrMax.length}
-            </div>
-            <div>
-               <strong>Minima Elixrs:</strong> Count - {trendlines.elixrMin.length}
-            </div>
-         </>
-      );
-   };
-
-   // Render
-   if (!initializationComplete) {
-      return (
-         <div className="w-full h-full flex items-center justify-center">
-            <div>Loading...</div>
-         </div>
-      );
-   }
-
-   return (
-      <div className="w-full h-auto text-teal-400 font-bold">
-         <div>just workshopping</div>
-         {initializationComplete ? renderElixrSummary() : <div>Loading...</div>}
-      </div>
-    );
-  }
+  useEffect(() => {
+    updatePriceToElixrRatio();
+  }, [currentPrice, trendlines]);
 
   return (
     <div className="w-full h-auto text-teal-400 font-bold">
-      {initializationComplete ? renderElixrSummary() : <div>Loading...</div>}
+      {initializationComplete ? (
+        <>
+          <div>Price to Elixr Ratio: {priceToElixrRatio.toFixed(2)}</div>
+          <div>Intersecting Price: {intersectingPrice.toFixed(5)}</div>
+        </>
+      ) : (
+        <div>Loading...</div>
+      )}
     </div>
   );
 };
