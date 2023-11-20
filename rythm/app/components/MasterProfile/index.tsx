@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { OandaApiContext } from '../../api/OandaApi';
 
-import { Label } from '@/components/ui/label';
+import { Label } from '@/app/components/Shadcn/label';
 
 const MasterProfile: React.FC = () => {
    const [accountSummary, setAccountSummary] = useState<any>(null);

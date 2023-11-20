@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import Navbar from './components/Shadcn/Navbar';
 import { ClerkProvider } from '@clerk/nextjs';
 
 export const metadata: Metadata = {
@@ -12,8 +13,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
    return (
       <ClerkProvider>
          <html lang="en">
-            <body className="bg-black ">
-               <div>{children}</div>
+            <body className="bg-black">
+               <Navbar />
+
+               <div className="pt-12">{children}</div>
             </body>
          </html>
       </ClerkProvider>

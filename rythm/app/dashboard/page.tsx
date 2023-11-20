@@ -8,10 +8,10 @@ import ElixrModel from '../components/ElixrModel';
 import MasterProfile from '../components/MasterProfile';
 import { OandaApiContext, api } from '../api/OandaApi';
 import styles from './DashboardPage.module.css';
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/app/components/Shadcn/select';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/app/components/Shadcn/dialog';
 
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/app/components/Shadcn/button';
 import { BOX_SIZES } from '../utils/constants';
 
 const initialFavorites = ['GBP_USD', 'USD_JPY', 'AUD_USD', 'EUR_JPY', 'EUR_USD', 'AUD_USD', 'USD_CAD', 'NZD_USD', 'GBP_JPY'];
@@ -125,7 +125,7 @@ const DashboardPage = () => {
 
    return (
       <OandaApiContext.Provider value={api}>
-         <div className="w-full flex flex-wrap">
+         <div className="w-full flex p-6 flex-wrap ">
             <div className="w-full flex flex-wrap gap-2 mb-4">
                <Dialog>
                   <DialogTrigger asChild>
