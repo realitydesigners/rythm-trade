@@ -26,11 +26,11 @@ export default function Navbar() {
             </svg>
          ),
          dashboard: (
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-               <path d="M4 3H20V21H4V3ZM6 5V19H18V5H6Z" stroke="white" strokeWidth="2" />
-               <path d="M9 7H15" stroke="white" strokeWidth="2" />
-               <path d="M9 11H15" stroke="white" strokeWidth="2" />
-               <path d="M9 15H15" stroke="white" strokeWidth="2" />
+            <svg viewBox="0 0 53 53" fill="none" xmlns="http://www.w3.org/2000/svg">
+               <path d="M3.75 20.2357L24.25 30.9032L24.25 44.7318L3.75 33.4605L3.75 20.2357Z" stroke="white" stroke-width="1.5" />
+               <path d="M49.25 20.1887L26.75 30.9212L26.75 44.7821L49.25 33.4421L49.25 20.1887Z" stroke="white" stroke-width="1.5" />
+               <path d="M49.25 32.7923L26.75 21.6623L26.75 7.23826L49.25 18.9983L49.25 32.7923Z" stroke="white" stroke-width="1.5" />
+               <path d="M3.75 32.743L24.25 21.6805L24.25 7.29099L3.75 18.9797L3.75 32.743Z" stroke="white" stroke-width="1.5" />
             </svg>
          ),
       };
@@ -38,13 +38,13 @@ export default function Navbar() {
    };
 
    return (
-      <nav role="navigation" id="navbar" className="flex items-center justify-between z-80  bg-black fixed w-full z-50 h-auto">
-         <div className="ml-2 relative flex items-center  z-80 logo">
-            <a href="/" className="flex-cols z-80  p-2 items-center flex">
+      <nav role="navigation" id="navbar" className="flex items-center justify-between bg-black fixed w-full h-auto" style={{ zIndex: 1000 }}>
+         <div className="ml-2 relative flex items-center logo" style={{ zIndex: 1001 }}>
+            <a href="/" className="p-2 items-center flex">
                {getIcon('logo')}
             </a>
 
-            <a href="/" className="flex lg:flex text-white pt-2 pb-2 flex-col">
+            <a href="/" className="text-white pt-2 pb-2 flex-col">
                <span className="text-lg font-bold tracking-wide leading-none">RYTHM</span>
             </a>
          </div>
@@ -60,9 +60,9 @@ export default function Navbar() {
             <div className="w-full h-full p-2 relative ">
                <div className="w-full h-[250px]"></div>
 
-               <ul className="flex font-bold relative  p-2 gap-2 h-auto lg:h-auto flex-col  lg:justify-end uppercase text-black text-5xl lg:text-6xl">
+               <ul className="flex font-bold relative  p-2 gap-2 h-auto lg:h-auto flex-col  lg:justify-end uppercase text-black text-3xl lg:text-4xl">
                   <li>
-                     <a href="/dashboard" className="block flex items-center px-3 py-1 text-white hover:bg-gray-200/30 rounded-lg">
+                     <a href="/dashboard" className="block font-mono tracking-wide flex items-center px-3 py-1 text-white hover:bg-gray-200/10 rounded-lg">
                         <svg className="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                            {getIcon('dashboard')}
                         </svg>
@@ -70,7 +70,7 @@ export default function Navbar() {
                      </a>
                   </li>
                   <li>
-                     <a href="/sign-in" className="block flex items-center px-3 py-1 text-white hover:bg-gray-200/30 rounded-lg">
+                     <a href="/sign-in" className="block font-mono tracking-wide flex items-center px-3 py-1 text-white  hover:bg-gray-200/10 rounded-lg">
                         <svg className="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                            {getIcon('dashboard')}
                         </svg>
