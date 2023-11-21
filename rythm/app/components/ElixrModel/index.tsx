@@ -180,7 +180,7 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
     if (intersectPrice !== null) {
       setIntersectingPrice(intersectPrice);
     } else {
-      setIntersectingPrice(currentPrice);
+      console.log('No intersection between elixrs');
     }
     setInitializationComplete(true);
   };

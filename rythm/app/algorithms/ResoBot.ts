@@ -1,15 +1,11 @@
 import { BoxArrays } from '@/types';
 import { OandaApi } from '../api/OandaApi';
-// import { AlgorithmTools, initTools } from './path/to/AlgorithmTools';
-// import { Indicators } from './path/to/Indicators';
-// import { Ticky } from './path/to/Ticky';
 
-class ResoBot { 
-  private symbol: string; 
+class ResoBot {
+  private symbol: string;
   private apiContext: OandaApi;
   private dataFetchIntervalId: NodeJS.Timeout | null = null;
 
-  // State variables similar to ElixrBot
   private unrealizedPL: number | null = null;
   private realizedPL: number | null = null;
   private equity: number | null = null;
@@ -20,8 +16,8 @@ class ResoBot {
   private accountSummary: any = null;
   private pairPositionSummary: any = null;
 
-  constructor(symbol = 'EUR_USD', apiContext: OandaApi) { 
-    this.symbol = symbol; 
+  constructor(symbol = 'EUR_USD', apiContext: OandaApi) {
+    this.symbol = symbol;
     this.apiContext = apiContext;
   }
 
@@ -38,7 +34,6 @@ class ResoBot {
       this.pairPositionSummary = await this.apiContext.getPairPositionSummary(this.symbol);
       this.accountSummary = await this.apiContext.getAccountSummary();
 
-      // Process the data similar to ElixrBot
       if (this.accountSummary) {
         this.unrealizedPL = parseFloat(this.accountSummary.unrealizedPL);
         this.realizedPL = parseFloat(this.accountSummary.pl);
@@ -52,7 +47,7 @@ class ResoBot {
         this.unitsShort = parseInt(this.pairPositionSummary.short.units);
       }
     } catch (error) {
-      console.error("Error fetching data: ", error);
+      console.error('Error fetching data: ', error);
     }
   }
 
@@ -64,23 +59,17 @@ class ResoBot {
   }
 
   onData(currentPrice: number, boxArrays: BoxArrays) {
-    // console.log('current Price: ' + currentPrice)
-    // console.log('boxArrays: ' + boxArrays)
     if (this.shouldBuy(currentPrice, boxArrays)) {
-      // Buy logic
     } else if (this.shouldSell(currentPrice, boxArrays)) {
-      // Sell logic
     }
   }
 
   shouldBuy(currentPrice: number, boxArrays: BoxArrays) {
-    // Implement your buy logic here
-    return false; // Placeholder return
+    return false;
   }
 
   shouldSell(currentPrice: number, boxArrays: BoxArrays) {
-    // Implement your sell logic here
-    return false; // Placeholder return
+    return false;
   }
 }
 

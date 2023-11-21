@@ -46,10 +46,9 @@ class ElixrBot {
         this.unitsShort = parseInt(this.pairPositionSummary.short.units);
       }
     } catch (error) {
-      console.error("Error fetching data: ", error);
+      console.error('Error fetching data: ', error);
     }
   }
-
 
   public stopDataCollection() {
     if (this.dataFetchIntervalId) {
@@ -57,17 +56,17 @@ class ElixrBot {
       this.dataFetchIntervalId = null;
     }
   }
-   onData(currentPrice: number, priceToElixrRatio: number, intersectingPrice: number) {
-      console.log(this.unitsLong)
-      console.log(this.unitsShort)
-    }
-    shouldBuy(currentPrice: { currentPrice: number; candleData: any; }, priceToElixrRatio: undefined, intersectingPrice: undefined) {
-      return false;
-    }
-  
-    shouldSell(currentPrice: { currentPrice: number; candleData: any; }, priceToElixrRatio: undefined, intersectingPrice: undefined) {
-      return false;
-    }
+  onData(currentPrice: number, priceToElixrRatio: number, intersectingPrice: number) {
+    // console.log(this.unitsLong)
+    // console.log(this.unitsShort)
   }
+  shouldBuy(currentPrice: { currentPrice: number; candleData: any }, priceToElixrRatio: undefined, intersectingPrice: undefined) {
+    return false;
+  }
+
+  shouldSell(currentPrice: { currentPrice: number; candleData: any }, priceToElixrRatio: undefined, intersectingPrice: undefined) {
+    return false;
+  }
+}
 
 export default ElixrBot;
