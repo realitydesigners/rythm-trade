@@ -15,6 +15,14 @@ class ResoBot {
   private unitsShort: number | null = null;
   private accountSummary: any = null;
   private pairPositionSummary: any = null;
+  private isLongPosition: boolean = false;
+  private isShortPosition: boolean = false;
+
+  private isActive: boolean = false;
+  // Method to toggle the bot's active state
+  toggleActive() {
+    this.isActive = !this.isActive;
+  }
 
   constructor(symbol = 'EUR_USD', apiContext: OandaApi) {
     this.symbol = symbol;
@@ -45,6 +53,8 @@ class ResoBot {
       if (this.pairPositionSummary) {
         this.unitsLong = parseInt(this.pairPositionSummary.long.units);
         this.unitsShort = parseInt(this.pairPositionSummary.short.units);
+        this.isLongPosition = this.unitsLong > 0;
+        this.isShortPosition = this.unitsShort < 0;
       }
     } catch (error) {
       console.error('Error fetching data: ', error);
@@ -57,7 +67,6 @@ class ResoBot {
       this.dataFetchIntervalId = null;
     }
   }
-
   onData(currentPrice: number, boxArrays: BoxArrays) {
     if (this.shouldBuy(currentPrice, boxArrays)) {
     } else if (this.shouldSell(currentPrice, boxArrays)) {

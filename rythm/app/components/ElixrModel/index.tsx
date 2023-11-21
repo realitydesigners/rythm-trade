@@ -5,6 +5,7 @@ import { CandleData, StreamData } from '../../../types';
 import { OandaApiContext } from '../../api/OandaApi';
 import { symbolsToDigits } from '@/app/utils/constants';
 import ElixrBot from '@/app/algorithms/ElixrBot';
+import { Button } from '../Shadcn/button';
 
 interface ElixrModelProps {
   pair: string;
@@ -27,7 +28,14 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
   const [currentPrice, setCurrentPrice] = useState<number>(0);
   const [priceToElixrRatio, setPriceToElixrRatio] = useState<number>(0.5);
   const [intersectingPrice, setIntersectingPrice] = useState<number>(0);
+  const [botActive, setBotActive] = useState(false);
 
+  const toggleBot = () => {
+    if (elixrInstance.current) {
+      elixrInstance.current.toggleActive();
+      setBotActive(!botActive);
+    }
+  };
   useEffect(() => {
     if (api) {
       elixrInstance.current = new ElixrBot(pair, api);
@@ -247,6 +255,10 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
         <>
           <div>Price to Elixr Ratio: {priceToElixrRatio.toFixed(2)}</div>
           <div>Intersecting Price: {intersectingPrice.toFixed(5)}</div>
+          <div className="w-full flex justify-center items-center gap-2">
+            {/* Using Button component for consistency */}
+            <Button onClick={toggleBot}>{botActive ? 'Turn Off Bot' : 'Turn On Bot'}</Button>
+          </div>
         </>
       ) : (
         <div>Loading...</div>
