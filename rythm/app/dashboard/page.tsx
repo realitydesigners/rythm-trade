@@ -14,7 +14,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Button, buttonVariants } from '@/app/components/Shadcn/button';
 import { BOX_SIZES } from '../utils/constants';
 
-const initialFavorites = ['GBP_USD', 'USD_JPY', 'AUD_USD', 'EUR_JPY', 'EUR_USD', 'AUD_USD', 'USD_CAD', 'NZD_USD', 'GBP_JPY'];
+const initialFavorites = ['GBP_USD', 'USD_JPY', 'AUD_USD', 'EUR_JPY', 'EUR_USD', 'USD_CAD', 'NZD_USD', 'GBP_JPY'];
 
 const DashboardPage = () => {
   const [currencyPairs, setCurrencyPairs] = useState<string[]>([]);
