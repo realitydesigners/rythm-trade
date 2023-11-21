@@ -18,6 +18,7 @@ class ElixrBot {
   private isShortPosition: boolean = false;
 
   private isActive: boolean = false;
+
   toggleActive() {
     this.isActive = !this.isActive;
   }
