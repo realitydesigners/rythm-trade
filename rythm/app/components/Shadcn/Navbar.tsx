@@ -71,13 +71,13 @@ export default function Navbar() {
                </Link>
             </SignedOut>
 
-            <div className="w-full p-4  flex items-center p-2">
-               <div className="flex justify-center rounded-full  p-[2px] bg-white">
-                  <SignedIn>
+            <SignedIn>
+               <div className="w-full p-4  flex items-center p-2">
+                  <div className="flex justify-center rounded-full  p-[2px] bg-white">
                      <UserButton afterSignOutUrl="/" />
-                  </SignedIn>
+                  </div>
                </div>
-            </div>
+            </SignedIn>
 
             <ul className="space-y-4">
                {['Dashboard', 'About', 'Contact'].map(text => (
