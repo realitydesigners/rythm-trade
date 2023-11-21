@@ -13,6 +13,10 @@ export default function Navbar() {
       setIsNavOpen(!isNavOpen);
       document.body.style.overflow = isNavOpen ? 'auto' : 'hidden';
    };
+   const closeNav = () => {
+      setIsNavOpen(false); // Close the navigation
+      document.body.style.overflow = 'auto'; // Enable scrolling
+   };
 
    const getMenuIconPath = () => {
       return isNavOpen ? 'M3 3l18 18M3 21L21 3' : 'M3 12h18M3 6h18M3 18h18';
@@ -61,7 +65,7 @@ export default function Navbar() {
 
          <div id="nav-content" role="menu" className={`absolute top-0 left-0 bg-black w-full h-screen overflow-y-auto transition-transform duration-300 ease-in-out ${isNavOpen ? 'translate-x-0' : '-translate-x-full'} flex flex-col justify-center p-8`}>
             <SignedOut>
-               <Link href="/sign-up" className="flex items-center space-x-2 text-white text-xl font-mono font-bold uppercase mb-4 hover:bg-gray-600/30 hover:text-gray-300 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-300" onClick={() => setIsNavOpen(false)}>
+               <Link href="/sign-up" className="flex items-center space-x-2 text-white text-xl font-mono font-bold uppercase mb-4 hover:bg-gray-600/30 hover:text-gray-300 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-300" onClick={closeNav}>
                   <div className="flex items-center space-x-2">
                      <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         {getIcon('dashboard')}
@@ -82,7 +86,7 @@ export default function Navbar() {
             <ul className="space-y-4">
                {['Dashboard', 'About', 'Contact'].map(text => (
                   <li key={text}>
-                     <Link href={`/${text.toLowerCase()}`} className="flex items-center text-xl text-white uppercase font-mono font-bold hover:bg-gray-600/30 hover:text-gray-300 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={() => setIsNavOpen(false)}>
+                     <Link href={`/${text.toLowerCase()}`} className="flex items-center text-xl text-white uppercase font-mono font-bold hover:bg-gray-600/30 hover:text-gray-300 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}>
                         <svg className="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                            {getIcon('dashboard')}
                         </svg>
