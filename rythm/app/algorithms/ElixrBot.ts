@@ -18,7 +18,6 @@ class ElixrBot {
   private isShortPosition: boolean = false;
 
   private isActive: boolean = false;
-  // Method to toggle the bot's active state
   toggleActive() {
     this.isActive = !this.isActive;
   }
@@ -83,43 +82,42 @@ class ElixrBot {
       const tradeSize = this.equity * 3;
 
       if (this.tradeCount > 0) {
-        // Check if conditions are met to close the trade
+        const closeAndFetchData = async (isLong: boolean, units: number) => {
+          const closeResult = await this.apiContext.closePosition(this.symbol, units);
+          console.log(isLong ? 'Long position closed:' : 'Short position closed:', closeResult);
+          this.tradeCount = 0;
+          this.isLongPosition = false;
+          this.isShortPosition = false;
+          await this.fetchData();
+        };
+
         if (this.unrealizedPL !== null && (this.unrealizedPL > profitTarget || this.unrealizedPL < -profitTarget)) {
           if (this.isLongPosition && this.unitsLong !== null) {
             console.log('close long now');
-            this.apiContext.closePosition(this.symbol, this.unitsLong).then(result => {
-              console.log('Long position closed:', result);
-              this.tradeCount = 0;
-              this.isLongPosition = false;
-              this.isShortPosition = false;
-            });
+            closeAndFetchData(true, this.unitsLong);
           } else if (this.isShortPosition && this.unitsShort !== null) {
             console.log('close short now');
-            this.apiContext.closePosition(this.symbol, this.unitsShort).then(result => {
-              console.log('Short position closed:', result);
-              this.tradeCount = 0;
-              this.isLongPosition = false;
-              this.isShortPosition = false;
-            });
+            closeAndFetchData(false, this.unitsShort);
           }
         }
       }
-      // Execute trade if no current trade is open
+      const placeTradeAndUpdate = async (size: number, direction: number) => {
+        await this.apiContext.placeTrade(this.symbol, size, direction);
+        console.log(`Trade placed: ${size} units, direction: ${direction}`);
+        await this.fetchData();
+      };
+
       if (this.tradeCount === 0) {
         if (this.shouldSell(currentPrice, priceToElixrRatio, intersectingPrice)) {
-          this.apiContext.placeTrade(this.symbol, tradeSize, -1).then(tradeId => {
-            console.log('Trade placed:', tradeId);
-          });
-          this.tradeCount += 1;
+          placeTradeAndUpdate(tradeSize, -1);
           this.isShortPosition = true;
           this.isLongPosition = false;
+          this.tradeCount = 1;
         } else if (this.shouldBuy(currentPrice, priceToElixrRatio, intersectingPrice)) {
-          this.apiContext.placeTrade(this.symbol, tradeSize, 1).then(tradeId => {
-            console.log('Trade placed:', tradeId);
-          });
-          this.tradeCount += 1;
+          placeTradeAndUpdate(tradeSize, 1);
           this.isLongPosition = true;
           this.isShortPosition = false;
+          this.tradeCount = 1;
         }
       }
     }
