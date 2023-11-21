@@ -359,11 +359,21 @@ export class OandaApi {
     return null;
   }
 
-  public async closePosition(pairName: string, longUnits: number) {
+  public async closePosition(pairName: string, units: number) {
     // Close a position. Returns related transaction IDs.
 
     const url = `accounts/${this.account_id}/positions/${pairName}/close`;
-    const data = longUnits > 0 ? { longUnits: 'ALL' } : { shortUnits: 'ALL' };
+    let data = {};
+
+    if (units > 0) {
+      data = { longUnits: 'ALL' };
+    } else if (units < 0) {
+      data = { shortUnits: 'ALL' };
+    } else {
+      // Handle the case where units is zero
+      console.error('No position to close');
+      return null;
+    }
 
     const [ok, response] = await this.makeRequest(url, 'put', 200, {}, data);
     if (ok && response['relatedTransactionIDs']) {
