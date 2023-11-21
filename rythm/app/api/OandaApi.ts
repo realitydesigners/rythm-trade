@@ -233,7 +233,17 @@ export class OandaApi {
       }
       return null;
    }
-
+   public async getPairPositionSummary(pair: string, account_id: string = this.account_id) {
+      const endpoint = `accounts/${account_id}/positions/${pair}`;
+      const [ok, data] = await this.makeRequest(endpoint, 'get');
+      if (ok) {
+        return data.position;
+      } else {
+        console.error(`ERROR getPairPositionSummary(${pair})`, data);
+        return null;
+      }
+    }
+  
    public async getAccountInstruments(account_id: string = this.account_id) {
       // Fetch account instruments. Returns an array of available instruments.
 
