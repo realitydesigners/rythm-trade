@@ -29,7 +29,6 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
   const [priceToElixrRatio, setPriceToElixrRatio] = useState<number>(0.5);
   const [intersectingPrice, setIntersectingPrice] = useState<number>(0);
   const [botActive, setBotActive] = useState(false);
-  const [positionSummary, setPositionSummary] = useState<any>(null);
 
   const toggleBot = () => {
     if (elixrInstance.current) {
@@ -54,17 +53,6 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
       };
     }
   }, [api, pair]);
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      // Check if elixrInstance.current is not null before accessing its methods
-      if (elixrInstance.current) {
-        setPositionSummary(elixrInstance.current.getPositionSummary());
-      }
-    }, 1000); // Update every second, adjust as needed
-
-    return () => clearInterval(intervalId);
-  }, []);
 
   const findLocalExtrema = (data: number[], findMax: boolean, numCandles: number = 5): number[] => {
     const extrema: number[] = [];
@@ -261,46 +249,6 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
     updatePriceToElixrRatio();
   }, [currentPrice, trendlines]);
 
-  const renderPLTable = (positionSummary: { instrument?: any; long?: any; short?: any }) => {
-    if (!positionSummary) {
-      return <div>No data available</div>;
-    }
-
-    const { long, short } = positionSummary;
-    let positions: any[] = [];
-
-    if (long && long.tradeIDs) {
-      positions = positions.concat(long.tradeIDs.map((id: any) => ({ ...long, id, position: 'Long' })));
-    }
-    if (short && short.tradeIDs) {
-      positions = positions.concat(short.tradeIDs.map((id: any) => ({ ...short, id, position: 'Short' })));
-    }
-
-    return (
-      <table>
-        <thead>
-          <tr>
-            <th>Order Num</th>
-            <th>Pair</th>
-            <th>Position</th>
-            <th>Avg Price</th>
-            <th>Profit/Loss</th>
-          </tr>
-        </thead>
-        <tbody>
-          {positions.map((pos, index) => (
-            <tr key={index}>
-              <td>{pos.id}</td>
-              <td>{positionSummary.instrument}</td>
-              <td>{pos.position}</td>
-              <td>{pos.averagePrice}</td>
-              <td>{pos.unrealizedPL}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    );
-  };
 
   return (
     <div className="w-full h-auto text-teal-400 font-bold">
@@ -311,7 +259,6 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
           <div className="w-full flex justify-center items-center gap-2">
             <Button onClick={toggleBot}>{botActive ? 'Turn Off Bot' : 'Turn On Bot'}</Button>
           </div>
-          {renderPLTable(positionSummary)}
         </>
       ) : (
         <div>Loading...</div>

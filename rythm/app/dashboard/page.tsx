@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Stream from '../components/Stream';
 import ResoModel from '../components/ResoModel';
 import ElixrModel from '../components/ElixrModel';
-
+import PositionTable from '../components/PositionTable';
 import MasterProfile from '../components/MasterProfile';
 import { OandaApiContext, api } from '../api/OandaApi';
 import styles from './DashboardPage.module.css';
@@ -158,6 +158,8 @@ const DashboardPage = () => {
                 <Stream pair={pair} data={streamData[pair]} />
               </a>
               <ResoModel pair={pair} streamData={streamData[pair]} selectedBoxArrayType={selectedBoxArrayTypes[pair]} />
+              <PositionTable pair={pair}/>
+
               <div className="w-full  flex justify-center items-center gap-2">
                 <Select value={selectedBoxArrayTypes[pair]} onValueChange={newValue => handleBoxArrayChange(pair, newValue)}>
                   <SelectTrigger>
