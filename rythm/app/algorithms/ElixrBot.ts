@@ -91,9 +91,9 @@ class ElixrBot {
 
     console.log(this.positionSummary);
     if (this.equity !== null) {
-      const profitTarget = this.equity * 0.003;
+      const profitTarget = this.equity * 0.001;
       const stopLoss = this.equity * -0.001;
-      const tradeSize = this.equity * 3;
+      const tradeSize = this.equity * 1;
 
       if (tradeCount > 0) {
         const closeAndFetchData = async (units: number) => {
