@@ -23,11 +23,14 @@ class ElixrBot {
     this.symbol = symbol;
     this.apiContext = apiContext;
   }
-
+  // Getter method to expose position summary data
+  public getPositionSummary() {
+    return this.positionSummary;
+  }
   toggleActive() {
     this.isActive = !this.isActive;
   }
-  public async startDataCollection(interval: number = 60000) {
+  public async startDataCollection(interval: number = 10000) {
     this.stopDataCollection();
 
     await this.fetchData();
@@ -60,19 +63,10 @@ class ElixrBot {
           instrument: this.symbol,
           long: this.pairPositionSummary?.long ?? {},
           short: this.pairPositionSummary?.short ?? {},
-          pl: this.accountSummary?.pl ?? 0,
-          unrealizedPL: this.accountSummary?.unrealizedPL ?? 0,
           positionCount: positionCount,
           tradeCount: tradeCount,
         };
       }
-      console.log(`Fetched data for ${this.symbol}:`, {
-        unrealizedPL: this.unrealizedPL,
-        realizedPL: this.realizedPL,
-        equity: this.equity,
-        tradeCount: this.tradeCount,
-        positionSummary: this.positionSummary,
-      });
     } catch (error) {
       console.error('Error fetching data: ', error);
     }
