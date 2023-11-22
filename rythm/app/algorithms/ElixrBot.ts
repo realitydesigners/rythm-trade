@@ -4,7 +4,6 @@ class ElixrBot {
   private symbol: string;
   private apiContext: OandaApi;
   private dataFetchIntervalId: NodeJS.Timeout | null = null;
-
   private unrealizedPL: number | null = null;
   private realizedPL: number | null = null;
   private equity: number | null = null;
@@ -16,18 +15,18 @@ class ElixrBot {
   private pairPositionSummary: any = null;
   private isLongPosition: boolean = false;
   private isShortPosition: boolean = false;
-
+  private positionSummary: any = null;
+  private isProcessingTrade: boolean = false;
   private isActive: boolean = false;
 
-  toggleActive() {
-    this.isActive = !this.isActive;
-  }
-
-  constructor(symbol = 'EUR_USD', apiContext: OandaApi) {
+  constructor(symbol: string, apiContext: OandaApi) {
     this.symbol = symbol;
     this.apiContext = apiContext;
   }
 
+  toggleActive() {
+    this.isActive = !this.isActive;
+  }
   public async startDataCollection(interval: number = 60000) {
     this.stopDataCollection();
 
@@ -45,16 +44,35 @@ class ElixrBot {
         this.unrealizedPL = parseFloat(this.accountSummary.unrealizedPL);
         this.realizedPL = parseFloat(this.accountSummary.pl);
         this.equity = parseFloat(this.accountSummary.NAV);
-        this.tradeCount = parseInt(this.accountSummary.openTradeCount);
         this.marginCloseoutPercent = parseFloat(this.accountSummary.marginCloseoutPercent);
       }
 
       if (this.pairPositionSummary) {
-        this.unitsLong = parseInt(this.pairPositionSummary.long.units);
-        this.unitsShort = parseInt(this.pairPositionSummary.short.units);
-        this.isLongPosition = this.unitsLong > 0;
-        this.isShortPosition = this.unitsShort < 0;
+        const longUnits = parseInt(this.pairPositionSummary.long?.units ?? '0');
+        const shortUnits = parseInt(this.pairPositionSummary.short?.units ?? '0');
+        const positionCount = longUnits !== 0 || shortUnits !== 0 ? 1 : 0;
+        const longTradeCount = this.pairPositionSummary.long?.tradeIDs?.length ?? 0;
+        const shortTradeCount = this.pairPositionSummary.short?.tradeIDs?.length ?? 0;
+        const tradeCount = longTradeCount + shortTradeCount;
+
+        this.positionSummary = {
+          lastTransactionID: this.pairPositionSummary?.lastTransactionID ?? '',
+          instrument: this.symbol,
+          long: this.pairPositionSummary?.long ?? {},
+          short: this.pairPositionSummary?.short ?? {},
+          pl: this.accountSummary?.pl ?? 0,
+          unrealizedPL: this.accountSummary?.unrealizedPL ?? 0,
+          positionCount: positionCount,
+          tradeCount: tradeCount,
+        };
       }
+      console.log(`Fetched data for ${this.symbol}:`, {
+        unrealizedPL: this.unrealizedPL,
+        realizedPL: this.realizedPL,
+        equity: this.equity,
+        tradeCount: this.tradeCount,
+        positionSummary: this.positionSummary,
+      });
     } catch (error) {
       console.error('Error fetching data: ', error);
     }
@@ -66,70 +84,75 @@ class ElixrBot {
       this.dataFetchIntervalId = null;
     }
   }
+
   onData(currentPrice: number, priceToElixrRatio: number, intersectingPrice: number) {
-    if (!this.isActive) {
-      console.log('Bot is not active.');
+    if (!this.isActive || this.isProcessingTrade) {
       return;
     }
 
-    console.log(`Current Price: ${currentPrice}, Price to Elixr Ratio: ${priceToElixrRatio}, Intersecting Price: ${intersectingPrice}`);
-    console.log(`Long Position: ${this.isLongPosition}, Short Position: ${this.isShortPosition}`);
+    const longUnits = this.positionSummary?.long?.units ? parseInt(this.positionSummary.long.units) : 0;
+    const shortUnits = this.positionSummary?.short?.units ? parseInt(this.positionSummary.short.units) : 0;
+    const tradeCount = this.positionSummary?.tradeCount ?? 0;
+    const positionUnrealizedPL = longUnits > 0 ? parseFloat(this.positionSummary.long.unrealizedPL) : shortUnits < 0 ? parseFloat(this.positionSummary.short.unrealizedPL) : 0;
 
-    if (this.equity !== null && this.tradeCount !== null) {
-      console.log(`Unrealized PL: ${this.unrealizedPL}, Profit Target: ${this.equity * 0.001}`);
-      console.log('short units: ' + this.unitsShort);
-      console.log('long units: ' + this.unitsLong);
-      const profitTarget = this.equity * 0.001;
+    console.log(this.positionSummary);
+    if (this.equity !== null) {
+      const profitTarget = this.equity * 0.003;
+      const stopLoss = this.equity * -0.001;
       const tradeSize = this.equity * 3;
 
-      if (this.tradeCount > 0) {
-        const closeAndFetchData = async (isLong: boolean, units: number) => {
+      if (tradeCount > 0) {
+        const closeAndFetchData = async (units: number) => {
+          this.isProcessingTrade = true;
+          console.log(`Closing position for ${this.symbol}:`, { units });
+
           const closeResult = await this.apiContext.closePosition(this.symbol, units);
-          console.log(isLong ? 'Long position closed:' : 'Short position closed:', closeResult);
-          this.tradeCount = 0;
-          this.isLongPosition = false;
-          this.isShortPosition = false;
+          console.log(`Position closed for ${this.symbol}:`, closeResult);
+
           await this.fetchData();
+          this.isProcessingTrade = false;
         };
 
-        if (this.unrealizedPL !== null && (this.unrealizedPL > profitTarget || this.unrealizedPL < -profitTarget)) {
-          if (this.isLongPosition && this.unitsLong !== null) {
-            console.log('close long now');
-            closeAndFetchData(true, this.unitsLong);
-          } else if (this.isShortPosition && this.unitsShort !== null) {
-            console.log('close short now');
-            closeAndFetchData(false, this.unitsShort);
+        if (positionUnrealizedPL !== null && (positionUnrealizedPL > profitTarget || positionUnrealizedPL < stopLoss)) {
+          if (longUnits > 0) {
+            closeAndFetchData(longUnits);
+          } else if (shortUnits < 0) {
+            closeAndFetchData(shortUnits);
           }
         }
       }
+
       const placeTradeAndUpdate = async (size: number, direction: number) => {
-        await this.apiContext.placeTrade(this.symbol, size, direction);
-        console.log(`Trade placed: ${size} units, direction: ${direction}`);
+        this.isProcessingTrade = true;
+        console.log(`Placing trade for ${this.symbol}:`, { size, direction });
+
+        const tradeResult = await this.apiContext.placeTrade(this.symbol, size, direction);
+        console.log(`Trade placed for ${this.symbol}:`, tradeResult);
+
         await this.fetchData();
+        this.isProcessingTrade = false;
       };
 
-      if (this.tradeCount === 0) {
-        if (this.shouldSell(currentPrice, priceToElixrRatio, intersectingPrice)) {
+      if (tradeCount === 0) {
+        if (this.shouldSell(currentPrice, priceToElixrRatio, intersectingPrice, shortUnits)) {
           placeTradeAndUpdate(tradeSize, -1);
-          this.isShortPosition = true;
-          this.isLongPosition = false;
-          this.tradeCount = 1;
-        } else if (this.shouldBuy(currentPrice, priceToElixrRatio, intersectingPrice)) {
+        } else if (this.shouldBuy(currentPrice, priceToElixrRatio, intersectingPrice, longUnits)) {
           placeTradeAndUpdate(tradeSize, 1);
-          this.isLongPosition = true;
-          this.isShortPosition = false;
-          this.tradeCount = 1;
         }
       }
     }
   }
 
-  shouldBuy(currentPrice: number, priceToElixrRatio: number, intersectingPrice: number): boolean {
-    return (priceToElixrRatio === 0.0 || currentPrice < intersectingPrice) && !this.isLongPosition;
+  shouldBuy(currentPrice: number, priceToElixrRatio: number, intersectingPrice: number, longUnits: number): boolean {
+    const result = (priceToElixrRatio === 0.0 || currentPrice < intersectingPrice) && longUnits === 0;
+    console.log(`shouldBuy decision:`, { currentPrice, priceToElixrRatio, intersectingPrice, longUnits, result });
+    return result;
   }
 
-  shouldSell(currentPrice: number, priceToElixrRatio: number, intersectingPrice: number): boolean {
-    return (priceToElixrRatio === 1.0 || currentPrice > intersectingPrice) && !this.isShortPosition;
+  shouldSell(currentPrice: number, priceToElixrRatio: number, intersectingPrice: number, shortUnits: number): boolean {
+    const result = (priceToElixrRatio === 1.0 || currentPrice > intersectingPrice) && shortUnits === 0;
+    console.log(`shouldSell decision:`, { currentPrice, priceToElixrRatio, intersectingPrice, shortUnits, result });
+    return result;
   }
 }
 
