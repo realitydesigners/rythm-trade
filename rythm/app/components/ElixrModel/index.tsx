@@ -307,10 +307,11 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
       {initializationComplete ? (
         <>
           {/* Render P/L table */}
-          {renderPLTable(positionSummary)}
+
           <div className="w-full flex justify-center items-center gap-2">
             <Button onClick={toggleBot}>{botActive ? 'Turn Off Bot' : 'Turn On Bot'}</Button>
           </div>
+          {renderPLTable(positionSummary)}
         </>
       ) : (
         <div>Loading...</div>
