@@ -45,6 +45,7 @@ export interface BoxArrays {
   [key: number]: Box;
 }
 export interface PositionData {
+  lastTransactionID: string;
   commission: string;
   dividendAdjustment: string;
   financing: string;
