@@ -109,7 +109,7 @@ export default function Navbar() {
             </SignedOut>
 
             <SignedIn>
-               <div className=" lg:flex lg:relative absolute bottom-8 right-4 lg:right-0 lg:bottom-0 lg:left-0  lg:w-auto lg:mr-4 mr-0  lg:p-2 flex items-center lg:justify-end">
+               <div className=" lg:flex lg:relative absolute top-16 right-3 lg:right-0 lg:top-0 lg:left-0  lg:w-auto lg:mr-4 mr-0  lg:p-2 flex items-center lg:justify-end">
                   <UserButton afterSignOutUrl="/" />
                </div>
             </SignedIn>
