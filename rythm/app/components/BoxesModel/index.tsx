@@ -187,17 +187,17 @@ const BoxesModel: React.FC<BoxModelProps> = ({ pair, streamData }) => {
    const renderToggleButtons = () => {
       return (
          <div className={styles.buttonContainer}>
-            <button onClick={() => switchBoxArray('default')} className={`${styles.toggleButton} ${selectedBoxArray === 'default' ? styles.active : ''}`}>
-               MysticRex
+            <button onClick={() => switchBoxArray('d')} className={`${styles.toggleButton} ${selectedBoxArray === 'd' ? styles.active : ''}`}>
+               d
             </button>
-            <button onClick={() => switchBoxArray('array1')} className={`${styles.toggleButton} ${selectedBoxArray === 'array1' ? styles.active : ''}`}>
-               SpiritBronto
+            <button onClick={() => switchBoxArray('1')} className={`${styles.toggleButton} ${selectedBoxArray === '1' ? styles.active : ''}`}>
+               1
             </button>
-            <button onClick={() => switchBoxArray('array2')} className={`${styles.toggleButton} ${selectedBoxArray === 'array2' ? styles.active : ''}`}>
-               ZenSaur
+            <button onClick={() => switchBoxArray('2')} className={`${styles.toggleButton} ${selectedBoxArray === '2' ? styles.active : ''}`}>
+               2
             </button>
-            <button onClick={() => switchBoxArray('array3')} className={`${styles.toggleButton} ${selectedBoxArray === 'array3' ? styles.active : ''}`}>
-               AuraRaptor
+            <button onClick={() => switchBoxArray('3')} className={`${styles.toggleButton} ${selectedBoxArray === '3' ? styles.active : ''}`}>
+               3
             </button>
          </div>
       );
