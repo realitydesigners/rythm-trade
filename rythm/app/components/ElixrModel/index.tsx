@@ -249,14 +249,14 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
     updatePriceToElixrRatio();
   }, [currentPrice, trendlines]);
 
+
   return (
     <div className="w-full h-auto text-teal-400 font-bold">
       {initializationComplete ? (
         <>
-          <div>Price to Elixr Ratio: {priceToElixrRatio.toFixed(2)}</div>
-          <div>Intersecting Price: {intersectingPrice.toFixed(5)}</div>
+          {/* Render P/L table */}
+
           <div className="w-full flex justify-center items-center gap-2">
-            {/* Using Button component for consistency */}
             <Button onClick={toggleBot}>{botActive ? 'Turn Off Bot' : 'Turn On Bot'}</Button>
           </div>
         </>
