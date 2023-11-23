@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
-import { Button, buttonVariants } from '@/components/ui/button';
+import '@/app/globals.css';
 
 type IconName = 'logo' | 'dashboard';
 
@@ -23,7 +23,7 @@ export default function Navbar() {
    };
 
    const getIcon = (name: IconName) => {
-      const icons: { [key in IconName]: JSX.Element } = {
+      const icons = {
          logo: (
             <svg width="40" height="40" viewBox="0 0 53 53" fill="none" xmlns="http://www.w3.org/2000/svg">
                <path d="M3.75 20.2357L24.25 30.9032L24.25 44.7318L3.75 33.4605L3.75 20.2357Z" stroke="white" strokeWidth="1.5" />
@@ -45,56 +45,70 @@ export default function Navbar() {
    };
 
    return (
-      <nav role="navigation" id="navbar" className="flex items-center justify-between bg-black fixed w-full h-auto" style={{ zIndex: 1000 }}>
+      <nav role="navigation" id="navbar" className="flex items-center justify-between   fixed w-full h-auto z-50">
          <div className="ml-2 relative flex items-center logo" style={{ zIndex: 1001 }}>
-            <a href="/" className="p-2 items-center flex">
-               {getIcon('logo')}
-            </a>
-
-            <a href="/" className="text-white pt-2 pb-2 flex-col">
-               <span className="text-lg font-bold tracking-wide leading-none">RYTHM</span>
-            </a>
+            <Link href="/">
+               <div className="p-2 items-center flex cursor-pointer">{getIcon('logo')}</div>
+            </Link>
+            <Link href="/">
+               <div className="text-white pt-2 pb-2 flex-col cursor-pointer">
+                  <span className="text-lg font-bold tracking-wide leading-none">RYTHM</span>
+               </div>
+            </Link>
          </div>
+
          <div className="flex relative">
-            <button id="nav-toggle" className="flex items-center justify-center items-center relative pl-2 pt-3 pr-2 z-20" aria-label="Toggle Menu" onClick={toggleNav}>
+            <button id="nav-toggle" className="flex items-center justify-center relative pl-2 pt-3 pr-2 z-20 lg:hidden" aria-label="Toggle Menu" onClick={toggleNav}>
                <svg className="w-8 h-8" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d={getMenuIconPath()} stroke="#fff" strokeWidth="2"></path>
                </svg>
             </button>
          </div>
 
-         <div id="nav-content" role="menu" className={`absolute top-0 left-0 bg-black w-full h-screen overflow-y-auto transition-transform duration-300 ease-in-out ${isNavOpen ? 'translate-x-0' : '-translate-x-full'} flex flex-col justify-center p-8`}>
+         {/* Navigation Links */}
+         <div id="nav-content" role="menu" className={`absolute lg:relative top-0 left-0 bg-black w-full lg:w-full  h-screen lg:h-auto items-center overflow-y-auto lg:overflow-y-visible  transition-transform duration-300 ease-in-out ${isNavOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 flex flex-col lg:flex-row lg:justify-between justify-center p-8 lg:p-0`}>
+            <div className="w-auto  flex m-0 lg:ml-12">
+               <p className="text-gray-400  text-center text-xs font-mono">
+                  {' '}
+                  Pattern Recognition<br></br>In Another Dimension
+               </p>
+            </div>
+
+            <ul className="lg:flex lg:space-evenly items-center  mt-4 lg:mt-0">
+               <li className="block">
+                  <Link href="/dashboard" className="flex items-center text-md lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-300 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}>
+                     <svg className="w-4 h-4">{getIcon('dashboard')}</svg>
+                     <span className="ml-2">Dashboard</span>
+                  </Link>
+               </li>
+               <li className="block">
+                  <Link href="/about" className="flex items-center text-md lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-300 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}>
+                     <svg className="w-4 h-4">{getIcon('dashboard')}</svg>
+                     <span className="ml-2">About</span>
+                  </Link>
+               </li>
+               <li className="w-full">
+                  <Link href="/contact" className="flex items-center text-md lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-300 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}>
+                     <svg className="w-4 h-4">{getIcon('dashboard')}</svg>
+                     <span className="ml-2">Contact</span>
+                  </Link>
+               </li>
+            </ul>
+            <div className="w-auto  lg:flex  hidden ">
+               <p className="text-gray-400  text-center text-xs font-mono">rythm.capital</p>
+            </div>
             <SignedOut>
-               <Link href="/sign-up" className="flex items-center space-x-2 text-white text-xl font-mono font-bold uppercase mb-4 hover:bg-gray-600/30 hover:text-gray-300 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-300" onClick={closeNav}>
-                  <div className="flex items-center space-x-2">
-                     <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        {getIcon('dashboard')}
-                     </svg>
-                     <span>Sign-In</span>
-                  </div>
+               <Link href="/sign-up" className="mb-4 lg:mb-0 lg:ml-6 flex items-center space-x-2 text-white  text-md lg:text-smfont-mono font-bold uppercase hover:bg-gray-600/30 hover:text-gray-300 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-300" onClick={closeNav}>
+                  <svg className="w-4 h-4">{getIcon('dashboard')}</svg>
+                  <span>Sign-In</span>
                </Link>
             </SignedOut>
 
             <SignedIn>
-               <div className="w-full p-4  flex items-center p-2">
-                  <div className="flex justify-center rounded-full  p-[2px] bg-white">
-                     <UserButton afterSignOutUrl="/" />
-                  </div>
+               <div className="w-full lg:w-auto p-4 lg:p-2 flex items-center justify-center lg:justify-end">
+                  <UserButton afterSignOutUrl="/" />
                </div>
             </SignedIn>
-
-            <ul className="space-y-4">
-               {['Dashboard', 'About', 'Contact'].map(text => (
-                  <li key={text}>
-                     <Link href={`/${text.toLowerCase()}`} className="flex items-center text-xl text-white uppercase font-mono font-bold hover:bg-gray-600/30 hover:text-gray-300 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}>
-                        <svg className="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                           {getIcon('dashboard')}
-                        </svg>
-                        {text}
-                     </Link>
-                  </li>
-               ))}
-            </ul>
          </div>
       </nav>
    );
