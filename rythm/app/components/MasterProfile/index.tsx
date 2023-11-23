@@ -21,7 +21,7 @@ const MasterProfile: React.FC = () => {
       <div>
          {accountSummary ? (
             <div>
-               <h2 className="title text-white font-mono mb-4 uppercase font-bold">Account Summary</h2>
+               <h2 className="title text-gray-200 font-mono mb-4 uppercase font-bold">Account Summary</h2>
                <div className="flex-col gap-2 flex flex-wrap">
                   <Label>
                      ID: <span>{accountSummary.id}</span>

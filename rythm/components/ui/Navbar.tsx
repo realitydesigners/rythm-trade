@@ -51,7 +51,7 @@ export default function Navbar() {
                <div className="p-2 items-center flex cursor-pointer">{getIcon('logo')}</div>
             </Link>
             <Link href="/">
-               <div className="text-white pt-2 pb-2 flex-col cursor-pointer">
+               <div className="text-gray-200 pt-2 pb-2 flex-col cursor-pointer">
                   <span className="text-lg font-bold tracking-wide leading-none">RYTHM</span>
                </div>
             </Link>
@@ -76,19 +76,19 @@ export default function Navbar() {
 
             <ul className="lg:flex lg:space-evenly items-center  mt-4 lg:mt-0">
                <li className="block">
-                  <Link href="/dashboard" className="flex items-center text-md lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-300 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}>
+                  <Link href="/dashboard" className="flex items-center text-md lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}>
                      <svg className="w-4 h-4">{getIcon('dashboard')}</svg>
                      <span className="ml-2">Dashboard</span>
                   </Link>
                </li>
                <li className="block">
-                  <Link href="/about" className="flex items-center text-md lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-300 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}>
+                  <Link href="/about" className="flex items-center text-md lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}>
                      <svg className="w-4 h-4">{getIcon('dashboard')}</svg>
                      <span className="ml-2">About</span>
                   </Link>
                </li>
                <li className="w-full">
-                  <Link href="/contact" className="flex items-center text-md lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-300 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}>
+                  <Link href="/contact" className="flex items-center text-md lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}>
                      <svg className="w-4 h-4">{getIcon('dashboard')}</svg>
                      <span className="ml-2">Contact</span>
                   </Link>
@@ -98,7 +98,7 @@ export default function Navbar() {
                <p className="text-gray-400  text-center text-xs font-mono">rythm.capital</p>
             </div>
             <SignedOut>
-               <Link href="/sign-up" className="mb-4 lg:mb-0 lg:ml-6 flex items-center space-x-2 text-white  text-md lg:text-smfont-mono font-bold uppercase hover:bg-gray-600/30 hover:text-gray-300 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-300" onClick={closeNav}>
+               <Link href="/sign-up" className="mb-4 lg:mb-0 lg:ml-6 flex items-center space-x-2 text-gray-200  text-md lg:text-smfont-mono font-bold uppercase hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-300" onClick={closeNav}>
                   <svg className="w-4 h-4">{getIcon('dashboard')}</svg>
                   <span>Sign-In</span>
                </Link>
