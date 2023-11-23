@@ -45,7 +45,7 @@ export default function Navbar() {
    };
 
    return (
-      <nav role="navigation" id="navbar" className="flex items-center justify-between   fixed w-full h-auto z-50">
+      <nav role="navigation" id="navbar" className="flex items-center justify-between bg-black/80 backdrop-blur-lg shadow-2xl fixed w-full h-auto z-50">
          <div className="ml-2 relative flex items-center logo" style={{ zIndex: 1001 }}>
             <Link href="/">
                <div className="p-2 items-center flex cursor-pointer">{getIcon('logo')}</div>
@@ -66,46 +66,50 @@ export default function Navbar() {
          </div>
 
          {/* Navigation Links */}
-         <div id="nav-content" role="menu" className={`absolute lg:relative top-0 left-0 bg-black w-full lg:w-full  h-screen lg:h-auto items-center overflow-y-auto lg:overflow-y-visible  transition-transform duration-300 ease-in-out ${isNavOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 flex flex-col lg:flex-row lg:justify-between justify-center p-8 lg:p-0`}>
-            <div className="w-auto  flex m-0 lg:ml-12">
+         <div id="nav-content" role="menu" className={`absolute lg:relative top-0 left-0 w-full bg-black lg:bg-transparent lg:w-full  h-screen lg:h-auto items-center overflow-y-auto lg:overflow-y-visible  transition-transform duration-300 ease-in-out ${isNavOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 flex flex-col lg:flex-row lg:justify-between justify-center p-8 lg:p-0`}>
+            <div className="w-auto  flex m-0 lg:ml-12 lg:mr-12">
                <p className="text-gray-400  text-center text-xs font-mono">
                   {' '}
                   Pattern Recognition<br></br>In Another Dimension
                </p>
             </div>
 
-            <ul className="lg:flex lg:space-evenly items-center  mt-4 lg:mt-0">
+            <ul className="lg:flex lg:space-evenly flex-cols  mt-4 lg:mt-0">
                <li className="block">
-                  <Link href="/dashboard" className="flex items-center text-md lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}>
+                  <Link href="/dashboard" className="flex items-center text-3xl lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}>
                      <svg className="w-4 h-4">{getIcon('dashboard')}</svg>
                      <span className="ml-2">Dashboard</span>
                   </Link>
                </li>
                <li className="block">
-                  <Link href="/about" className="flex items-center text-md lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}>
+                  <Link href="/about" className="flex items-center text-3xl lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}>
                      <svg className="w-4 h-4">{getIcon('dashboard')}</svg>
                      <span className="ml-2">About</span>
                   </Link>
                </li>
-               <li className="w-full">
-                  <Link href="/contact" className="flex items-center text-md lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}>
+               <li className="block">
+                  <Link href="/" className="flex items-center text-3xl lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}>
                      <svg className="w-4 h-4">{getIcon('dashboard')}</svg>
-                     <span className="ml-2">Contact</span>
+                     <span className="ml-2">Tools</span>
                   </Link>
                </li>
             </ul>
             <div className="w-auto  lg:flex  hidden ">
-               <p className="text-gray-400  text-center text-xs font-mono">rythm.capital</p>
+               <p className="text-gray-400  text-center text-xs underline font-mono">rythm.capital</p>
             </div>
             <SignedOut>
-               <Link href="/sign-up" className="mb-4 lg:mb-0 lg:ml-6 flex items-center space-x-2 text-gray-200  text-md lg:text-smfont-mono font-bold uppercase hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-300" onClick={closeNav}>
-                  <svg className="w-4 h-4">{getIcon('dashboard')}</svg>
-                  <span>Sign-In</span>
-               </Link>
+               <div className="group w-full lg:w-auto mt-8 h-12 lg:h-8 lg:mr-4 mr-0 lg:mt-0 flex justify-center">
+                  <Link href="/sign-up" onClick={closeNav} className="relative lg:pr-2 w-full flex pr-0 h-full items-center font-mono text-md lg:text-xs text-black font-semibold rounded-full transition-all duration-200 ease-in-out bg-white border-2 border-black hover:border-gray-300">
+                     {/* Content */}
+                     <div className="z-10 flex items-center justify-center w-full h-full">
+                        <span className="ml-2">Sign-In</span>
+                     </div>
+                  </Link>
+               </div>
             </SignedOut>
 
             <SignedIn>
-               <div className="w-full lg:w-auto p-4 lg:p-2 flex items-center justify-center lg:justify-end">
+               <div className="w-full  lg:w-auto p-4 lg:mr-4 m-0  lg:p-2 flex items-center justify-center lg:justify-end">
                   <UserButton afterSignOutUrl="/" />
                </div>
             </SignedIn>
