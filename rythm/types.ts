@@ -44,3 +44,25 @@ export interface Box {
 export interface BoxArrays {
   [key: number]: Box;
 }
+export interface PositionData {
+  commission: string;
+  dividendAdjustment: string;
+  financing: string;
+  guaranteedExecutionFees: string;
+  instrument: string;
+  long: PositionDetails;
+  short: PositionDetails;
+  unrealizedPL: string;
+  marginUsed: string;
+}
+export interface PositionDetails {
+  averagePrice?: string;
+  dividendAdjustment: string;
+  financing: string;
+  guaranteedExecutionFees: string;
+  pl: string;
+  resettablePL: string;
+  units: string;
+  unrealizedPL?: string;
+  tradeIDs?: string[];
+}

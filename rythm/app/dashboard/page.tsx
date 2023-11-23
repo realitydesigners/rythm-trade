@@ -7,12 +7,14 @@ import ElixrModel from '../components/ElixrModel';
 import PositionTable from '../components/PositionTable';
 import MasterProfile from '../components/MasterProfile';
 import { OandaApiContext, api } from '../api/OandaApi';
+import MasterPosition from '../components/MasterPosition';
 import styles from './DashboardPage.module.css';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/app/components/Shadcn/select';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/app/components/Shadcn/dialog';
 
 import { Button, buttonVariants } from '@/app/components/Shadcn/button';
 import { BOX_SIZES } from '../utils/constants';
+import { PositionData } from '@/types';
 
 const initialFavorites = ['GBP_USD', 'USD_JPY', 'AUD_USD', 'EUR_JPY', 'EUR_USD', 'USD_CAD', 'NZD_USD', 'GBP_JPY'];
 
@@ -26,6 +28,7 @@ const DashboardPage = () => {
   const [streamData, setStreamData] = useState<{ [pair: string]: any }>({});
   const [isLoading, setIsLoading] = useState(true); // Initialize as true to show loading by default
   const [selectedBoxArrayTypes, setSelectedBoxArrayTypes] = useState(Object.fromEntries(initialFavorites.map(pair => [pair, 'd'])));
+  const [positionData, setPositionData] = useState<PositionData[]>([]);
 
   const handleBoxArrayChange = (pair: string, selectedKey: string) => {
     setSelectedBoxArrayTypes(prev => ({
@@ -69,6 +72,22 @@ const DashboardPage = () => {
       api.unsubscribeFromPairs(favoritePairs);
     };
   }, [favoritePairs]);
+
+  // Fetch position data periodically
+  useEffect(() => {
+    const fetchPositionData = async () => {
+      const displayedFavorites = favoritePairs.slice(0, numDisplayedFavorites);
+      const data = await Promise.all(
+        displayedFavorites.map(pair => api.getPairPositionSummary(pair))
+      );
+      setPositionData(data);
+    };
+
+    fetchPositionData();
+    const intervalId = setInterval(fetchPositionData, 5000);
+
+    return () => clearInterval(intervalId);
+  }, [favoritePairs, numDisplayedFavorites]);
 
   useEffect(() => {
     const displayedFavorites = favoritePairs.slice(0, numDisplayedFavorites);
@@ -158,8 +177,6 @@ const DashboardPage = () => {
                 <Stream pair={pair} data={streamData[pair]} />
               </a>
               <ResoModel pair={pair} streamData={streamData[pair]} selectedBoxArrayType={selectedBoxArrayTypes[pair]} />
-              <PositionTable pair={pair}/>
-
               <div className="w-full  flex justify-center items-center gap-2">
                 <Select value={selectedBoxArrayTypes[pair]} onValueChange={newValue => handleBoxArrayChange(pair, newValue)}>
                   <SelectTrigger>
@@ -191,6 +208,8 @@ const DashboardPage = () => {
           ))}
         </div>
       </div>
+      <MasterPosition positionData={positionData} />
+
     </OandaApiContext.Provider>
   );
 };
