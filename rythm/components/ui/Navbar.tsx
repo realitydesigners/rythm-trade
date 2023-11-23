@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
-import { Button, buttonVariants } from '@/app/components/Shadcn/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 
 type IconName = 'logo' | 'dashboard';
 
