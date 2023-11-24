@@ -274,6 +274,22 @@ export class OandaApi {
     }
   }
 
+    // API call to get all positions, filter, and sort them
+  public async getAllPositions(account_id: string = this.account_id) {
+    const endpoint = `accounts/${account_id}/positions`;
+    const [ok, data] = await this.makeRequest(endpoint, 'get');
+    if (ok && data.positions) {
+      const activePositions = data.positions.filter((position: { long: { units: string; }; short: { units: string; }; }) => 
+        position.long.units !== '0' || position.short.units !== '0'
+      );
+
+      return activePositions;
+    } else {
+      console.error('Error in getAllPositions', data);
+      return [];
+    }
+  }
+
   public async getAccountInstruments(account_id: string = this.account_id) {
     // Fetch account instruments. Returns an array of available instruments.
 

@@ -76,18 +76,15 @@ const DashboardPage = () => {
   // Fetch position data periodically
   useEffect(() => {
     const fetchPositionData = async () => {
-      const displayedFavorites = favoritePairs.slice(0, numDisplayedFavorites);
-      const data = await Promise.all(
-        displayedFavorites.map(pair => api.getPairPositionSummary(pair))
-      );
-      setPositionData(data);
+      const positions = await api.getAllPositions();
+      setPositionData(positions);
     };
 
     fetchPositionData();
     const intervalId = setInterval(fetchPositionData, 5000);
 
     return () => clearInterval(intervalId);
-  }, [favoritePairs, numDisplayedFavorites]);
+  }, []);
 
   useEffect(() => {
     const displayedFavorites = favoritePairs.slice(0, numDisplayedFavorites);

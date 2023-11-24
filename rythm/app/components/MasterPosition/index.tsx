@@ -15,6 +15,7 @@ function MasterPosition({ positionData }: MasterPositionProps) {
             <th>Trade IDs</th>
             <th>Pair</th>
             <th>Position</th>
+            <th>Units</th>
             <th>Avg Price</th>
             <th>Unrealized</th>
           </tr>
@@ -29,6 +30,10 @@ function MasterPosition({ positionData }: MasterPositionProps) {
                 </td>
                 <td>{position.instrument}</td>
                 <td>{position.long.units !== '0' ? 'Long' : (position.short.units !== '0' ? 'Short' : 'N/A')}</td>
+                <td>
+                  {position.long.units !== '0' ? position.long.units : 
+                   position.short.units !== '0' ? position.short.units : 'N/A'}
+                </td>
                 <td>{position.long.units !== '0' ? position.long.averagePrice : 
                      position.short.units !== '0' ? position.short.averagePrice : 'N/A'}</td>
                 <td>{position.unrealizedPL}</td>
