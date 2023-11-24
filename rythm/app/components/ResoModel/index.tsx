@@ -176,11 +176,12 @@ const ResoModel: React.FC<ResoModelProps> = ({ pair, streamData, selectedBoxArra
       if (bidPrice !== null && askPrice !== null) {
         const currentPrice = (bidPrice + askPrice) / 2;
         setCurrentClosePrice(currentPrice);
+        updateBoxesWithCurrentPrice(currentPrice);
 
         resoInstance.current.onData(currentPrice, boxArrays);
       }
     }
-  }, [streamData, boxArrays, initializationComplete]);
+  }, [streamData, boxArrays, initializationComplete, updateBoxesWithCurrentPrice]);
   // Render
   if (!initializationComplete) {
     return (

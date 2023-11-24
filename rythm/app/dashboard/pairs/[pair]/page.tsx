@@ -9,6 +9,9 @@ import MasterPosition from '@/app/components/MasterPosition';
 import { OandaApiContext, api } from '@/app/api/OandaApi';
 import styles from './PairPage.module.css';
 import ElixrModel from '@/app/components/ElixrModel';
+import ResoModel from '@/app/components/ResoModel';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
+import { BOX_SIZES } from '@/app/utils/constants';
 
 
 
@@ -17,7 +20,13 @@ const PairPage = () => {
   let pair = Array.isArray(params.pair) ? params.pair[0] : params.pair || ''; 
   const [streamData, setStreamData] = useState<{ [pair: string]: any }>({}); 
   const [positionData, setPositionData] = useState(null);
+  // State for selected box array type
+  const [selectedBoxArrayType, setSelectedBoxArrayType] = useState<string>('d');
 
+  // Function to handle change in selected box array type
+  const handleBoxArrayTypeChange = (newType: string) => {
+    setSelectedBoxArrayType(newType);
+  };
   useEffect(() => {
     const handleStreamData = (data: any, pair: string) => {   
       if (data.type !== "HEARTBEAT") {
@@ -51,7 +60,21 @@ const PairPage = () => {
         <a href="/" className={styles.backLink}> --BACK</a>
         <h1 className={styles.title}>{pair}</h1>
         <Stream pair={pair} data={streamData[pair]} />
-        <BoxesModel pair={pair} streamData={streamData[pair]} />
+
+        <ResoModel pair={pair} streamData={streamData[pair]} selectedBoxArrayType={selectedBoxArrayType} />
+        <Select value={selectedBoxArrayType} onValueChange={handleBoxArrayTypeChange}>
+          <SelectTrigger>
+            <SelectValue>{selectedBoxArrayType}</SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            {Object.keys(BOX_SIZES).map(arrayKey => (
+              <SelectItem key={arrayKey} value={arrayKey}>
+                {arrayKey}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
         <ElixrModel pair={pair} streamData={streamData[pair]} />
 
         {positionData && <MasterPosition positionData={[positionData]} />}
