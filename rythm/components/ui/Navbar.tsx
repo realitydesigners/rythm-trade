@@ -45,19 +45,21 @@ export default function Navbar() {
    };
 
    return (
-      <nav role="navigation" id="navbar" className="flex items-center justify-between bg-black/80 backdrop-blur-lg shadow-2xl fixed w-full h-auto z-50">
+      <nav role="navigation" id="navbar" className="flex items-center h-14  justify-between bg-black lg:bg-black/80 backdrop-blur-lg shadow-2xl fixed w-full  z-50">
          <div className="ml-2 relative flex items-center logo" style={{ zIndex: 1001 }}>
             <Link href="/">
-               <div className="p-2 items-center flex cursor-pointer">{getIcon('logo')}</div>
+               <div className="p-2 items-center flex ">
+                  <svg className="w-8 h-8">{getIcon('dashboard')}</svg>
+               </div>
             </Link>
             <Link href="/">
-               <div className="text-gray-200 pt-2 pb-2 flex-col cursor-pointer">
+               <div className="text-gray-200 pt-2 pb-2 hidden lg:flex flex-col cursor-pointer">
                   <span className="text-lg font-bold tracking-wide leading-none">RYTHM</span>
                </div>
             </Link>
          </div>
 
-         <div className="flex relative">
+         <div className="relative pl-4 lg:pl-0">
             <button id="nav-toggle" className="flex items-center justify-center relative pl-2 pt-3 pr-2 z-20 lg:hidden" aria-label="Toggle Menu" onClick={toggleNav}>
                <svg className="w-8 h-8" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d={getMenuIconPath()} stroke="#fff" strokeWidth="2"></path>
@@ -66,8 +68,8 @@ export default function Navbar() {
          </div>
 
          {/* Navigation Links */}
-         <div id="nav-content" role="menu" className={`absolute lg:relative top-0 left-0 w-full bg-black lg:bg-transparent lg:w-full  h-screen lg:h-auto items-center overflow-y-auto lg:overflow-y-visible  transition-transform duration-300 ease-in-out ${isNavOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 flex flex-col lg:flex-row lg:justify-between justify-center p-8 lg:p-0`}>
-            <div className="w-auto  flex m-0 lg:ml-12 lg:mr-12">
+         <div id="nav-content" role="menu" className={`absolute lg:relative top-0 left-0 w-full bg-black lg:bg-transparent lg:w-full  h-screen lg:h-auto items-center overflow-y-auto lg:overflow-y-visible  transition-transform duration-300 ease-in-out ${isNavOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 flex flex-col lg:flex-row lg:justify-evenly justify-center p-8 lg:p-0`}>
+            <div className="w-auto  flex ">
                <p className="text-gray-400  text-center text-xs font-mono">
                   {' '}
                   Pattern Recognition<br></br>In Another Dimension
@@ -97,23 +99,20 @@ export default function Navbar() {
             <div className="w-auto  lg:flex  hidden ">
                <p className="text-gray-400  text-center text-xs underline font-mono">rythm.capital</p>
             </div>
-            <SignedOut>
-               <div className="group w-full lg:w-auto mt-8 h-12 lg:h-8 lg:mr-4 mr-0 lg:mt-0 flex justify-center">
-                  <Link href="/sign-up" onClick={closeNav} className="relative lg:pr-2 w-full flex pr-0 h-full items-center font-mono text-md lg:text-xs text-black font-semibold rounded-full transition-all duration-200 ease-in-out bg-white border-2 border-black hover:border-gray-300">
-                     {/* Content */}
-                     <div className="z-10 flex items-center justify-center w-full h-full">
-                        <span className="ml-2">Sign-In</span>
-                     </div>
-                  </Link>
-               </div>
-            </SignedOut>
-
-            <SignedIn>
-               <div className=" lg:flex lg:relative absolute top-16 right-3 lg:right-0 lg:top-0 lg:left-0  lg:w-auto lg:mr-4 mr-0  lg:p-2 flex items-center lg:justify-end">
-                  <UserButton afterSignOutUrl="/" />
-               </div>
-            </SignedIn>
          </div>
+         <SignedOut>
+            <div className="group flex  lg:h-8 lg:mr-4 mr-0 lg:mt-0 justify-center">
+               <Link href="/sign-up" onClick={closeNav} className="relative items-center justify-center mr-2 p-2 items-center flex font-mono text-xs text-black font-semibold rounded-full transition-all duration-200 ease-in-out bg-white border-1 border-black hover:border-gray-300">
+                  <span className="whitespace-nowrap">Sign-In</span>
+               </Link>
+            </div>
+         </SignedOut>
+
+         <SignedIn>
+            <div className=" lg:flex lg:relative  mr-4   lg:p-2 flex ">
+               <UserButton afterSignOutUrl="/" />
+            </div>
+         </SignedIn>
       </nav>
    );
 }
