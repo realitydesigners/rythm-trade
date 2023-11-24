@@ -59,7 +59,7 @@ export default function Navbar() {
             </Link>
          </div>
 
-         <div className="relative pl-4 lg:pl-0">
+         <div className="relative pl-2 lg:pl-0">
             <button id="nav-toggle" className="flex items-center justify-center relative pl-2 pt-3 pr-2 z-20 lg:hidden" aria-label="Toggle Menu" onClick={toggleNav}>
                <svg className="w-8 h-8" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d={getMenuIconPath()} stroke="#fff" strokeWidth="2"></path>
