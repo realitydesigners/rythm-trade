@@ -256,7 +256,7 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
                {/* Render P/L table */}
 
                <div className="w-full flex justify-center items-center gap-2">
-                  <Button onClick={toggleBot}>{botActive ? 'Turn Off Bot' : 'Turn On Bot'}</Button>
+                  <Button onClick={toggleBot}>{botActive ? 'Turn Off Elixr' : 'Turn On Elixr'}</Button>
                </div>
             </>
          ) : (
