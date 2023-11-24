@@ -200,7 +200,6 @@ export class OandaApi {
         to: currentToDate.toISOString(),
       };
 
-
       const data = await this.getInstrumentEP(`${pairName}/candles`, params);
       if (data && data['candles']) {
         const fetchedCandles = data['candles'];
@@ -273,14 +272,12 @@ export class OandaApi {
     }
   }
 
-    // API call to get all positions, filter, and sort them
+  // API call to get all positions, filter, and sort them
   public async getAllPositions(account_id: string = this.account_id) {
     const endpoint = `accounts/${account_id}/positions`;
     const [ok, data] = await this.makeRequest(endpoint, 'get');
     if (ok && data.positions) {
-      const activePositions = data.positions.filter((position: { long: { units: string; }; short: { units: string; }; }) => 
-        position.long.units !== '0' || position.short.units !== '0'
-      );
+      const activePositions = data.positions.filter((position: { long: { units: string }; short: { units: string } }) => position.long.units !== '0' || position.short.units !== '0');
 
       return activePositions;
     } else {
@@ -350,21 +347,40 @@ export class OandaApi {
     return null;
   }
 
-  public async placeTrade(pairName: string, units: number, direction: number) {
-    // Place a trade order. Returns the ID of the filled order.
-
+  public async placeTrade(pairName: string, units: number, direction: number, orderType: 'MARKET' | 'LIMIT' = 'MARKET', price?: number, stopLossPrice?: number, takeProfitPrice?: number): Promise<string | null> {
     const url = `accounts/${this.account_id}/orders`;
     units = Math.round(units);
     if (direction === -1) {
       units *= -1;
     }
 
+    // Declare orderData with a flexible type
+    const orderData: { [key: string]: any } = {
+      units: units.toString(),
+      instrument: pairName,
+      type: orderType,
+    };
+
+    if (orderType === 'LIMIT' && price) {
+      orderData['price'] = price.toString();
+    }
+
+    if (stopLossPrice) {
+      orderData['stopLossOnFill'] = {
+        price: stopLossPrice.toString(),
+        timeInForce: 'GTC', // Good Till Cancelled
+      };
+    }
+
+    if (takeProfitPrice) {
+      orderData['takeProfitOnFill'] = {
+        price: takeProfitPrice.toString(),
+        timeInForce: 'GTC', // Good Till Cancelled
+      };
+    }
+
     const data = {
-      order: {
-        units: units.toString(),
-        instrument: pairName,
-        type: 'MARKET',
-      },
+      order: orderData,
     };
 
     const [ok, response] = await this.makeRequest(url, 'post', 201, {}, data);
