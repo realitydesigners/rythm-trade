@@ -25,11 +25,15 @@ export default function Navbar() {
    const getIcon = (name: IconName) => {
       const icons = {
          logo: (
-            <svg width="40" height="40" viewBox="0 0 53 53" fill="none" xmlns="http://www.w3.org/2000/svg">
-               <path d="M3.75 20.2357L24.25 30.9032L24.25 44.7318L3.75 33.4605L3.75 20.2357Z" stroke="white" strokeWidth="1.5" />
-               <path d="M49.25 20.1887L26.75 30.9212L26.75 44.7821L49.25 33.4421L49.25 20.1887Z" stroke="white" strokeWidth="1.5" />
-               <path d="M49.25 32.7923L26.75 21.6623L26.75 7.23826L49.25 18.9983L49.25 32.7923Z" stroke="white" strokeWidth="1.5" />
-               <path d="M3.75 32.743L24.25 21.6805L24.25 7.29099L3.75 18.9797L3.75 32.743Z" stroke="white" strokeWidth="1.5" />
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+               <path
+                  d="M32.4444 69L32.4444 33.4444C32.4444 32.8922 32.8922 32.4444 33.4444 32.4444L66.3441 32.4445C66.9074 32.4445 67.3595 32.9094 67.3437 33.4724L66.8803 50.0401C66.8652 50.5813 66.4221 51.0121 65.8807 51.0121L51.4575 51.0121C50.5517 51.0121 50.1126 52.12 50.7724 52.7406L83.8627 83.8627M83.8627 83.8627L48.9346 83.8627L16.9542 83.8627C16.402 83.8627 15.9542 83.415 15.9542 82.8627L15.9542 16.9542C15.9542 16.4019 16.4019 15.9542 16.9542 15.9542L82.8627 15.9542C83.415 15.9542 83.8627 16.402 83.8627 16.9542L83.8627 83.8627Z"
+                  stroke="white"
+                  stroke-width="8"
+               />
+               <clipPath id="clip0_804_82">
+                  <rect width="100" height="100" fill="white" />
+               </clipPath>
             </svg>
          ),
          dashboard: (
@@ -45,16 +49,16 @@ export default function Navbar() {
    };
 
    return (
-      <nav role="navigation" id="navbar" className="flex items-center h-14  justify-between bg-black lg:bg-black/80 backdrop-blur-lg shadow-2xl fixed w-full  z-50">
+      <nav role="navigation" id="navbar" className="flex items-center h-14  justify-between bg-black shadow-2xl fixed w-full  z-50">
          <div className="ml-2 relative flex items-center logo" style={{ zIndex: 1001 }}>
             <Link href="/">
                <div className="p-2 items-center flex ">
-                  <svg className="w-8 h-8">{getIcon('dashboard')}</svg>
+                  <svg className="w-8 h-8 ">{getIcon('logo')}</svg>
                </div>
             </Link>
             <Link href="/">
                <div className="text-gray-200 pt-2 pb-2 hidden lg:flex flex-col cursor-pointer">
-                  <span className="text-lg font-bold tracking-wide leading-none">RYTHM</span>
+                  <span className="text-xl font-mono font-bold tracking-widest leading-none">RYTHM</span>
                </div>
             </Link>
          </div>
@@ -70,10 +74,7 @@ export default function Navbar() {
          {/* Navigation Links */}
          <div id="nav-content" role="menu" className={`absolute lg:relative top-0 left-0 w-full bg-black lg:bg-transparent lg:w-full  h-screen lg:h-auto items-center overflow-y-auto lg:overflow-y-visible  transition-transform duration-300 ease-in-out ${isNavOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 flex flex-col lg:flex-row lg:justify-evenly justify-center p-8 lg:p-0`}>
             <div className="w-auto  flex ">
-               <p className="text-gray-400  text-center text-xs font-mono">
-                  {' '}
-                  Pattern Recognition<br></br>In Another Dimension
-               </p>
+               <p className="text-gray-400  text-center text-xs font-mono"> The Future Of Trading</p>
             </div>
 
             <ul className="lg:flex lg:space-evenly flex-cols  mt-4 lg:mt-0">
