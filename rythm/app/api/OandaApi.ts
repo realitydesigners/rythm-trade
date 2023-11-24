@@ -200,7 +200,6 @@ export class OandaApi {
         to: currentToDate.toISOString(),
       };
 
-      await new Promise(resolve => setTimeout(resolve, 10));
 
       const data = await this.getInstrumentEP(`${pairName}/candles`, params);
       if (data && data['candles']) {
