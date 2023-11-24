@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { OandaApiContext } from '../../api/OandaApi';
 
-import { Label } from '@/app/components/Shadcn/label';
+import { Label } from '@/components/ui/label';
 
 const MasterProfile: React.FC = () => {
    const [accountSummary, setAccountSummary] = useState<any>(null);
@@ -21,7 +21,7 @@ const MasterProfile: React.FC = () => {
       <div>
          {accountSummary ? (
             <div>
-               <h2 className="title text-white font-mono mb-4 uppercase font-bold">Account Summary</h2>
+               <h2 className="title text-gray-200 font-mono mb-4 uppercase font-bold">Account Summary</h2>
                <div className="flex-col gap-2 flex flex-wrap">
                   <Label>
                      ID: <span>{accountSummary.id}</span>
