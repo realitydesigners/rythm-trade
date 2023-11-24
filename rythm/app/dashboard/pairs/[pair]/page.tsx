@@ -5,16 +5,18 @@ import DataTable from '@/app/components/DataTable';
 import Stream from '@/app/components/Stream';
 import LineChart from '@/app/components/Linechart';
 import BoxesModel from '@/app/components/BoxesModel';
-import MasterPosition from '@/app/components/MasterPosition'; // Import your position component
+import MasterPosition from '@/app/components/MasterPosition';
 import { OandaApiContext, api } from '@/app/api/OandaApi';
 import styles from './PairPage.module.css';
+import ElixrModel from '@/app/components/ElixrModel';
+
 
 
 const PairPage = () => {
   const params = useParams();
   let pair = Array.isArray(params.pair) ? params.pair[0] : params.pair || ''; 
   const [streamData, setStreamData] = useState<{ [pair: string]: any }>({}); 
-  const [positionData, setPositionData] = useState(null); // State for position data
+  const [positionData, setPositionData] = useState(null);
 
   useEffect(() => {
     const handleStreamData = (data: any, pair: string) => {   
@@ -34,7 +36,7 @@ const PairPage = () => {
     };
 
     fetchPosition();
-    const intervalId = setInterval(fetchPosition, 5000);
+    const intervalId = setInterval(fetchPosition, 1000);
 
     return () => {
       api.unsubscribeFromPairs([pair]);
@@ -50,6 +52,8 @@ const PairPage = () => {
         <h1 className={styles.title}>{pair}</h1>
         <Stream pair={pair} data={streamData[pair]} />
         <BoxesModel pair={pair} streamData={streamData[pair]} />
+        <ElixrModel pair={pair} streamData={streamData[pair]} />
+
         {positionData && <MasterPosition positionData={[positionData]} />}
         {!positionData && <p>No position data available for {pair}</p>}
       </div>

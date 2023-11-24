@@ -80,7 +80,7 @@ const DashboardPage = () => {
       };
 
       fetchPositionData();
-      const intervalId = setInterval(fetchPositionData, 5000);
+      const intervalId = setInterval(fetchPositionData, 1000);
 
     return () => clearInterval(intervalId);
   }, []);
