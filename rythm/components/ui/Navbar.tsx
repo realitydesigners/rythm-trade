@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
+import { staatliches, inter, jura } from '@/app/fonts';
 import '@/app/globals.css';
 
 type IconName = 'logo' | 'dashboard';
@@ -57,8 +58,8 @@ export default function Navbar() {
                </div>
             </Link>
             <Link href="/">
-               <div className="text-gray-200 pt-2 pb-2 hidden lg:flex flex-col cursor-pointer">
-                  <span className="text-xl font-mono font-bold tracking-widest leading-none">RYTHM</span>
+               <div className={`${jura.className}  text-gray-200 pt-2 pb-2 hidden lg:flex flex-col `}>
+                  <span className="text-xl font-bold tracking-widest leading-none">RYTHM</span>
                </div>
             </Link>
          </div>
@@ -74,31 +75,31 @@ export default function Navbar() {
          {/* Navigation Links */}
          <div id="nav-content" role="menu" className={`absolute lg:relative top-0 left-0 w-full bg-black lg:bg-transparent lg:w-full  h-screen lg:h-auto items-center overflow-y-auto lg:overflow-y-visible  transition-transform duration-300 ease-in-out ${isNavOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 flex flex-col lg:flex-row lg:justify-evenly justify-center p-8 lg:p-0`}>
             <div className="w-auto  flex ">
-               <p className="text-gray-400  text-center text-xs font-mono"> The Future Of Trading</p>
+               <p className={`${jura.className}  text-gray-400  text-center text-xs font-mono`}> The Future Of Trading</p>
             </div>
 
             <ul className="lg:flex lg:space-evenly flex-cols  mt-4 lg:mt-0">
                <li className="block">
-                  <Link href="/dashboard" className="flex items-center text-3xl lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}>
+                  <Link href="/dashboard" className={`${jura.className}   flex items-center text-3xl lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}`}>
                      <svg className="w-4 h-4">{getIcon('dashboard')}</svg>
                      <span className="ml-2">Dashboard</span>
                   </Link>
                </li>
                <li className="block">
-                  <Link href="/about" className="flex items-center text-3xl lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}>
+                  <Link href="/about" className={`${jura.className}  flex items-center text-3xl lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}`}>
                      <svg className="w-4 h-4">{getIcon('dashboard')}</svg>
                      <span className="ml-2">About</span>
                   </Link>
                </li>
                <li className="block">
-                  <Link href="/" className="flex items-center text-3xl lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}>
+                  <Link href="/" className={`${jura.className}   flex items-center text-3xl lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}`}>
                      <svg className="w-4 h-4">{getIcon('dashboard')}</svg>
                      <span className="ml-2">Tools</span>
                   </Link>
                </li>
             </ul>
             <div className="w-auto  lg:flex  hidden ">
-               <p className="text-gray-400  text-center text-xs underline font-mono">rythm.capital</p>
+               <p className={`${jura.className}  text-gray-400  text-center text-xs underline font-mono`}>rythm.capital</p>
             </div>
          </div>
          <SignedOut>

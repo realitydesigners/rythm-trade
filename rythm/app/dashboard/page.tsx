@@ -143,7 +143,7 @@ const DashboardPage = () => {
 
    return (
       <OandaApiContext.Provider value={api}>
-         <div className="w-full flex p-2 lg:p-6 pt-16 lg:pt-16 flex-wrap ">
+         <div className="w-full flex pt-20 lg:pt-20 lg:p-6 p-4 flex-wrap ">
             <div className="w-full flex flex-wrap gap-2 mb-4">
                <Dialog>
                   <DialogTrigger asChild>
