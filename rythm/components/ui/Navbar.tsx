@@ -80,19 +80,19 @@ export default function Navbar() {
 
             <ul className="lg:flex lg:space-evenly flex-cols  mt-4 lg:mt-0">
                <li className="block">
-                  <Link href="/dashboard" className={`${jura.className}   flex items-center text-3xl lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}`}>
+                  <Link href="/dashboard" className={`${jura.className}   flex items-center text-3xl lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out`} onClick={closeNav}>
                      <svg className="w-4 h-4">{getIcon('dashboard')}</svg>
                      <span className="ml-2">Dashboard</span>
                   </Link>
                </li>
                <li className="block">
-                  <Link href="/about" className={`${jura.className}  flex items-center text-3xl lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}`}>
+                  <Link href="/about" className={`${jura.className}  flex items-center text-3xl lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out`} onClick={closeNav}>
                      <svg className="w-4 h-4">{getIcon('dashboard')}</svg>
                      <span className="ml-2">About</span>
                   </Link>
                </li>
                <li className="block">
-                  <Link href="/" className={`${jura.className}   flex items-center text-3xl lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out" onClick={closeNav}`}>
+                  <Link href="/" className={`${jura.className}   flex items-center text-3xl lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out`} onClick={closeNav}>
                      <svg className="w-4 h-4">{getIcon('dashboard')}</svg>
                      <span className="ml-2">Tools</span>
                   </Link>

@@ -49,7 +49,7 @@ const AppPage = () => {
                   {/* Feature 1 - Secure */}
                   <div className="p-2 rounded-lg shadow-lg space-y-2 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:shadow-2xl">
                      <div className="h-20 w-20 rounded-full mx-auto transition duration-500 ease-in-out transform hover:scale-110">
-                        <Image src={Secure} width={100} height={100} alt="Secure" />
+                        <Image src={Secure} width={500} height={500} alt="Secure" />
                      </div>
                      <h3 className={`${staatliches.className} text-gray-200 text-center uppercase font-bold text-2xl`}>Secure</h3>
                      <p className={`${jura.className} text-gray-400 text-sm text-center`}>Our robust security features protect your data and maintain privacy.</p>
@@ -57,7 +57,7 @@ const AppPage = () => {
                   {/* Feature 2 - Scalable */}
                   <div className="p-2 rounded-lg shadow-lg space-y-2 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:shadow-2xl">
                      <div className="h-20 w-20 rounded-full mx-auto transition duration-500 ease-in-out transform hover:scale-110">
-                        <Image src={Scale} width={100} height={100} alt="Scalable" />
+                        <Image src={Scale} width={500} height={500} alt="Scalable" />
                      </div>
                      <h3 className={`${staatliches.className} text-gray-200 text-center uppercase font-bold text-2xl`}>Scalable</h3>
                      <p className={`${jura.className} text-gray-400 text-sm text-center`}>Our infrastructure is designed to scale regardless of volume.</p>
@@ -65,7 +65,7 @@ const AppPage = () => {
                   {/* Feature 3 - Repeatable */}
                   <div className="p-2 rounded-lg shadow-lg space-y-2 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:shadow-2xl">
                      <div className="h-20 w-20 rounded-full mx-auto transition duration-500 ease-in-out transform hover:scale-110">
-                        <Image src={Repeat} width={100} height={100} alt="Repeatable" />
+                        <Image src={Repeat} width={500} height={500} alt="Repeatable" />
                      </div>
                      <h3 className={`${staatliches.className} text-gray-200 text-center uppercase font-bold text-2xl`}>Repeatable</h3>
                      <p className={`${jura.className} text-gray-400 text-sm text-center`}>Rely on our algorithms for consistent and repeatable success.</p>
@@ -73,7 +73,7 @@ const AppPage = () => {
                   {/* Feature 4 - Proprietary */}
                   <div className="p-2 rounded-lg shadow-lg space-y-2 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:shadow-2xl">
                      <div className="h-20 w-20 rounded-full mx-auto transition duration-500 ease-in-out transform hover:scale-110">
-                        <Image src={Prop} width={100} height={100} alt="Proprietary" />
+                        <Image src={Prop} width={500} height={500} alt="Proprietary" />
                      </div>
                      <h3 className={`${staatliches.className} text-gray-200 text-center uppercase font-bold text-2xl`}>Automated</h3>
                      <p className={`${jura.className} text-gray-400 text-sm text-center`}>Benefit from our proprietary technology that trades for you.</p>
@@ -81,7 +81,7 @@ const AppPage = () => {
                   {/* Feature 5 - Quantitative */}
                   <div className="p-2 rounded-lg shadow-lg space-y-2 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:shadow-2xl">
                      <div className="h-20 w-20 rounded-full mx-auto transition duration-500 ease-in-out transform hover:scale-110">
-                        <Image src={Quant} width={100} height={100} alt="Quantitative" />
+                        <Image src={Quant} width={500} height={500} alt="Quantitative" />
                      </div>
                      <h3 className={`${staatliches.className} text-gray-200 text-center uppercase font-bold text-2xl`}>Quantitative</h3>
                      <p className={`${jura.className} text-gray-400 text-sm text-center`}>Access quantitative analytics for data-driven decisions.</p>
