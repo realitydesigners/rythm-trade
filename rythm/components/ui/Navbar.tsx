@@ -49,7 +49,7 @@ export default function Navbar() {
    };
 
    return (
-      <nav role="navigation" id="navbar" className="flex items-center h-14  justify-between bg-black shadow-2xl fixed w-full  z-50">
+      <nav role="navigation" id="navbar" className="flex items-center h-16 p-2  justify-between bg-gradient-to-t from-transparent to-black fixed w-full  z-50">
          <div className="ml-2 relative flex items-center logo" style={{ zIndex: 1001 }}>
             <Link href="/">
                <div className="p-2 items-center flex ">
