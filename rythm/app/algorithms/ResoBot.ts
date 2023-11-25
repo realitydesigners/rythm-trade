@@ -24,10 +24,7 @@ class ResoBot {
     this.symbol = symbol;
     this.apiContext = apiContext;
   }
-  // Getter method to expose position summary data
-  public getPositionSummary() {
-    return this.positionSummary;
-  }
+
   toggleActive() {
     this.isActive = !this.isActive;
   }

@@ -13,8 +13,6 @@ class ElixrBot {
   private unitsShort: number | null = null;
   private accountSummary: any = null;
   private pairPositionSummary: any = null;
-  private isLongPosition: boolean = false;
-  private isShortPosition: boolean = false;
   private positionSummary: any = null;
   private isProcessingTrade: boolean = false;
   private isActive: boolean = false;
@@ -23,10 +21,7 @@ class ElixrBot {
     this.symbol = symbol;
     this.apiContext = apiContext;
   }
-  // Getter method to expose position summary data
-  public getPositionSummary() {
-    return this.positionSummary;
-  }
+
   toggleActive() {
     this.isActive = !this.isActive;
   }

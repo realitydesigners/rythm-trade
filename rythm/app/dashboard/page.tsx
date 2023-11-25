@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import Stream from '../components/Stream';
 import ResoModel from '../components/ResoModel';
 import ElixrModel from '../components/ElixrModel';
-import PositionTable from '../components/PositionTable';
 import MasterProfile from '../components/MasterProfile';
 import { OandaApiContext, api } from '../api/OandaApi';
 import MasterPosition from '../components/MasterPosition';
