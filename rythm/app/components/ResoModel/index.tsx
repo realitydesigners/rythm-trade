@@ -10,6 +10,8 @@ import { CandleData, Box, BoxArrays, StreamData } from '../../../types';
 import { findCurrentPrice, findHighest, findLowest } from '../../api/priceAnalysis';
 import { OandaApiContext } from '../../api/OandaApi';
 import { SymbolsToDigits, symbolsToDigits, BOX_SIZES } from '../../utils/constants';
+import { Button } from '../../../components/ui/button';
+
 import ResoBox from '../ResoBox';
 import ResoBot from '@/app/algorithms/ResoBot';
 
@@ -35,7 +37,15 @@ const ResoModel: React.FC<ResoModelProps> = ({ pair, streamData, selectedBoxArra
   const [boxArrays, setBoxArrays] = useState<BoxArrays>({});
   const [initializationComplete, setInitializationComplete] = useState<boolean>(false);
   const resoInstance = useRef<ResoBot | null>(null);
+  const [botActive, setBotActive] = useState(false);  // Bot active state
 
+  // Toggle bot function
+  const toggleBot = () => {
+    if (resoInstance.current) {
+      resoInstance.current.toggleActive();
+      setBotActive(!botActive);  // Toggle the bot active state
+    }
+  };
   useEffect(() => {
     if (api) {
       resoInstance.current = new ResoBot(pair, api);
@@ -177,7 +187,7 @@ const ResoModel: React.FC<ResoModelProps> = ({ pair, streamData, selectedBoxArra
         const currentPrice = (bidPrice + askPrice) / 2;
         setCurrentClosePrice(currentPrice);
         updateBoxesWithCurrentPrice(currentPrice);
-
+        console.log(boxArrays)
         resoInstance.current.onData(currentPrice, boxArrays);
       }
     }
@@ -196,16 +206,22 @@ const ResoModel: React.FC<ResoModelProps> = ({ pair, streamData, selectedBoxArra
   }
 
   return (
-    <div className="w-full h-auto">
+    <div className="w-full h-auto text-teal-400 font-bold">
       {initializationComplete ? (
         <>
           <ResoBox boxArrays={boxArrays} />
+  
+          <div className="w-full flex justify-center items-center gap-2">
+                  <Button onClick={toggleBot}>{botActive ? 'Turn Off reso' : 'Turn On reso'}</Button>
+               </div>
         </>
       ) : (
         <div>Loading...</div>
       )}
     </div>
   );
+  
+  
 };
 
 export default ResoModel;
