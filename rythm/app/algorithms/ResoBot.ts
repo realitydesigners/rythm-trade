@@ -8,7 +8,7 @@ enum TradeState {
 }
 
 interface TradeSnapshot {
-  boxArrays: any; // Replace 'any' with the actual type of your boxArrays
+  boxArrays: any;
   currentPrice: number;
   stopLoss: number;
   timestamp: Date;
@@ -29,7 +29,7 @@ class ResoBot {
   private positionSummary: any = null;
   private isProcessingTrade: boolean = false;
   private isActive: boolean = false;
-  private tradeState: TradeState = TradeState.Closed; // Initial state
+  private tradeState: TradeState = TradeState.Closed;
   private tradeSnapshot: TradeSnapshot | null = null;
 
   constructor(symbol: string, apiContext: OandaApi) {
@@ -160,7 +160,7 @@ class ResoBot {
     this.tradeSnapshot = {
       boxArrays: boxArrays,
       currentPrice: currentPrice,
-      stopLoss: stopLoss, // Store stop loss price
+      stopLoss: stopLoss,
       timestamp: new Date()
     };
     this.logTradeLifecycle('Trade Initialized');
