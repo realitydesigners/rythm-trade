@@ -1,6 +1,8 @@
 import { OandaApi } from "../../services/OandaApi";
+
 export class OandaController {
   private oandaApi: OandaApi;
+
   constructor() {
     this.oandaApi = new OandaApi(
       process.env.OANDA_TOKEN as string,
@@ -9,15 +11,16 @@ export class OandaController {
       process.env.OANDA_STREAM_URL as string
     );
   }
-  public async getAccountSummary(ctx: any) {
+
+  public async getAccountSummary() {
     console.log("Received request for getAccountSummary");
     try {
       const summary = await this.oandaApi.getAccountSummary();
       console.log("Account Summary:", summary);
-      ctx.res.json(summary);
+      return summary; // Directly return the summary
     } catch (error) {
       console.error("Error in getAccountSummary:", error);
-      ctx.res.status(500).json({ error: 'An error occurred while fetching account summary' });
+      return { error: 'An error occurred while fetching account summary' }; // Return error response
     }
   }
 }
