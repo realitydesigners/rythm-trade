@@ -1,7 +1,8 @@
-import { Elysia } from "elysia";
-
-const app = new Elysia().get("/", () => "Hello Elysia").listen(3000);
-
-console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-);
+import { Elysia, t } from 'elysia';
+import { swagger } from '@elysiajs/swagger';
+import oandaRoutes from './api/routes/oandaRoutes';
+const app = new Elysia()
+  .use(swagger())
+  .use(oandaRoutes)
+  .listen(8080, () => console.log(`Server is running at http://localhost:8080`));
+export type App = typeof app;
