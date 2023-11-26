@@ -1,6 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+
 import Navbar from '@/components/ui/Navbar';
 import { ClerkProvider } from '@clerk/nextjs';
 
@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
          <html lang="en">
             <body className="bg-black">
                <Navbar />
-               <div className="pt-16 p-0">{children}</div>
+               <div className="p-0">{children}</div>
             </body>
          </html>
       </ClerkProvider>
