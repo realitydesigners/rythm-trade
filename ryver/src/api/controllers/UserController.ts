@@ -1,18 +1,29 @@
-import { PrismaClient } from '@prisma/client';
+import { DatabaseService } from '../../services/DatabaseService';
 
 export class UserController {
-  private prisma: PrismaClient;
+  private dbService: DatabaseService;
 
   constructor() {
-    this.prisma = new PrismaClient();
+    this.dbService = new DatabaseService();
   }
 
-  public async createUserOrUpdate(clerkUserId: string, userEmail: string, userName?: string) {
-    const user = await this.prisma.user.upsert({
-      where: { clerkUserId },
-      update: { email: userEmail, name: userName },
-      create: { clerkUserId, email: userEmail, name: userName },
-    });
-    return user;
+  /**
+   * Retrieves a user by their Clerk ID.
+   * @param {string} clerkUserId - The Clerk user ID.
+   * @returns {Promise<any>} A promise that resolves to the user data.
+   */
+  public async getUserByClerkId(clerkUserId: string): Promise<any> {
+    return await this.dbService.getUserByClerkId(clerkUserId);
+  }
+
+  /**
+   * Creates or updates a user in the database.
+   * @param {string} clerkUserId - The Clerk user ID.
+   * @param {string} userEmail - The user's email address.
+   * @param {string} [userName] - The user's name. Optional.
+   * @returns {Promise<any>} A promise that resolves to the created or updated user data.
+   */
+  public async createUserOrUpdate(clerkUserId: string, userEmail: string, userName?: string): Promise<any> {
+    return await this.dbService.createUserOrUpdate(clerkUserId, userEmail, userName);
   }
 }

@@ -4,37 +4,36 @@ import { useEffect } from 'react';
 export default function Page() {
   const { user } = useUser();
 
-  // const handleSignInSuccess = async () => {
-  //   const serverBaseUrl = 'http://localhost:3001';
-  //   if (!user) return;
+  /**
+   * Handles the sign-in process by verifying if the user exists in the database.
+   * @returns {Promise<void>} A promise that resolves when the sign-in process is complete.
+   */
+  const handleSignIn = async (): Promise<void> => {
+    const serverBaseUrl = 'http://localhost:3001';
+    if (!user) return;
 
-  //   try {
-  //     const primaryEmail = user.primaryEmailAddress?.emailAddress;
-  //     const fullName = user.fullName;
+    try {
+      const response = await fetch(`${serverBaseUrl}/user/${user.id}`);
+      if (!response.ok) {
+        throw new Error('Failed to verify user');
+      }
+      const userData = await response.json();
+      if (userData) {
+        console.log('User verified:', userData);
+      } else {
+        console.log('User not found in the database');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
-  //     const userDetails = { userId: user.id, email: primaryEmail, name: fullName };
-  //     const response = await fetch(`${serverBaseUrl}/user`, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(userDetails),
-  //     });
-  //     if (!response.ok) {
-  //       throw new Error('Failed to create or update user');
-  //     }
-  //     const updatedUser = await response.json();
-  //     console.log('User created or updated:', updatedUser);
-  //   } catch (error) {
-  //     console.error('Error:', error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (user) {
-  //     handleSignInSuccess();
-  //   }
-  // }, [user]);
+  // Runs the handleSignIn function when the user object changes
+  useEffect(() => {
+    if (user) {
+      handleSignIn();
+    }
+  }, [user]);
 
   return <SignIn />;
 }

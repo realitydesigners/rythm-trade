@@ -10,10 +10,15 @@ export class OandaController {
     this.dbService = new DatabaseService();
   }
 
-  public async getAccountSummary(userId: string) {
+  /**
+   * Retrieves the account summary from the Oanda API.
+   * @param {string} userId - The ID of the user for whom the account summary is being fetched.
+   * @returns {Promise<any>} A promise that resolves to the account summary.
+   */
+  public async getAccountSummary(userId: string): Promise<any> {
     console.log('Received request for getAccountSummary');
     try {
-      const userData = await this.dbService.getUser(userId);
+      const userData = await this.dbService.getUserByClerkId(userId);
 
       const summary = await this.oandaApi.getAccountSummary();
       console.log('Account Summary:', summary);
