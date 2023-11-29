@@ -100,7 +100,11 @@ For more complex or significant functions, use the following comment structure:
 function functionName(paramName, anotherParamName) {
   // Function implementation
 }
+```
 
+For simple functions that you think require some explanation, use the following comment structure:
+
+```typescript
 // Brief description of the function
 function smallFunction(param) {
   // Function implementation
