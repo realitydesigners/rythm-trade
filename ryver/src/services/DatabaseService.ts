@@ -17,6 +17,7 @@ export class DatabaseService {
       const user = await this.prisma.user.findUnique({
         where: { clerkUserId },
       });
+      console.log(user)
       return user;
     } catch (error) {
       console.error('Error in getUserByClerkId:', error);
@@ -38,6 +39,7 @@ export class DatabaseService {
         update: { email: userEmail, name: userName },
         create: { clerkUserId, email: userEmail, name: userName },
       });
+      console.log(user)
       return user;
     } catch (error) {
       console.error('Error in createUserOrUpdate:', error);

@@ -1,3 +1,4 @@
+'use client';
 import { SignIn, useUser } from '@clerk/nextjs';
 import { useEffect } from 'react';
 
@@ -9,7 +10,8 @@ export default function Page() {
    * @returns {Promise<void>} A promise that resolves when the sign-in process is complete.
    */
   const handleSignIn = async (): Promise<void> => {
-    const serverBaseUrl = 'http://localhost:3001';
+    const serverBaseUrl = 'http://localhost:8080';
+    console.log('sign in')
     if (!user) return;
 
     try {

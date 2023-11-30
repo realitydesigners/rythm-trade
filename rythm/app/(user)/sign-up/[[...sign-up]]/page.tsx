@@ -1,3 +1,4 @@
+'use client';
 import { SignUp, useUser } from '@clerk/nextjs';
 import { useEffect } from 'react';
 
@@ -9,7 +10,8 @@ export default function Page() {
    * @returns {Promise<void>} A promise that resolves when the user creation or update process is complete.
    */
   const handleSignUpSuccess = async (): Promise<void> => {
-    const serverBaseUrl = 'http://localhost:3001';
+    const serverBaseUrl = 'http://localhost:8080';
+    console.log('sign up')
     if (!user) return;
 
     try {

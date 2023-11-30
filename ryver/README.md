@@ -12,11 +12,10 @@ Make sure you have the following prerequisites installed on your system:
 
 ## Initializing Prisma with Bun
 
-1. Create a new directory for your project and navigate to it:
+1. cd directory:
 
    ```bash
-   mkdir ryver-app
-   cd ryver-app
+   cd ryver
    ```
 
 2. Initialize your project with Bun:
@@ -24,7 +23,9 @@ Make sure you have the following prerequisites installed on your system:
    ```bash
    bun init
    ```
-
+   ```bash
+   bun install
+   ```
 3. Install Prisma CLI (prisma) and Prisma Client (@prisma/client) using Bun:
 
    ```bash
@@ -39,21 +40,8 @@ Make sure you have the following prerequisites installed on your system:
    bunx prisma init --datasource-provider sqlite
    ```
 
-2. Modify the `prisma/schema.prisma` file to define your data models (similar to the User model in the example provided).
-
-## Running Migrations
-
-1. Generate and run the initial migration by running the following command:
-
-   ```bash
-   bunx prisma migrate dev --name init
-   ```
-
-   This command will create a `.sql` migration file in the `prisma/migrations` directory and execute the migration against a new SQLite instance.
 
 ## Regenerating Prisma Client
-
-Prisma Client is automatically regenerated whenever a new migration is executed. However, you can manually regenerate the client if needed:
 
 ```bash
 bunx prisma generate
@@ -65,10 +53,10 @@ Import and use the generated Prisma Client in your application from `@prisma/cli
 
 ## Sample Script
 
-A sample script is provided that demonstrates how to create a new user and count the number of users in the database. You can run the script with the following command:
+now You can run ryver with the following command:
 
 ```bash
-bun run index.ts
+bun run dev
 ```
 
 ## Continuing Development
