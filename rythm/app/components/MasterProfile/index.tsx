@@ -1,21 +1,30 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { OandaApiContext } from '../../api/OandaApi';
-
+import React, { useEffect, useState } from 'react';
+import { useUser } from '@clerk/nextjs';
 import { Label } from '@/components/ui/label';
 
 const MasterProfile: React.FC = () => {
-   const [accountSummary, setAccountSummary] = useState<any>(null);
-   const api = useContext(OandaApiContext);
+  const [accountSummary, setAccountSummary] = useState<any>(null);
+  const { user } = useUser();
 
-   useEffect(() => {
-      const fetchAccount = async () => {
-         if (api) {
-            const summary = await api.getAccountSummary();
-            setAccountSummary(summary);
-         }
-      };
-      fetchAccount();
-   }, [api]);
+  useEffect(() => {
+    const fetchAccountSummary = async () => {
+      if (user) {
+        const serverBaseUrl = process.env.NEXT_PUBLIC_SERVER_URL
+        try {
+          const response = await fetch(`${serverBaseUrl}/account/summary/${user.id}`);
+          if (!response.ok) {
+            throw new Error('Failed to fetch account summary');
+          }
+          const summary = await response.json();
+          setAccountSummary(summary);
+        } catch (error) {
+          console.error('Error fetching account summary:', error);
+        }
+      }
+    };
+
+    fetchAccountSummary();
+  }, [user]);
 
    return (
       <div>
