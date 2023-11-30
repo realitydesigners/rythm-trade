@@ -1,19 +1,20 @@
-import { Elysia, t } from 'elysia';
+// Main server file adjustments
+import { Context, Elysia, t } from 'elysia';
 import { swagger } from '@elysiajs/swagger';
 import oandaRoutes from './api/routes/oandaRoutes';
 import userRoutes from './api/routes/userRoutes';
-import { cors } from '@elysiajs/cors'
+import { cors } from '@elysiajs/cors';
+import { WebSocketServer } from './services/websocketServer';
 
-import { StreamingService } from './services/streamingService';
+
 const app = new Elysia()
   .use(swagger())
   .use(cors())
   .use(oandaRoutes)
   .use(userRoutes)
-  .listen(8080, () => console.log(`Server is running at http://localhost:8080`));
+  .listen(8080, () => console.log(`HTTP Server is running at http://localhost:8080`));
 
-//const streamingService = new StreamingService();
+const websocketServer = new WebSocketServer();
+websocketServer.start();
 
-// Start streaming
-//streamingService.startStreaming(['EUR_USD', 'USD_JPY']);
 export type App = typeof app;

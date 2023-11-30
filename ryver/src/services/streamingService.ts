@@ -1,7 +1,9 @@
-import { OandaApi } from './OandaApi';
+import { ServerWebSocket } from "bun";
+import { OandaApi } from "./OandaApi";
 
 export class StreamingService {
   private oandaApi: OandaApi;
+  private clients: Set<ServerWebSocket>;
 
   constructor() {
     this.oandaApi = new OandaApi(
@@ -10,12 +12,24 @@ export class StreamingService {
       process.env.ACCOUNT_ID as string,
       process.env.OANDA_STREAM_URL as string
     );
+    this.clients = new Set();
+  }
+
+  public addClient(ws: ServerWebSocket) {
+    this.clients.add(ws);
+  }
+
+  public removeClient(ws: ServerWebSocket) {
+    this.clients.delete(ws);
   }
 
   public startStreaming(pairs: string[]) {
     this.oandaApi.subscribeToPairs(pairs, (data, pair) => {
-      // Handle streaming data here
-      console.log(`Data for ${pair}:`, data);
+      this.clients.forEach(client => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(JSON.stringify({ pair, data }));
+        }
+      });
     });
   }
 }
