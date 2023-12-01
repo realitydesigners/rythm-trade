@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import { BoxArrays } from '../../../types';
-
 import * as THREE from 'three';
 
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
@@ -48,7 +47,7 @@ const ThreeDBox: React.FC<ThreeDBoxProps> = ({ boxArrays }) => {
 
    return (
       <Canvas style={{ width: '100%', height: '50vh', background: '#111' }}>
-         <PerspectiveCamera makeDefault position={[0.5, 0.5, 0.5]} fov={75} />
+         <PerspectiveCamera makeDefault position={[1, 1, 1]} fov={90} />
          <OrbitControls />
          <ambientLight intensity={0.5} />
          <pointLight position={[10, 10, 10]} />
