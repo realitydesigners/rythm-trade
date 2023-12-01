@@ -9,7 +9,8 @@ import MasterPosition from '@/app/components/MasterPosition';
 import { OandaApiContext, api } from '@/app/api/OandaApi';
 import styles from './PairPage.module.css';
 import ElixrModel from '@/app/components/ElixrModel';
-import ResoModel from '@/app/components/ResoModel';
+import ThreeDModel from '@/app/components/ThreeDModel';
+//import ResoModel from '@/app/components/ResoModel';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { BOX_SIZES } from '@/app/utils/constants';
 
@@ -57,7 +58,7 @@ const PairPage = () => {
             <div className="w-full pl-6 pr-6">
                <Stream pair={pair} data={streamData[pair]} />
             </div>
-            <ResoModel pair={pair} streamData={streamData[pair]} selectedBoxArrayType={selectedBoxArrayType} />
+            <ThreeDModel pair={pair} streamData={streamData[pair]} selectedBoxArrayType={selectedBoxArrayType} />
             <div className="w-full p-6">
                <Select value={selectedBoxArrayType} onValueChange={handleBoxArrayTypeChange}>
                   <SelectTrigger>
