@@ -210,8 +210,9 @@ const ThreeDModel: React.FC<ResoModelProps> = ({ pair, streamData, selectedBoxAr
       <div className="w-full h-auto text-teal-400 font-bold">
          {initializationComplete ? (
             <>
-               <ResoBox boxArrays={boxArrays} />
                <ThreeDBox boxArrays={boxArrays} />
+               <ResoBox boxArrays={boxArrays} />
+
                <div className="w-full flex justify-center items-center gap-2">
                   <Button onClick={toggleBot}>{botActive ? 'Turn Off reso' : 'Turn On reso'}</Button>
                </div>

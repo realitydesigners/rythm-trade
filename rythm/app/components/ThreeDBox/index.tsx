@@ -33,7 +33,7 @@ const ThreeDBox: React.FC<ThreeDBoxProps> = ({ boxArrays }) => {
 
          console.log(`Box ${size}: movedUp: ${box.boxMovedUp}, size: ${box.rngSize}, index: ${index}`);
 
-         const color = box.boxMovedUp ? 'green' : 'red';
+         const color = box.boxMovedUp ? 'rgb(91,226,186)' : 'rgb(200,100,104)';
 
          const boxSize: [number, number, number] = [box.rngSize - index * 0.1, box.rngSize - index * 0.1, box.rngSize - index * 0.1];
 
@@ -46,8 +46,8 @@ const ThreeDBox: React.FC<ThreeDBoxProps> = ({ boxArrays }) => {
    }, [boxArrays]);
 
    return (
-      <Canvas style={{ width: '100%', height: '50vh', background: '#111' }}>
-         <PerspectiveCamera makeDefault position={[1, 1, 1]} fov={90} />
+      <Canvas style={{ width: '100%', height: '80vh', background: '#000' }}>
+         <PerspectiveCamera makeDefault position={[0.8, 0.8, 0.8]} fov={99} />
          <OrbitControls />
          <ambientLight intensity={0.5} />
          <pointLight position={[10, 10, 10]} />
