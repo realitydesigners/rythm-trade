@@ -10,12 +10,13 @@ interface SingleBoxProps {
    position: [number, number, number];
    size: [number, number, number];
    color: string;
+   opacity: number;
 }
 
-const SingleBox: React.FC<SingleBoxProps> = ({ position, size, color }) => (
+const SingleBox: React.FC<SingleBoxProps> = ({ position, size, color, opacity }) => (
    <mesh position={[0, 0, 0]}>
       <primitive object={new THREE.BoxGeometry(...size)} />
-      <meshStandardMaterial color={'white'} />
+      <meshStandardMaterial color={color} transparent opacity={opacity} />
    </mesh>
 );
 
@@ -25,27 +26,36 @@ interface ThreeDBoxProps {
 
 const ThreeDBox: React.FC<ThreeDBoxProps> = ({ boxArrays }) => {
    const boxes = useMemo(() => {
-      return Object.values(boxArrays).map((box, index) => {
-         const color = box.boxMovedUp ? 'rgb(91,226,186)' : 'rgb(200,100,104)';
+      const sortedBoxSizes = Object.keys(boxArrays)
+         .map(Number)
+         .sort((b, a) => boxArrays[b].rngSize - boxArrays[a].rngSize);
+      return sortedBoxSizes.map((size, index) => {
+         const box = boxArrays[size];
 
-         // Increase the size values so they are visible
-         const size: [number, number, number] = [1, 1, 1]; // Example size
-         const position: [number, number, number] = [index * 2, 0, 0]; // Example position
+         console.log(`Box ${size}: movedUp: ${box.boxMovedUp}, size: ${box.rngSize}, index: ${index}`);
 
-         return { position, size, color };
+         const color = box.boxMovedUp ? 'green' : 'red';
+
+         const boxSize: [number, number, number] = [box.rngSize - index * 0.1, box.rngSize - index * 0.1, box.rngSize - index * 0.1];
+
+         const position: [number, number, number] = [0, 0, 0];
+
+         const opacity = 1 - index * 0.08;
+
+         return { position, size: boxSize, color, opacity };
       });
    }, [boxArrays]);
 
    return (
-      <Canvas style={{ width: '100vw', height: '75vh', background: '#111' }}>
-         <PerspectiveCamera makeDefault position={[3, 3, 3]} zoom={1} />
+      <Canvas style={{ width: '100%', height: '50vh', background: '#111' }}>
+         <PerspectiveCamera makeDefault position={[0.5, 0.5, 0.5]} fov={75} />
          <OrbitControls />
          <ambientLight intensity={0.5} />
          <pointLight position={[10, 10, 10]} />
-         {boxes.map((boxProps, index) => {
-            console.log('Box props:', boxProps);
-            return <SingleBox key={index} {...boxProps} />;
-         })}
+         <directionalLight position={[-10, -10, -10]} intensity={0.5} />
+         {boxes.map((boxProps, index) => (
+            <SingleBox key={index} {...boxProps} />
+         ))}
       </Canvas>
    );
 };

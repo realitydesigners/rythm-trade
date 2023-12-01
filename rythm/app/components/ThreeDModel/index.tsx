@@ -32,7 +32,7 @@ const generateBoxSizes = (pair: string, pointSizes: number[], symbolsToDigits: S
    return boxSizeMap;
 };
 
-const ResoModel: React.FC<ResoModelProps> = ({ pair, streamData, selectedBoxArrayType }) => {
+const ThreeDModel: React.FC<ResoModelProps> = ({ pair, streamData, selectedBoxArrayType }) => {
    const api = useContext(OandaApiContext);
    const [currentClosePrice, setCurrentClosePrice] = useState<number | null>(null);
    const [boxArrays, setBoxArrays] = useState<BoxArrays>({});
@@ -211,7 +211,7 @@ const ResoModel: React.FC<ResoModelProps> = ({ pair, streamData, selectedBoxArra
          {initializationComplete ? (
             <>
                <ResoBox boxArrays={boxArrays} />
-
+               <ThreeDBox boxArrays={boxArrays} />
                <div className="w-full flex justify-center items-center gap-2">
                   <Button onClick={toggleBot}>{botActive ? 'Turn Off reso' : 'Turn On reso'}</Button>
                </div>
@@ -223,4 +223,4 @@ const ResoModel: React.FC<ResoModelProps> = ({ pair, streamData, selectedBoxArra
    );
 };
 
-export default ResoModel;
+export default ThreeDModel;
