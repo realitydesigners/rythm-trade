@@ -26,4 +26,23 @@ export class UserController {
   public async createUserOrUpdate(clerkUserId: string, userEmail: string, userName?: string): Promise<any> {
     return await this.dbService.createUserOrUpdate(clerkUserId, userEmail, userName);
   }
+
+  /**
+   * Retrieves Forex preferences for a given user.
+   * @param {string} userId - The user's ID.
+   * @returns {Promise<any>} A promise that resolves to the Forex preferences.
+   */
+  public async getForexPreferences(userId: string): Promise<any> {
+    return await this.dbService.getForexPreferences(userId);
+  }
+
+  /**
+   * Sets Forex preferences for a given user.
+   * @param {string} userId - The user's ID.
+   * @param {string[]} pairs - The Forex pairs.
+   * @returns {Promise<any>} A promise that resolves to the updated Forex preferences.
+   */
+  public async setForexPreferences(userId: string, pairs: string[]): Promise<any> {
+    return await this.dbService.setForexPreferences(userId, pairs);
+  }
 }

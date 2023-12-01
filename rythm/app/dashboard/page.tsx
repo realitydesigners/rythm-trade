@@ -1,5 +1,6 @@
 'use client';
 
+import { useUser } from '@clerk/nextjs';
 import React, { useEffect, useState } from 'react';
 import Stream from '../components/Stream';
 import ResoModel from '../components/ResoModel';
@@ -16,14 +17,16 @@ import { BOX_SIZES } from '../utils/constants';
 import { PositionData } from '@/types';
 
 const initialFavorites = ['GBP_USD', 'USD_JPY', 'AUD_USD', 'EUR_JPY', 'EUR_USD', 'USD_CAD', 'NZD_USD', 'GBP_JPY'];
-
 const DashboardPage = () => {
+  const { user } = useUser();
   const [currencyPairs, setCurrencyPairs] = useState<string[]>([]);
-  const [favoritePairs, setFavoritePairs] = useState<string[]>(initialFavorites);
+  const [favoritePairs, setFavoritePairs] = useState<string[]>([]);
+  const [showNonFavoritedPairs, setShowNonFavoritedPairs] = useState(false); // New state for toggling display
+
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const [allPairs, setAllPairs] = useState<string[]>([]);
   const [showProfile, setShowProfile] = useState(false);
-  const [numDisplayedFavorites, setNumDisplayedFavorites] = useState<number>(4);
+  const [numDisplayedFavorites, setNumDisplayedFavorites] = useState<number>(0); // Initialize with 0
   const [streamData, setStreamData] = useState<{ [pair: string]: any }>({});
   const [isLoading, setIsLoading] = useState(true); // Initialize as true to show loading by default
   const [selectedBoxArrayTypes, setSelectedBoxArrayTypes] = useState(Object.fromEntries(initialFavorites.map(pair => [pair, 'd'])));
@@ -61,6 +64,48 @@ const DashboardPage = () => {
       }
     };
   }, []);
+
+  useEffect(() => {
+    const fetchFavoritePairs = async () => {
+      if (user) {
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/forex-preferences/${user.id}`);
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const data = await response.json();
+          if (data && data.pairs.length > 0) {
+            setFavoritePairs(data.pairs.map((pair: { pair: string }) => pair.pair));
+            setNumDisplayedFavorites(data.pairs.length); // Set number of favorites to match fetched data
+          }
+        } catch (error) {
+          console.error('Error fetching favorite pairs:', error);
+        }
+      }
+    };
+
+    fetchFavoritePairs();
+  }, [user]);
+
+  const updateFavoritePairs = async (newPairs: string[]) => {
+    if (user) {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/forex-preferences`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userId: user.id, pairs: newPairs }),
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        setFavoritePairs(newPairs);
+      } catch (error) {
+        console.error('Error updating favorite pairs:', error);
+      }
+    }
+  };
 
   const handleBoxArrayChange = (pair: string, selectedKey: string) => {
     setSelectedBoxArrayTypes(prev => ({
@@ -127,6 +172,19 @@ const DashboardPage = () => {
     setNumDisplayedFavorites(parseInt(newValue, 10));
   };
 
+  useEffect(() => {
+    // Update favorite pairs on the server only when there's a change
+    const updateFavoritePairsOnServer = async () => {
+      if (JSON.stringify(favoritePairs) !== JSON.stringify(initialFavorites)) {
+        await updateFavoritePairs(favoritePairs);
+      }
+    };
+
+    if (favoritePairs.length > 0) {
+      updateFavoritePairsOnServer();
+    }
+  }, [favoritePairs]);
+
   const handleReplaceFavorite = (selectedPair: string, index: number) => {
     setFavoritePairs(prev => {
       const newFavorites = [...prev];
@@ -170,6 +228,24 @@ const DashboardPage = () => {
 
     setDraggedItem(null);
   };
+  // Function to delete a favorite pair
+  const deleteFavoritePair = async (pairToDelete: string) => {
+    const updatedPairs = favoritePairs.filter(pair => pair !== pairToDelete);
+    await updateFavoritePairs(updatedPairs); // Update pairs on the server
+    setFavoritePairs(updatedPairs); // Update local state
+  };
+
+  // Function to add a selected pair to favorites
+  const addToFavorites = async (pairToAdd: string) => {
+    if (!pairToAdd) return; // Exit if no pair is selected
+    if (favoritePairs.includes(pairToAdd)) {
+      alert('This pair is already in your favorites!');
+      return;
+    }
+    const updatedPairs = [...favoritePairs, pairToAdd];
+    await updateFavoritePairs(updatedPairs); // Update pairs on the server
+    setFavoritePairs(updatedPairs); // Update local state
+  };
 
   return (
     <OandaApiContext.Provider value={api}>
@@ -183,27 +259,16 @@ const DashboardPage = () => {
               <MasterProfile />
             </DialogContent>
           </Dialog>
-
-          <Select onValueChange={handleNumFavoritesChange} value={numDisplayedFavorites.toString()}>
-            <SelectTrigger>
-              <SelectValue>{numDisplayedFavorites} Favorites</SelectValue>{' '}
-            </SelectTrigger>
-            <SelectContent>
-              {getFavoritePairsOptions().map(n => (
-                <SelectItem key={n} value={n.toString()}>
-                  {n}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 lg:gap-4 w-full">
           {favoritePairs.slice(0, numDisplayedFavorites).map((pair, index) => (
             <div key={pair} className="w-full p-3 lg:p-6 border border-gray-600 h-[420px] sm:h-[550px] md:h-[575px] lg:h-[650px] rounded-lg" onDrop={e => handleDrop(e, 'favorites', index)} onDragOver={handleDragOver} draggable onDragStart={() => handleDragStart(pair)}>
+             <Button onClick={() => deleteFavoritePair(pair)}>Delete</Button>
               <a href={`/dashboard/pairs/${pair}`}>
                 <Stream pair={pair} data={streamData[pair]} />
               </a>
+
               <ResoModel pair={pair} streamData={streamData[pair]} selectedBoxArrayType={selectedBoxArrayTypes[pair]} />
               <div className="w-full  flex justify-center items-center gap-2">
                 <Select value={selectedBoxArrayTypes[pair]} onValueChange={newValue => handleBoxArrayChange(pair, newValue)}>
@@ -232,8 +297,19 @@ const DashboardPage = () => {
                 </Select>
               </div>
               <ElixrModel pair={pair} streamData={streamData[pair]} />
+              
             </div>
           ))}
+          <Select onValueChange={pairToAdd => addToFavorites(pairToAdd)} value="">
+            <SelectTrigger>
+              <SelectValue>Add More Pairs</SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              {currencyPairs.filter(pair => !favoritePairs.includes(pair)).map(pair => (
+                <SelectItem key={pair} value={pair}>{pair}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
       <MasterPosition positionData={positionData} />

@@ -9,11 +9,27 @@ generator client {
 }
 
 model User {
-  id          Int     @id @default(autoincrement())
-  email       String  @unique
-  name        String?
-  clerkUserId String  @unique
-  // Placeholder for future Oanda-related fields
-  // oandaAccountId: String? (to be added later)
-  // oandaApiKey: String? (to be added later)
+  id              Int              @id @default(autoincrement())
+  email           String           @unique
+  name            String?
+  clerkUserId     String           @unique
+  forexPreference ForexPreference?
+}
+
+model ForexPair {
+  id                Int             @id @default(autoincrement())
+  forexPreferenceId Int
+  pair              String
+  forexPreference   ForexPreference @relation(fields: [forexPreferenceId], references: [id])
+
+  @@unique([forexPreferenceId, pair])
+}
+
+model ForexPreference {
+  id     Int         @id @default(autoincrement())
+  userId String
+  pairs  ForexPair[]
+  user   User        @relation(fields: [userId], references: [clerkUserId])
+
+  @@unique([userId])
 }

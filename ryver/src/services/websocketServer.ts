@@ -7,7 +7,7 @@ export class WebSocketServer {
 
   constructor() {
     this.streamingService = new StreamingService();
-    this.streamingService.startStreaming(['EUR/USD', 'GBP/USD']);
+    this.streamingService.startStreaming(['EUR_USD', 'GBP_USD']);
   }
   
   public start() {

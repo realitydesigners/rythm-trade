@@ -46,4 +46,73 @@ export class DatabaseService {
       throw error;
     }
   }
+
+  /**
+   * Retrieves Forex preferences for a user by their user ID.
+   * @param {number} userId - The user's ID.
+   * @returns {Promise<any>} A promise that resolves to the Forex preferences.
+   */
+  public async getForexPreferences(userId: string): Promise<any> {
+    try {
+      const forexPreference = await this.prisma.forexPreference.findUnique({
+        where: { userId },
+        include: { pairs: true }, // Include related ForexPair entities
+      });
+      return forexPreference;
+    } catch (error) {
+      console.error('Error in getForexPreferences:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Sets Forex preferences for a user by their user ID.
+   * @param {number} userId - The user's ID.
+   * @param {string[]} pairs - An array of Forex pairs.
+   * @returns {Promise<any>} A promise that resolves after setting the preferences.
+   */
+  public async setForexPreferences(userId: string, pairs: string[]): Promise<any> {
+    try {
+      console.log(`Setting Forex preferences for user: ${userId} with pairs: ${pairs.join(', ')}`);
+  
+      // First, create or find the ForexPreference entity
+      const forexPreference = await this.prisma.forexPreference.upsert({
+        where: { userId },
+        update: {},
+        create: { userId },
+      });
+  
+      console.log(`ForexPreference entity created or found with ID: ${forexPreference.id}`);
+  
+      // Delete existing ForexPairs for the preference
+      const deleteResult = await this.prisma.forexPair.deleteMany({
+        where: { forexPreferenceId: forexPreference.id },
+      });
+  
+      console.log(`Deleted ${deleteResult.count} existing ForexPair(s)`);
+  
+      // Prepare new ForexPairs data
+      const forexPairs = pairs.map(pair => ({
+        forexPreferenceId: forexPreference.id,
+        pair,
+      }));
+  
+      console.log('ForexPairs to be created:', forexPairs);
+  
+      // Create new ForexPairs
+      const createResult = await this.prisma.forexPair.createMany({
+        data: forexPairs,
+        skipDuplicates: true, // This might help avoid the unique constraint error
+      });
+  
+      console.log(`Created ${createResult.count} new ForexPair(s)`);
+  
+      return forexPreference;
+  
+    } catch (error) {
+      console.error('Error in setForexPreferences:', error);
+      throw error;
+    }
+  }
+  
 }
