@@ -9,5 +9,11 @@ router.get('/account/summary/:userId', async context => {
   const { userId } = context.params;
   return await oandaController.getAccountSummary(userId);
 });
+// Get account instruments for a given user
+router.get('/instruments/:userId', async context => {
+  const { userId } = context.params;
+  return await oandaController.getInstruments(userId);
+});
+
 
 export default router;

@@ -119,18 +119,25 @@ const DashboardPage = () => {
   };
   useEffect(() => {
     const fetchInstruments = async () => {
-      if (api) {
-        const instruments = await api.getAccountInstruments();
-        if (instruments) {
-          const allPairsFetched = instruments.map((inst: { name: string }) => inst.name);
+      if (user) {
+        const serverBaseUrl = process.env.NEXT_PUBLIC_SERVER_URL;
+        try {
+          const response = await fetch(`${serverBaseUrl}/instruments/${user.id}`);
+          if (!response.ok) {
+            throw new Error('Failed to fetch instruments');
+          }
+          const instruments = await response.json();
+          const allPairsFetched = instruments.map((inst: { name: any }) => inst.name);
           const sortedPairs = allPairsFetched.sort((a: string, b: any) => a.localeCompare(b));
           setAllPairs(sortedPairs);
           setCurrencyPairs(sortedPairs);
+        } catch (error) {
+          console.error('Error fetching instruments:', error);
         }
       }
     };
     fetchInstruments();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     const handleStreamData = (data: any, pair: string) => {
@@ -237,14 +244,15 @@ const DashboardPage = () => {
 
   // Function to add a selected pair to favorites
   const addToFavorites = async (pairToAdd: string) => {
-    if (!pairToAdd) return; // Exit if no pair is selected
+    if (!pairToAdd) return;
     if (favoritePairs.includes(pairToAdd)) {
       alert('This pair is already in your favorites!');
       return;
     }
     const updatedPairs = [...favoritePairs, pairToAdd];
-    await updateFavoritePairs(updatedPairs); // Update pairs on the server
-    setFavoritePairs(updatedPairs); // Update local state
+    await updateFavoritePairs(updatedPairs);
+    setFavoritePairs(updatedPairs);
+    setNumDisplayedFavorites(updatedPairs.length);
   };
 
   return (
@@ -264,7 +272,7 @@ const DashboardPage = () => {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 lg:gap-4 w-full">
           {favoritePairs.slice(0, numDisplayedFavorites).map((pair, index) => (
             <div key={pair} className="w-full p-3 lg:p-6 border border-gray-600 h-[420px] sm:h-[550px] md:h-[575px] lg:h-[650px] rounded-lg" onDrop={e => handleDrop(e, 'favorites', index)} onDragOver={handleDragOver} draggable onDragStart={() => handleDragStart(pair)}>
-             <Button onClick={() => deleteFavoritePair(pair)}>Delete</Button>
+              <Button onClick={() => deleteFavoritePair(pair)}>Delete</Button>
               <a href={`/dashboard/pairs/${pair}`}>
                 <Stream pair={pair} data={streamData[pair]} />
               </a>
@@ -297,7 +305,6 @@ const DashboardPage = () => {
                 </Select>
               </div>
               <ElixrModel pair={pair} streamData={streamData[pair]} />
-              
             </div>
           ))}
           <Select onValueChange={pairToAdd => addToFavorites(pairToAdd)} value="">
@@ -305,9 +312,13 @@ const DashboardPage = () => {
               <SelectValue>Add More Pairs</SelectValue>
             </SelectTrigger>
             <SelectContent>
-              {currencyPairs.filter(pair => !favoritePairs.includes(pair)).map(pair => (
-                <SelectItem key={pair} value={pair}>{pair}</SelectItem>
-              ))}
+              {currencyPairs
+                .filter(pair => !favoritePairs.includes(pair))
+                .map(pair => (
+                  <SelectItem key={pair} value={pair}>
+                    {pair}
+                  </SelectItem>
+                ))}
             </SelectContent>
           </Select>
         </div>

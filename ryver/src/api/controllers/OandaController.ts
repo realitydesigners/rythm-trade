@@ -18,14 +18,43 @@ export class OandaController {
   public async getAccountSummary(userId: string): Promise<any> {
     console.log('Received request for getAccountSummary');
     try {
+      // Check if user exists
       const userData = await this.dbService.getUserByClerkId(userId);
-
+      if (!userData) {
+        console.error(`User not found for ID: ${userId}`);
+        return { error: 'User not found' };
+      }
       const summary = await this.oandaApi.getAccountSummary();
       console.log('Account Summary:', summary);
       return summary;
     } catch (error) {
       console.error('Error in getAccountSummary:', error);
       return { error: 'An error occurred while fetching account summary' };
+    }
+  }
+
+  /**
+   * Retrieves the list of instruments from the Oanda API for a user's account.
+   * @param {string} userId - The ID of the user for whom the instruments are being fetched.
+   * @returns {Promise<any>} A promise that resolves to the list of instruments.
+   */
+  public async getInstruments(userId: string): Promise<any> {
+    console.log(`Received request for getInstruments for user: ${userId}`);
+    try {
+      // Check if user exists
+      const userData = await this.dbService.getUserByClerkId(userId);
+      if (!userData) {
+        console.error(`User not found for ID: ${userId}`);
+        return { error: 'User not found' };
+      }
+
+      // Fetch instruments for the user's account
+      const instruments = await this.oandaApi.getAccountInstruments();
+      console.log('Instruments:', instruments);
+      return instruments;
+    } catch (error) {
+      console.error('Error in getInstruments:', error);
+      return { error: 'An error occurred while fetching instruments' };
     }
   }
 }
