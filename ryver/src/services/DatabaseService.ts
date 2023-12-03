@@ -17,7 +17,6 @@ export class DatabaseService {
       const user = await this.prisma.user.findUnique({
         where: { clerkUserId },
       });
-      console.log(user)
       return user;
     } catch (error) {
       console.error('Error in getUserByClerkId:', error);

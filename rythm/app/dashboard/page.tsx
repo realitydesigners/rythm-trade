@@ -16,6 +16,7 @@ import { fetchFavoritePairs, updateFavoritePairs, fetchInstruments, fetchAllPosi
 import { Button, buttonVariants } from '@/components/ui/button';
 import { BOX_SIZES } from '../utils/constants';
 import { PositionData } from '@/types';
+import { closeWebSocket, connectWebSocket } from '../api/websocket';
 
 const initialFavorites = ['GBP_USD', 'USD_JPY', 'AUD_USD', 'EUR_JPY', 'EUR_USD', 'USD_CAD', 'NZD_USD', 'GBP_JPY'];
 const DashboardPage = () => {
@@ -33,38 +34,27 @@ const DashboardPage = () => {
   const [positionData, setPositionData] = useState<PositionData[]>([]);
   const [ws, setWs] = useState<WebSocket | null>(null);
 
-  // useEffect(() => {
-  //   if (ws && ws.readyState === WebSocket.OPEN) {
-  //     ws.close();
-  //   }
 
-  //   const websocket = new WebSocket(process.env.NEXT_PUBLIC_WEBSOCKET_URL as string);
-  //   setWs(websocket);
+  useEffect(() => {
+    const handleWebSocketMessage = (data: any) => {
+      console.log('WebSocket Message:', data);
+    };
 
-  //   websocket.onopen = () => {
-  //     console.log('WebSocket Connected');
-  //   };
+    const handleWebSocketError = (event: any) => {
+      console.error('WebSocket Error:', event);
+    };
 
-  //   websocket.onmessage = event => {
-  //     const data = JSON.parse(event.data);
-  //     console.log('WebSocket Message:'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        , data);
-  //   };
+    const handleWebSocketClose = () => {
+      console.log('WebSocket Disconnected');
+    };
 
-  //   websocket.onerror = event => {
-  //     console.error('WebSocket Error:', event);
-  //   };
+    connectWebSocket(handleWebSocketMessage, handleWebSocketError, handleWebSocketClose);
 
-  //   websocket.onclose = () => {
-  //     console.log('WebSocket Disconnected');
-  //   };
+    return () => {
+      closeWebSocket();
+    };
+  }, []);
 
-  //   return () => {
-  //     if (websocket.readyState === WebSocket.OPEN) {
-  //       websocket.close();
-  //     }
-  //   };
-  // }, []);
-  
   useEffect(() => {
     const loadFavoritePairs = async () => {
       if (user) {
@@ -72,23 +62,21 @@ const DashboardPage = () => {
           const fetchedFavoritePairs = await fetchFavoritePairs(user.id);
           setFavoritePairs(fetchedFavoritePairs);
           setNumDisplayedFavorites(fetchedFavoritePairs.length);
-  
-          const newSelectedBoxArrayTypes = fetchedFavoritePairs.reduce((acc: { [x: string]: string; }, pair: string | number) => {
+
+          const newSelectedBoxArrayTypes = fetchedFavoritePairs.reduce((acc: { [x: string]: string }, pair: string | number) => {
             acc[pair] = 'd';
             return acc;
           }, {});
           setSelectedBoxArrayTypes(newSelectedBoxArrayTypes);
-  
         } catch (error) {
           console.error('Error fetching favorite pairs:', error);
         }
       }
     };
-  
+
     loadFavoritePairs();
   }, [user]);
-  
-  
+
   const handleUpdateFavoritePairs = async (newPairs: string[]) => {
     if (user) {
       try {
@@ -99,7 +87,6 @@ const DashboardPage = () => {
       }
     }
   };
-  
 
   const handleBoxArrayChange = (pair: string, selectedKey: string) => {
     setSelectedBoxArrayTypes(prev => ({
@@ -123,10 +110,9 @@ const DashboardPage = () => {
         }
       }
     };
-  
+
     loadInstruments();
   }, [user]);
-  
 
   useEffect(() => {
     const handleStreamData = (data: any, pair: string) => {
@@ -145,7 +131,7 @@ const DashboardPage = () => {
       api.unsubscribeFromPairs(favoritePairs);
     };
   }, [favoritePairs]);
-  
+
   // Fetch position data periodically
   useEffect(() => {
     const fetchPositionData = async () => {
@@ -158,10 +144,10 @@ const DashboardPage = () => {
         }
       }
     };
-  
+
     fetchPositionData();
     const intervalId = setInterval(fetchPositionData, 1000);
-  
+
     return () => clearInterval(intervalId);
   }, [user]);
 

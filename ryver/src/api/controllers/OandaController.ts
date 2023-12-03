@@ -64,7 +64,6 @@ export class OandaController {
    * @returns {Promise<any>} A promise that resolves to the list of all positions.
    */
   public async getAllPositions(userId: string): Promise<any> {
-    console.log(`Received request for getAllPositions for user: ${userId}`);
     try {
       // Check if user exists
       const userData = await this.dbService.getUserByClerkId(userId);
@@ -75,7 +74,6 @@ export class OandaController {
 
       // Fetch all positions for the user's account
       const positions = await this.oandaApi.getAllPositions();
-      console.log('Positions:', positions);
       return positions;
     } catch (error) {
       console.error('Error in getAllPositions:', error);
