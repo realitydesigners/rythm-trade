@@ -10,7 +10,7 @@ export default function Page() {
    * @returns {Promise<void>} A promise that resolves when the sign-in process is complete.
    */
   const handleSignIn = async (): Promise<void> => {
-    const serverBaseUrl = 'http://localhost:8080';
+    const serverBaseUrl = process.env.NEXT_PUBLIC_SERVER_URL;
     console.log('sign in')
     if (!user) return;
 
