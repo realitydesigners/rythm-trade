@@ -53,14 +53,20 @@ export class OandaApi {
     }
   }
 
-  public unsubscribeFromPairs(pairs: string[]) {
+
+  public unsubscribeFromPairs(pairs: string[]): string[] {
+    const successfullyUnsubscribed = [];
+  
     for (const pair of pairs) {
       const reader = this.activeStreams.get(pair);
       if (reader) {
         reader.cancel();
         this.activeStreams.delete(pair);
+        successfullyUnsubscribed.push(pair);
       }
     }
+  
+    return successfullyUnsubscribed;
   }
 
   private async streamData(pair: string, reader: ReadableStreamDefaultReader<Uint8Array>, onData: (data: any, pair: string) => void) {

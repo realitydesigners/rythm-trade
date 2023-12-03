@@ -188,7 +188,6 @@ const ResoModel: React.FC<ResoModelProps> = ({ pair, streamData, selectedBoxArra
             const currentPrice = (bidPrice + askPrice) / 2;
             setCurrentClosePrice(currentPrice);
             updateBoxesWithCurrentPrice(currentPrice);
-            console.log(boxArrays);
             resoInstance.current.onData(currentPrice, boxArrays);
          }
       }
