@@ -4,6 +4,7 @@ let websocket: WebSocket | null = null;
 const websocketUrl = process.env.NEXT_PUBLIC_WEBSOCKET_URL as string;
 
 export const connectWebSocket = (
+  userId: string,
   onMessage: (data: any) => void, 
   onError: (event: Event) => void, 
   onClose: () => void
@@ -16,6 +17,9 @@ export const connectWebSocket = (
 
   websocket.onopen = () => {
     console.log('WebSocket Connected');
+    if (websocket) {
+      websocket.send(JSON.stringify({ userId })); // Ensure websocket is not null
+    }
   };
 
   websocket.onmessage = event => {

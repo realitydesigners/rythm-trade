@@ -1,13 +1,13 @@
+// src/services/WebSocketServer.ts
+
 import { Server, ServerWebSocket } from 'bun';
 import { StreamingService } from './streamingService';
 
 export class WebSocketServer {
-
   private streamingService: StreamingService;
 
   constructor() {
     this.streamingService = new StreamingService();
-    this.streamingService.startStreaming(['EUR_USD', 'GBP_USD']);
   }
   
   public start() {
@@ -16,7 +16,6 @@ export class WebSocketServer {
       port: 8081,
       fetch: (req, server) => {
         console.log(`Incoming request on ${req.url}`);
-        console.log('Headers:', req.headers);
         if (server.upgrade(req)) {
           console.log('WebSocket upgrade successful');
           return;
@@ -27,16 +26,28 @@ export class WebSocketServer {
       websocket: {
         open: (ws: ServerWebSocket<any>) => {
           console.log('WebSocket connection opened');
-          this.streamingService.addClient(ws);
+          // Expect the client to send user ID in the first message
         },
         close: (ws: ServerWebSocket<any>) => {
           console.log('WebSocket connection closed');
-          this.streamingService.removeClient(ws);
+          // Implement logic to handle WebSocket closure
         },
         message: (ws, message) => {
           console.log('Message received:', message);
+
+          // Ensure message is a string before parsing
+          const messageString = message instanceof Buffer ? message.toString() : message;
+          try {
+            const { userId } = JSON.parse(messageString);
+            if (userId) {
+              this.streamingService.addClient(userId, ws);
+            }
+          } catch (error) {
+            console.error('Error parsing message:', error);
+          }
         },
       },
     });
   }
 }
+

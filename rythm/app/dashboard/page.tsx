@@ -23,21 +23,32 @@ const DashboardPage = () => {
   const { user } = useUser();
   const [currencyPairs, setCurrencyPairs] = useState<string[]>([]);
   const [favoritePairs, setFavoritePairs] = useState<string[]>([]);
-  const [showNonFavoritedPairs, setShowNonFavoritedPairs] = useState(false); // New state for toggling display
-
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const [allPairs, setAllPairs] = useState<string[]>([]);
   const [showProfile, setShowProfile] = useState(false);
-  const [numDisplayedFavorites, setNumDisplayedFavorites] = useState<number>(0); // Initialize with 0
+  const [numDisplayedFavorites, setNumDisplayedFavorites] = useState<number>(0);
   const [streamData, setStreamData] = useState<{ [pair: string]: any }>({});
   const [selectedBoxArrayTypes, setSelectedBoxArrayTypes] = useState(Object.fromEntries(initialFavorites.map(pair => [pair, 'd'])));
   const [positionData, setPositionData] = useState<PositionData[]>([]);
   const [ws, setWs] = useState<WebSocket | null>(null);
 
-
   useEffect(() => {
-    const handleWebSocketMessage = (data: any) => {
-      console.log('WebSocket Message:', data);
+    const handleWebSocketMessage = (message: any) => {
+      console.log(message)
+      const data = message.data
+
+      if (data.type === 'HEARTBEAT') {
+        console.log('Heartbeat received:', data);
+
+        return;
+      }
+
+      if (data.pair) {
+        setStreamData(prevStreamData => ({
+          ...prevStreamData,
+          [data.pair]: data.data,
+        }));
+      }
     };
 
     const handleWebSocketError = (event: any) => {
@@ -48,12 +59,14 @@ const DashboardPage = () => {
       console.log('WebSocket Disconnected');
     };
 
-    connectWebSocket(handleWebSocketMessage, handleWebSocketError, handleWebSocketClose);
+    if (user) {
+      connectWebSocket(user.id, handleWebSocketMessage, handleWebSocketError, handleWebSocketClose);
+    }
 
     return () => {
       closeWebSocket();
     };
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     const loadFavoritePairs = async () => {
@@ -113,24 +126,6 @@ const DashboardPage = () => {
 
     loadInstruments();
   }, [user]);
-
-  useEffect(() => {
-    const handleStreamData = (data: any, pair: string) => {
-      if (data.type !== 'HEARTBEAT') {
-        setStreamData(prevData => ({
-          ...prevData,
-          [pair]: data,
-        }));
-      }
-    };
-
-    api.unsubscribeFromPairs(favoritePairs);
-    api.subscribeToPairs(favoritePairs, handleStreamData);
-
-    return () => {
-      api.unsubscribeFromPairs(favoritePairs);
-    };
-  }, [favoritePairs]);
 
   // Fetch position data periodically
   useEffect(() => {
