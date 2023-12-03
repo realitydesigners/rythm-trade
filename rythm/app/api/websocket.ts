@@ -17,9 +17,7 @@ export const connectWebSocket = (
 
   websocket.onopen = () => {
     console.log('WebSocket Connected');
-    if (websocket) {
-      websocket.send(JSON.stringify({ userId })); // Ensure websocket is not null
-    }
+    sendWebSocketMessage({ userId }); // Send userId upon connection
   };
 
   websocket.onmessage = event => {
@@ -43,3 +41,10 @@ export const closeWebSocket = () => {
     websocket.close();
   }
 };
+
+export const sendWebSocketMessage = (message: object) => {
+  if (websocket && websocket.readyState === WebSocket.OPEN) {
+    websocket.send(JSON.stringify(message));
+  }
+};
+

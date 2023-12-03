@@ -26,21 +26,26 @@ export class WebSocketServer {
       websocket: {
         open: (ws: ServerWebSocket<any>) => {
           console.log('WebSocket connection opened');
-          // Expect the client to send user ID in the first message
         },
         close: (ws: ServerWebSocket<any>) => {
           console.log('WebSocket connection closed');
-          // Implement logic to handle WebSocket closure
         },
         message: (ws, message) => {
           console.log('Message received:', message);
 
-          // Ensure message is a string before parsing
           const messageString = message instanceof Buffer ? message.toString() : message;
           try {
             const { userId } = JSON.parse(messageString);
             if (userId) {
               this.streamingService.addClient(userId, ws);
+            }
+          } catch (error) {
+            console.error('Error parsing message:', error);
+          }
+          try {
+            const parsedMessage = JSON.parse(messageString);
+            if (parsedMessage.userId && parsedMessage.favoritePairs) {
+              this.streamingService.handleFavoritePairsUpdate(parsedMessage.userId, parsedMessage.favoritePairs);
             }
           } catch (error) {
             console.error('Error parsing message:', error);

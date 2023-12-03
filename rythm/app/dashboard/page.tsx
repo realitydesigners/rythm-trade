@@ -16,7 +16,7 @@ import { fetchFavoritePairs, updateFavoritePairs, fetchInstruments, fetchAllPosi
 import { Button, buttonVariants } from '@/components/ui/button';
 import { BOX_SIZES } from '../utils/constants';
 import { PositionData } from '@/types';
-import { closeWebSocket, connectWebSocket } from '../api/websocket';
+import { closeWebSocket, connectWebSocket, sendWebSocketMessage } from '../api/websocket';
 
 const initialFavorites = ['GBP_USD', 'USD_JPY', 'AUD_USD', 'EUR_JPY', 'EUR_USD', 'USD_CAD', 'NZD_USD', 'GBP_JPY'];
 const DashboardPage = () => {
@@ -28,29 +28,26 @@ const DashboardPage = () => {
   const [showProfile, setShowProfile] = useState(false);
   const [numDisplayedFavorites, setNumDisplayedFavorites] = useState<number>(0);
   const [streamData, setStreamData] = useState<{ [pair: string]: any }>({});
-  const [selectedBoxArrayTypes, setSelectedBoxArrayTypes] = useState(Object.fromEntries(initialFavorites.map(pair => [pair, 'd'])));
+  const [selectedBoxArrayTypes, setSelectedBoxArrayTypes] = useState(Object.fromEntries(allPairs.map(pair => [pair, 'd'])));
   const [positionData, setPositionData] = useState<PositionData[]>([]);
   const [ws, setWs] = useState<WebSocket | null>(null);
 
   useEffect(() => {
     const handleWebSocketMessage = (message: any) => {
-      console.log(message)
-      const data = message.data
-
+      const { data, pair } = message;
+      console.log(pair);
       if (data.type === 'HEARTBEAT') {
         console.log('Heartbeat received:', data);
-
         return;
       }
 
-      if (data.pair) {
+      if (pair && favoritePairs.includes(pair)) {
         setStreamData(prevStreamData => ({
           ...prevStreamData,
-          [data.pair]: data.data,
+          [pair]: data,
         }));
       }
     };
-
     const handleWebSocketError = (event: any) => {
       console.error('WebSocket Error:', event);
     };
@@ -90,15 +87,29 @@ const DashboardPage = () => {
     loadFavoritePairs();
   }, [user]);
 
+  // Function to handle updating favorite pairs
   const handleUpdateFavoritePairs = async (newPairs: string[]) => {
     if (user) {
       try {
         await updateFavoritePairs(user.id, newPairs);
         setFavoritePairs(newPairs);
+
+        // Send updated favorite pairs to the WebSocket server
+        sendWebSocketMessage({
+          userId: user.id,
+          favoritePairs: newPairs,
+        });
       } catch (error) {
         console.error('Error updating favorite pairs:', error);
       }
     }
+    const updatedBoxArrayTypes = { ...selectedBoxArrayTypes };
+    newPairs.forEach(pair => {
+      if (!updatedBoxArrayTypes[pair]) {
+        updatedBoxArrayTypes[pair] = 'd';
+      }
+    });
+    setSelectedBoxArrayTypes(updatedBoxArrayTypes);
   };
 
   const handleBoxArrayChange = (pair: string, selectedKey: string) => {
