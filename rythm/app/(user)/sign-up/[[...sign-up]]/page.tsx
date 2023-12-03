@@ -10,7 +10,7 @@ export default function Page() {
    * @returns {Promise<void>} A promise that resolves when the user creation or update process is complete.
    */
   const handleSignUpSuccess = async (): Promise<void> => {
-    const serverBaseUrl = 'http://localhost:8080';
+    const serverBaseUrl = process.env.NEXT_PUBLIC_SERVER_URL;
     console.log('sign up')
     if (!user) return;
 
