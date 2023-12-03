@@ -124,6 +124,7 @@ const ResoModel: React.FC<ResoModelProps> = ({ pair, streamData, selectedBoxArra
 
       const fetchAndCalculateBoxes = async () => {
          const oandaData = await api?.fetchLargeCandles(pair, 6000, 'M1');
+         console.log('pair: ', pair + oandaData)
          if (oandaData && oandaData.length > 0) {
             const currentPrice = findCurrentPrice(oandaData);
             if (currentPrice !== undefined) {
@@ -188,7 +189,6 @@ const ResoModel: React.FC<ResoModelProps> = ({ pair, streamData, selectedBoxArra
             const currentPrice = (bidPrice + askPrice) / 2;
             setCurrentClosePrice(currentPrice);
             updateBoxesWithCurrentPrice(currentPrice);
-            console.log(boxArrays);
             resoInstance.current.onData(currentPrice, boxArrays);
          }
       }

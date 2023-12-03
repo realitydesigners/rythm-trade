@@ -57,4 +57,29 @@ export class OandaController {
       return { error: 'An error occurred while fetching instruments' };
     }
   }
+
+  /**
+   * Retrieves all positions from the Oanda API for a user's account.
+   * @param {string} userId - The ID of the user for whom the positions are being fetched.
+   * @returns {Promise<any>} A promise that resolves to the list of all positions.
+   */
+  public async getAllPositions(userId: string): Promise<any> {
+    console.log(`Received request for getAllPositions for user: ${userId}`);
+    try {
+      // Check if user exists
+      const userData = await this.dbService.getUserByClerkId(userId);
+      if (!userData) {
+        console.error(`User not found for ID: ${userId}`);
+        return { error: 'User not found' };
+      }
+
+      // Fetch all positions for the user's account
+      const positions = await this.oandaApi.getAllPositions();
+      console.log('Positions:', positions);
+      return positions;
+    } catch (error) {
+      console.error('Error in getAllPositions:', error);
+      return { error: 'An error occurred while fetching positions' };
+    }
+  }
 }

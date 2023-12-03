@@ -15,5 +15,10 @@ router.get('/instruments/:userId', async context => {
   return await oandaController.getInstruments(userId);
 });
 
+// Get all positions for a given user
+router.get('/positions/:userId', async context => {
+  const { userId } = context.params;
+  return await oandaController.getAllPositions(userId);
+});
 
 export default router;

@@ -11,6 +11,7 @@ import MasterPosition from '../components/MasterPosition';
 import styles from './DashboardPage.module.css';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { fetchFavoritePairs, updateFavoritePairs, fetchInstruments, fetchAllPositions } from '../api/rest';
 
 import { Button, buttonVariants } from '@/components/ui/button';
 import { BOX_SIZES } from '../utils/constants';
@@ -28,84 +29,77 @@ const DashboardPage = () => {
   const [showProfile, setShowProfile] = useState(false);
   const [numDisplayedFavorites, setNumDisplayedFavorites] = useState<number>(0); // Initialize with 0
   const [streamData, setStreamData] = useState<{ [pair: string]: any }>({});
-  const [isLoading, setIsLoading] = useState(true); // Initialize as true to show loading by default
   const [selectedBoxArrayTypes, setSelectedBoxArrayTypes] = useState(Object.fromEntries(initialFavorites.map(pair => [pair, 'd'])));
   const [positionData, setPositionData] = useState<PositionData[]>([]);
   const [ws, setWs] = useState<WebSocket | null>(null);
 
+  // useEffect(() => {
+  //   if (ws && ws.readyState === WebSocket.OPEN) {
+  //     ws.close();
+  //   }
+
+  //   const websocket = new WebSocket(process.env.NEXT_PUBLIC_WEBSOCKET_URL as string);
+  //   setWs(websocket);
+
+  //   websocket.onopen = () => {
+  //     console.log('WebSocket Connected');
+  //   };
+
+  //   websocket.onmessage = event => {
+  //     const data = JSON.parse(event.data);
+  //     console.log('WebSocket Message:'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        , data);
+  //   };
+
+  //   websocket.onerror = event => {
+  //     console.error('WebSocket Error:', event);
+  //   };
+
+  //   websocket.onclose = () => {
+  //     console.log('WebSocket Disconnected');
+  //   };
+
+  //   return () => {
+  //     if (websocket.readyState === WebSocket.OPEN) {
+  //       websocket.close();
+  //     }
+  //   };
+  // }, []);
+  
   useEffect(() => {
-    if (ws && ws.readyState === WebSocket.OPEN) {
-      ws.close();
-    }
-
-    const websocket = new WebSocket(process.env.NEXT_PUBLIC_WEBSOCKET_URL as string);
-    setWs(websocket);
-
-    websocket.onopen = () => {
-      console.log('WebSocket Connected');
-    };
-
-    websocket.onmessage = event => {
-      const data = JSON.parse(event.data);
-      console.log('WebSocket Message:', data);
-    };
-
-    websocket.onerror = event => {
-      console.error('WebSocket Error:', event);
-    };
-
-    websocket.onclose = () => {
-      console.log('WebSocket Disconnected');
-    };
-
-    return () => {
-      if (websocket.readyState === WebSocket.OPEN) {
-        websocket.close();
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    const fetchFavoritePairs = async () => {
+    const loadFavoritePairs = async () => {
       if (user) {
         try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/forex-preferences/${user.id}`);
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          const data = await response.json();
-          if (data && data.pairs.length > 0) {
-            setFavoritePairs(data.pairs.map((pair: { pair: string }) => pair.pair));
-            setNumDisplayedFavorites(data.pairs.length); // Set number of favorites to match fetched data
-          }
+          const fetchedFavoritePairs = await fetchFavoritePairs(user.id);
+          setFavoritePairs(fetchedFavoritePairs);
+          setNumDisplayedFavorites(fetchedFavoritePairs.length);
+  
+          const newSelectedBoxArrayTypes = fetchedFavoritePairs.reduce((acc: { [x: string]: string; }, pair: string | number) => {
+            acc[pair] = 'd';
+            return acc;
+          }, {});
+          setSelectedBoxArrayTypes(newSelectedBoxArrayTypes);
+  
         } catch (error) {
           console.error('Error fetching favorite pairs:', error);
         }
       }
     };
-
-    fetchFavoritePairs();
+  
+    loadFavoritePairs();
   }, [user]);
-
-  const updateFavoritePairs = async (newPairs: string[]) => {
+  
+  
+  const handleUpdateFavoritePairs = async (newPairs: string[]) => {
     if (user) {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/forex-preferences`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ userId: user.id, pairs: newPairs }),
-        });
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
+        await updateFavoritePairs(user.id, newPairs);
         setFavoritePairs(newPairs);
       } catch (error) {
         console.error('Error updating favorite pairs:', error);
       }
     }
   };
+  
 
   const handleBoxArrayChange = (pair: string, selectedKey: string) => {
     setSelectedBoxArrayTypes(prev => ({
@@ -118,26 +112,21 @@ const DashboardPage = () => {
     setShowProfile(prevShow => !prevShow);
   };
   useEffect(() => {
-    const fetchInstruments = async () => {
+    const loadInstruments = async () => {
       if (user) {
-        const serverBaseUrl = process.env.NEXT_PUBLIC_SERVER_URL;
         try {
-          const response = await fetch(`${serverBaseUrl}/instruments/${user.id}`);
-          if (!response.ok) {
-            throw new Error('Failed to fetch instruments');
-          }
-          const instruments = await response.json();
-          const allPairsFetched = instruments.map((inst: { name: any }) => inst.name);
-          const sortedPairs = allPairsFetched.sort((a: string, b: any) => a.localeCompare(b));
-          setAllPairs(sortedPairs);
-          setCurrencyPairs(sortedPairs);
+          const fetchedInstruments = await fetchInstruments(user.id);
+          setAllPairs(fetchedInstruments);
+          setCurrencyPairs(fetchedInstruments);
         } catch (error) {
           console.error('Error fetching instruments:', error);
         }
       }
     };
-    fetchInstruments();
+  
+    loadInstruments();
   }, [user]);
+  
 
   useEffect(() => {
     const handleStreamData = (data: any, pair: string) => {
@@ -156,18 +145,25 @@ const DashboardPage = () => {
       api.unsubscribeFromPairs(favoritePairs);
     };
   }, [favoritePairs]);
+  
   // Fetch position data periodically
   useEffect(() => {
     const fetchPositionData = async () => {
-      const positions = await api.getAllPositions();
-      setPositionData(positions);
+      if (user) {
+        try {
+          const positions = await fetchAllPositions(user.id);
+          setPositionData(positions);
+        } catch (error) {
+          console.error('Error fetching positions:', error);
+        }
+      }
     };
-
+  
     fetchPositionData();
     const intervalId = setInterval(fetchPositionData, 1000);
-
+  
     return () => clearInterval(intervalId);
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     const displayedFavorites = favoritePairs.slice(0, numDisplayedFavorites);
@@ -175,15 +171,11 @@ const DashboardPage = () => {
     setCurrencyPairs(filteredPairs);
   }, [favoritePairs, allPairs, numDisplayedFavorites]);
 
-  const handleNumFavoritesChange = (newValue: string) => {
-    setNumDisplayedFavorites(parseInt(newValue, 10));
-  };
-
   useEffect(() => {
     // Update favorite pairs on the server only when there's a change
     const updateFavoritePairsOnServer = async () => {
       if (JSON.stringify(favoritePairs) !== JSON.stringify(initialFavorites)) {
-        await updateFavoritePairs(favoritePairs);
+        await handleUpdateFavoritePairs(favoritePairs);
       }
     };
 
@@ -199,13 +191,7 @@ const DashboardPage = () => {
       return newFavorites;
     });
   };
-  const getFavoritePairsOptions = () => {
-    const options = [];
-    for (let i = 1; i <= favoritePairs.length; i++) {
-      options.push(i);
-    }
-    return options;
-  };
+
   const handleDragStart = (pair: string) => {
     setDraggedItem(pair);
   };
@@ -238,7 +224,7 @@ const DashboardPage = () => {
   // Function to delete a favorite pair
   const deleteFavoritePair = async (pairToDelete: string) => {
     const updatedPairs = favoritePairs.filter(pair => pair !== pairToDelete);
-    await updateFavoritePairs(updatedPairs); // Update pairs on the server
+    await handleUpdateFavoritePairs(updatedPairs); // Update pairs on the server
     setFavoritePairs(updatedPairs); // Update local state
   };
 
@@ -250,7 +236,7 @@ const DashboardPage = () => {
       return;
     }
     const updatedPairs = [...favoritePairs, pairToAdd];
-    await updateFavoritePairs(updatedPairs);
+    await handleUpdateFavoritePairs(updatedPairs);
     setFavoritePairs(updatedPairs);
     setNumDisplayedFavorites(updatedPairs.length);
   };
