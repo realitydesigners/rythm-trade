@@ -13,7 +13,6 @@ import { SymbolsToDigits, symbolsToDigits, BOX_SIZES } from '../utils/constants'
 import { Button } from '../../components/ui/button';
 
 import ResoBox from './ResoBox';
-import ThreeDBox from './ThreeDBox';
 import ResoBot from '@/app/algorithms/ResoBot';
 
 interface ResoModelProps {

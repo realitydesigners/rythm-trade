@@ -250,7 +250,7 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
    }, [currentPrice, trendlines]);
 
    return (
-      <div className="w-full h-auto text-teal-400 font-bold">
+      <div className="w-full h-auto ">
          {initializationComplete ? (
             <>
                {/* Render P/L table */}
@@ -260,7 +260,13 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
                </div>
             </>
          ) : (
-            <div>Loading...</div>
+            <div className="w-full p-2 h-auto flex justify-center">
+               <svg width="25" height="25" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="25" cy="25" r="20" stroke="#333" strokeWidth="5" fill="none" strokeDasharray="31.415, 31.415" strokeDashoffset="0">
+                     <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="1s" repeatCount="indefinite" />
+                  </circle>
+               </svg>
+            </div>
          )}
       </div>
    );

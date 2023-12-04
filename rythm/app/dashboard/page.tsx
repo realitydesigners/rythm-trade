@@ -13,7 +13,7 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { fetchFavoritePairs, updateFavoritePairs, fetchInstruments, fetchAllPositions } from '../api/rest';
 
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { BOX_SIZES } from '../utils/constants';
 import { PositionData } from '@/types';
 import { closeWebSocket, connectWebSocket, sendWebSocketMessage } from '../api/websocket';

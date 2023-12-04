@@ -23,6 +23,10 @@ interface ThreeDBoxProps {
    boxArrays: BoxArrays;
 }
 
+interface BoxGroupProps {
+   boxes: SingleBoxProps[];
+}
+
 const SingleBox: React.FC<SingleBoxProps> = ({ position, size, color, opacity }) => (
    <mesh position={[0, 0, 0]}>
       <primitive object={new THREE.BoxGeometry(...size)} />
@@ -30,32 +34,45 @@ const SingleBox: React.FC<SingleBoxProps> = ({ position, size, color, opacity })
    </mesh>
 );
 
+const BoxGroup: React.FC<BoxGroupProps> = ({ boxes }) => {
+   const boxesGroupRef = useRef<THREE.Group>(null);
+
+   useFrame(() => {
+      if (boxesGroupRef.current) {
+         boxesGroupRef.current.rotation.y += 0.001;
+      }
+   });
+
+   return (
+      <group ref={boxesGroupRef}>
+         {boxes.map((boxProps: SingleBoxProps, index: number) => (
+            <SingleBox key={index} {...boxProps} />
+         ))}
+      </group>
+   );
+};
+
 const ThreeDBox: React.FC<ThreeDBoxProps> = ({ boxArrays }) => {
    const boxes = useMemo(() => {
-      const sortedBoxSizes = Object.keys(boxArrays)
-         .map(Number)
-         .sort((b, a) => boxArrays[b].rngSize - boxArrays[a].rngSize);
-      return sortedBoxSizes.map((size, index) => {
-         const box = boxArrays[size];
-
-         //   console.log(`Box ${size}: movedUp: ${box.boxMovedUp}, size: ${box.rngSize}, index: ${index}`);
-
+      // Assuming boxArrays is an object where keys are strings and values have the properties you need
+      return Object.keys(boxArrays).map((key, index) => {
+         const numericKey = Number(key);
+         const box = boxArrays[numericKey];
          const colorUp = 'rgba(58, 153, 147, 0.8)';
          const colorDown = 'rgba(191, 80, 96, 0.8)';
-
          const color = box.boxMovedUp ? colorUp : colorDown;
-
-         const boxSize: [number, number, number] = [box.rngSize - index * 0.1, box.rngSize - index * 0.1, box.rngSize - index * 0.1];
+         const size: [number, number, number] = [box.rngSize - index * 0.1, box.rngSize - index * 0.1, box.rngSize - index * 0.1];
          const position: [number, number, number] = [0, 0, 0];
          const opacity = 1 - index * 0.075;
 
-         return { position, size: boxSize, color, opacity };
+         // Ensure this object matches the SingleBoxProps type
+         return { position, size, color, opacity };
       });
    }, [boxArrays]);
 
    return (
-      <Canvas style={{ width: '100%', height: '80vh', background: '#000' }}>
-         <PerspectiveCamera makeDefault position={[1, 1, 1]} fov={60} />
+      <Canvas style={{ width: '100%', height: '100%' }}>
+         <PerspectiveCamera makeDefault position={[1.5, 0, 1.5]} fov={60} />
          <OrbitControls />
          {/* LIGHTING */}
          <ambientLight intensity={10} color={'rgb(150, 141, 255)'} receiveShadow={true} /> {/* Soft purple */}
@@ -65,9 +82,7 @@ const ThreeDBox: React.FC<ThreeDBoxProps> = ({ boxArrays }) => {
          <EffectComposer>
             <DotScreen blendFunction={BlendFunction.NORMAL} angle={Math.PI * 10} scale={500} />
             <Center>
-               {boxes.map((boxProps, index) => (
-                  <SingleBox key={index} {...boxProps} />
-               ))}
+               <BoxGroup boxes={boxes} />
             </Center>
          </EffectComposer>
       </Canvas>

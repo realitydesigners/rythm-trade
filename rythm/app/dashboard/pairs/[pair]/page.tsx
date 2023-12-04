@@ -1,15 +1,12 @@
 'use client';
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'next/navigation';
-import DataTable from '@/app/components/DataTable';
 import Stream from '@/app/components/Stream';
-import LineChart from '@/app/components/LineChart';
-import BoxesModel from '@/app/components/BoxesModel';
 import MasterPosition from '@/app/components/MasterPosition';
 import { OandaApiContext, api } from '@/app/api/OandaApi';
 import ElixrModel from '@/app/components/ElixrModel';
 import ThreeDModel from '@/app/components/ThreeDModel';
-//import ResoModel from '@/app/components/ResoModel';
+
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { BOX_SIZES } from '@/app/utils/constants';
 
@@ -53,12 +50,19 @@ const PairPage = () => {
 
    return (
       <OandaApiContext.Provider value={api}>
-         <div className="w-full pt-20">
-            <div className="w-full pl-6 pr-6">
+         <div className="w-full relative z-0">
+            {/* Top component */}
+            <div className="w-full top-20 absolute z-30 pl-6 pr-6">
                <Stream pair={pair} data={streamData[pair]} />
             </div>
-            <ThreeDModel pair={pair} streamData={streamData[pair]} selectedBoxArrayType={selectedBoxArrayType} />
-            <div className="w-full p-6">
+
+            {/* 3D Model component */}
+            <div id="three" className="w-full flex h-screen absolute z-20">
+               <ThreeDModel pair={pair} streamData={streamData[pair]} selectedBoxArrayType={selectedBoxArrayType} />
+            </div>
+
+            {/* Selection and Elixr Model component */}
+            <div className="w-auto  flex-rows  gap-2 flex absolute left-0 top-40 p-4" style={{ zIndex: 1001 }}>
                <Select value={selectedBoxArrayType} onValueChange={handleBoxArrayTypeChange}>
                   <SelectTrigger>
                      <SelectValue>{selectedBoxArrayType}</SelectValue>
@@ -71,10 +75,26 @@ const PairPage = () => {
                      ))}
                   </SelectContent>
                </Select>
-               <ElixrModel pair={pair} streamData={streamData[pair]} />
+               <div id="elixr" className="w-full flex h-full">
+                  <ElixrModel pair={pair} streamData={streamData[pair]} />
+               </div>
             </div>
-            {positionData && <MasterPosition positionData={[positionData]} />}
-            {!positionData && <p>No position data available for {pair}</p>}
+
+            {/* Master Position component */}
+            <div className="w-full fixed bottom-0 bg-black" style={{ zIndex: 1000 }}>
+               {positionData && <MasterPosition positionData={[positionData]} />}
+               {!positionData && <p>No position data available for {pair}</p>}
+            </div>
+
+            {/* Buttons for hyperlinks */}
+            <div className="fixed bottom-20 right-20 p-4">
+               <a href="#three" className="m-2 btn">
+                  Go to Three
+               </a>
+               <a href="#elixr" className="m-2 btn">
+                  Go to Elixr
+               </a>
+            </div>
          </div>
       </OandaApiContext.Provider>
    );
