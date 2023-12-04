@@ -58,7 +58,7 @@ export default function Navbar() {
                </div>
             </Link>
             <Link href="/">
-               <div className={`${jura.className}  text-gray-200 pt-2 pb-2 hidden lg:flex flex-col `}>
+               <div className={`${staatliches.className}  text-gray-200 pt-2 pb-2 hidden lg:flex flex-col `}>
                   <span className="text-xl font-bold tracking-widest leading-none">RYTHM</span>
                </div>
             </Link>
@@ -78,23 +78,29 @@ export default function Navbar() {
                <p className={`${jura.className}  text-gray-400  text-center text-xs font-mono`}> The Future Of Trading</p>
             </div>
 
-            <ul className="lg:flex lg:space-evenly flex-cols  mt-4 lg:mt-0">
+            <ul className="lg:flex lg:space-evenly flex-cols gap-4  mt-4 lg:mt-0">
                <li className="block">
-                  <Link href="/dashboard" className={`${jura.className}   flex items-center text-3xl lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out`} onClick={closeNav}>
+                  <Link href="/dashboard" className={`${staatliches.className}   flex items-center  text-3xl lg:text-sm text-gray-200   tracking-wide font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-2 rounded-lg transition-all duration-200 ease-in-out`} onClick={closeNav}>
                      <svg className="w-4 h-4">{getIcon('dashboard')}</svg>
                      <span className="ml-2">Dashboard</span>
                   </Link>
                </li>
                <li className="block">
-                  <Link href="/about" className={`${jura.className}  flex items-center text-3xl lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out`} onClick={closeNav}>
+                  <Link href="/account" className={`${staatliches.className}   flex items-center text-3xl lg:text-sm text-gray-200   tracking-wide  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-2 rounded-lg transition-all duration-200 ease-in-out`} onClick={closeNav}>
                      <svg className="w-4 h-4">{getIcon('dashboard')}</svg>
-                     <span className="ml-2">About</span>
+                     <span className="ml-2">My Account</span>
                   </Link>
                </li>
                <li className="block">
-                  <Link href="/" className={`${jura.className}   flex items-center text-3xl lg:text-xs text-gray-200  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-3 rounded-lg transition-all duration-200 ease-in-out`} onClick={closeNav}>
+                  <Link href="/" className={`${staatliches.className}   flex items-center  text-3xl lg:text-sm text-gray-200  tracking-wide   font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-2 rounded-lg transition-all duration-200 ease-in-out`} onClick={closeNav}>
                      <svg className="w-4 h-4">{getIcon('dashboard')}</svg>
                      <span className="ml-2">Tools</span>
+                  </Link>
+               </li>
+               <li className="block">
+                  <Link href="/about" className={`${staatliches.className}  flex items-center  text-3xl lg:text-sm text-gray-200  tracking-wide  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-2 rounded-lg transition-all duration-200 ease-in-out`} onClick={closeNav}>
+                     <svg className="w-4 h-4">{getIcon('dashboard')}</svg>
+                     <span className="ml-2">About</span>
                   </Link>
                </li>
             </ul>

@@ -1,14 +1,21 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
-import { staatliches, inter, jura } from './fonts';
+import Image from 'next/image';
 import Secure from '@/public/icons/secure.svg';
 import Scale from '@/public/icons/scale.svg';
 import Repeat from '@/public/icons/repeat.svg';
 import Quant from '@/public/icons/quant.svg';
 import Prop from '@/public/icons/prop.svg';
+import { staatliches, inter, jura } from '@/app/fonts';
 
-import Image from 'next/image';
+const featureData = [
+   { icon: Secure, title: 'Secure', description: 'Our robust security features protect your data and maintain privacy.' },
+   { icon: Scale, title: 'Scalable', description: 'Our infrastructure is designed to scale regardless of volume.' },
+   { icon: Repeat, title: 'Repeatable', description: 'Rely on our algorithms for consistent and repeatable success.' },
+   { icon: Prop, title: 'Automated', description: 'Benefit from our proprietary technology that trades for you.' },
+   { icon: Quant, title: 'Quantitative', description: 'Access quantitative analytics for data-driven decisions.' },
+];
 
 const AppPage = () => {
    return (
@@ -38,54 +45,22 @@ const AppPage = () => {
             </div>
          </section>
 
-         {/* Features Section */}
-         <section className="bg-black lg:p-20 p-0 mb-40 ">
-            <div className="container gap-8">
-               <h2 className={`${staatliches.className} py-20 lg:p-32  text-center text-gray-200 uppercase font-bold text-4xl lg:text-6xl`}>
+         <section className="bg-black pt-20 pb-40 px-4 lg:px-20">
+            <div className="container mx-auto">
+               <h2 className={`${staatliches.className} text-center text-gray-200 uppercase font-bold text-4xl lg:text-6xl mb-20`}>
                   A New Kind Of
                   <br /> Trading Algorithm
                </h2>
-               <div className="grid grid-cols-2 md:grid-cols-5 gap-12 ">
-                  {/* Feature 1 - Secure */}
-                  <div className="p-2 rounded-lg shadow-lg space-y-2 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:shadow-2xl">
-                     <div className="h-20 w-20 rounded-full mx-auto transition duration-500 ease-in-out transform hover:scale-110">
-                        <Image src={Secure} width={500} height={500} alt="Secure" />
+               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {featureData.map((feature, index) => (
+                     <div key={index} className="p-4 rounded-lg shadow-lg space-y-4 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:shadow-2xl ">
+                        <div className="h-24 w-24 rounded-full mx-auto transition duration-500 ease-in-out transform hover:scale-110">
+                           <Image src={feature.icon} width={80} height={80} alt={feature.title} />
+                        </div>
+                        <h3 className={`${staatliches.className} text-gray-200 text-center uppercase font-bold text-2xl`}>{feature.title}</h3>
+                        <p className={`${jura.className} text-gray-400 text-center`}>{feature.description}</p>
                      </div>
-                     <h3 className={`${staatliches.className} text-gray-200 text-center uppercase font-bold text-2xl`}>Secure</h3>
-                     <p className={`${jura.className} text-gray-400 text-sm text-center`}>Our robust security features protect your data and maintain privacy.</p>
-                  </div>
-                  {/* Feature 2 - Scalable */}
-                  <div className="p-2 rounded-lg shadow-lg space-y-2 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:shadow-2xl">
-                     <div className="h-20 w-20 rounded-full mx-auto transition duration-500 ease-in-out transform hover:scale-110">
-                        <Image src={Scale} width={500} height={500} alt="Scalable" />
-                     </div>
-                     <h3 className={`${staatliches.className} text-gray-200 text-center uppercase font-bold text-2xl`}>Scalable</h3>
-                     <p className={`${jura.className} text-gray-400 text-sm text-center`}>Our infrastructure is designed to scale regardless of volume.</p>
-                  </div>
-                  {/* Feature 3 - Repeatable */}
-                  <div className="p-2 rounded-lg shadow-lg space-y-2 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:shadow-2xl">
-                     <div className="h-20 w-20 rounded-full mx-auto transition duration-500 ease-in-out transform hover:scale-110">
-                        <Image src={Repeat} width={500} height={500} alt="Repeatable" />
-                     </div>
-                     <h3 className={`${staatliches.className} text-gray-200 text-center uppercase font-bold text-2xl`}>Repeatable</h3>
-                     <p className={`${jura.className} text-gray-400 text-sm text-center`}>Rely on our algorithms for consistent and repeatable success.</p>
-                  </div>
-                  {/* Feature 4 - Proprietary */}
-                  <div className="p-2 rounded-lg shadow-lg space-y-2 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:shadow-2xl">
-                     <div className="h-20 w-20 rounded-full mx-auto transition duration-500 ease-in-out transform hover:scale-110">
-                        <Image src={Prop} width={500} height={500} alt="Proprietary" />
-                     </div>
-                     <h3 className={`${staatliches.className} text-gray-200 text-center uppercase font-bold text-2xl`}>Automated</h3>
-                     <p className={`${jura.className} text-gray-400 text-sm text-center`}>Benefit from our proprietary technology that trades for you.</p>
-                  </div>
-                  {/* Feature 5 - Quantitative */}
-                  <div className="p-2 rounded-lg shadow-lg space-y-2 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:shadow-2xl">
-                     <div className="h-20 w-20 rounded-full mx-auto transition duration-500 ease-in-out transform hover:scale-110">
-                        <Image src={Quant} width={500} height={500} alt="Quantitative" />
-                     </div>
-                     <h3 className={`${staatliches.className} text-gray-200 text-center uppercase font-bold text-2xl`}>Quantitative</h3>
-                     <p className={`${jura.className} text-gray-400 text-sm text-center`}>Access quantitative analytics for data-driven decisions.</p>
-                  </div>
+                  ))}
                </div>
             </div>
          </section>
