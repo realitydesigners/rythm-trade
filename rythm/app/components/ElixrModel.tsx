@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { CandleData, StreamData } from '../../../types';
-import { OandaApiContext } from '../../api/OandaApi';
+import { CandleData, StreamData } from '../../types';
+import { OandaApiContext } from '../api/OandaApi';
 import { symbolsToDigits } from '@/app/utils/constants';
 import ElixrBot from '@/app/algorithms/ElixrBot';
-import { Button } from '../../../components/ui/button';
+import { Button } from '../../components/ui/button';
 
 interface ElixrModelProps {
    pair: string;

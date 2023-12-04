@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { OandaApiContext } from '../../api/OandaApi';
+import { OandaApiContext } from '../api/OandaApi';
 import { CandleData } from '@/types';
-import styles from './styles.module.css';
 
 interface DataTableProps {
    pair: string;
@@ -28,30 +27,32 @@ function DataTable({ pair }: DataTableProps) {
    }, [api, pair]);
 
    return (
-      <div className={styles.tableContainer}>
-         <table className={styles.dataTable}>
-            <thead className={styles.tableHeader}>
+      <div className="overflow-auto">
+         <table className="min-w-full table-auto">
+            <thead className="bg-gray-200">
                <tr>
-                  <th>Time</th>
-                  <th>Open</th>
-                  <th>Close</th>
-                  <th>High</th>
-                  <th>Low</th>
+                  <th className="px-4 py-2">Time</th>
+                  <th className="px-4 py-2">Open</th>
+                  <th className="px-4 py-2">Close</th>
+                  <th className="px-4 py-2">High</th>
+                  <th className="px-4 py-2">Low</th>
                </tr>
             </thead>
-            <tbody className={styles.tableBody}>
+            <tbody>
                {loading ? (
                   <tr>
-                     <td colSpan={5}>Loading...</td>
+                     <td colSpan={5} className="text-center px-4 py-2">
+                        Loading...
+                     </td>
                   </tr>
                ) : (
                   data.map((candle, index) => (
                      <tr key={index}>
-                        <td>{new Date(candle.time).toLocaleString()}</td>
-                        <td>{candle.mid.o}</td>
-                        <td>{candle.mid.c}</td>
-                        <td>{candle.mid.h}</td>
-                        <td>{candle.mid.l}</td>
+                        <td className="px-4 py-2">{new Date(candle.time).toLocaleString()}</td>
+                        <td className="px-4 py-2">{candle.mid.o}</td>
+                        <td className="px-4 py-2">{candle.mid.c}</td>
+                        <td className="px-4 py-2">{candle.mid.h}</td>
+                        <td className="px-4 py-2">{candle.mid.l}</td>
                      </tr>
                   ))
                )}

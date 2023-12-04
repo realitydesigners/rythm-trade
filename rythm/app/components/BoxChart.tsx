@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-import { BoxArrays } from '../../../types';
-import styles from './styles.module.css';
+import { BoxArrays } from '../../types';
 
 interface BoxChartProps {
    boxArrays: BoxArrays;
@@ -82,7 +81,7 @@ const BoxChart: React.FC<BoxChartProps> = ({ boxArrays }) => {
    }, [boxArrays, containerWidth]);
 
    return (
-      <div ref={containerRef} className={styles.chartContainer}>
+      <div ref={containerRef} className="w-full flex justify-center">
          <svg ref={svgRef}></svg>
       </div>
    );

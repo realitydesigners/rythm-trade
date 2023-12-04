@@ -6,14 +6,14 @@
 
 import React, { useState, useEffect, useContext, useCallback, useRef } from 'react';
 
-import { CandleData, Box, BoxArrays, StreamData } from '../../../types';
-import { findCurrentPrice, findHighest, findLowest } from '../../api/priceAnalysis';
-import { OandaApiContext } from '../../api/OandaApi';
-import { SymbolsToDigits, symbolsToDigits, BOX_SIZES } from '../../utils/constants';
-import { Button } from '../../../components/ui/button';
+import { CandleData, Box, BoxArrays, StreamData } from '../../types';
+import { findCurrentPrice, findHighest, findLowest } from '../api/priceAnalysis';
+import { OandaApiContext } from '../api/OandaApi';
+import { SymbolsToDigits, symbolsToDigits, BOX_SIZES } from '../utils/constants';
+import { Button } from '../../components/ui/button';
 
-import ResoBox from '../ResoBox';
-import ThreeDBox from '../ThreeDBox';
+import ResoBox from './ResoBox';
+import ThreeDBox from './ThreeDBox';
 import ResoBot from '@/app/algorithms/ResoBot';
 
 interface ResoModelProps {

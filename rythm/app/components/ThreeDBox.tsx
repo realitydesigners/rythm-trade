@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, RefObject } from 'react';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
-import { BoxArrays } from '../../../types';
+import { BoxArrays } from '../../types';
 import * as THREE from 'three';
 import { DirectionalLight } from 'three';
 import { EffectComposer, DotScreen } from '@react-three/postprocessing';
@@ -47,7 +47,7 @@ const ThreeDBox: React.FC<ThreeDBoxProps> = ({ boxArrays }) => {
 
          const boxSize: [number, number, number] = [box.rngSize - index * 0.1, box.rngSize - index * 0.1, box.rngSize - index * 0.1];
          const position: [number, number, number] = [0, 0, 0];
-         const opacity = 1 - index * 0.08;
+         const opacity = 1 - index * 0.075;
 
          return { position, size: boxSize, color, opacity };
       });
@@ -59,11 +59,11 @@ const ThreeDBox: React.FC<ThreeDBoxProps> = ({ boxArrays }) => {
          <OrbitControls />
          {/* LIGHTING */}
          <ambientLight intensity={10} color={'rgb(150, 141, 255)'} receiveShadow={true} /> {/* Soft purple */}
-         <RotatingDirectionalLight position={[-10, -10, -10]} color={'rgba(58, 153, 147, 0.8)'} intensity={4} /> {/* Turquoise */}
-         <RotatingDirectionalLight position={[10, 10, 10]} color={'rgb(255, 182, 193)'} intensity={4} /> {/* Light pink */}
+         <RotatingDirectionalLight position={[0, -10, -10]} color={'rgba(58, 153, 147, 0.8)'} intensity={4} /> {/* Turquoise */}
+         <RotatingDirectionalLight position={[10, 0, 10]} color={'rgb(255, 182, 193)'} intensity={4} /> {/* Light pink */}
          {/* 3D BOX */}
          <EffectComposer>
-            <DotScreen blendFunction={BlendFunction.NORMAL} angle={Math.PI * 0.1} scale={250} />
+            <DotScreen blendFunction={BlendFunction.NORMAL} angle={Math.PI * 10} scale={500} />
             <Center>
                {boxes.map((boxProps, index) => (
                   <SingleBox key={index} {...boxProps} />
@@ -79,8 +79,8 @@ const RotatingDirectionalLight: React.FC<RotatingDirectionalLightProps> = ({ pos
 
    useFrame(() => {
       if (lightRef.current) {
-         lightRef.current.position.y = Math.sin(Date.now() * 0.005) * 20;
-         lightRef.current.position.x = Math.cos(Date.now() * 0.005) * 20;
+         lightRef.current.position.y = Math.sin(Date.now() * 0.0003) * 20;
+         lightRef.current.position.x = Math.cos(Date.now() * 0.0003) * 20;
       }
    });
 

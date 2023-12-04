@@ -5,13 +5,13 @@
 'use client';
 
 import React, { useState, useEffect, useContext, useCallback } from 'react';
-import styles from './styles.module.css';
-import { CandleData, Box, BoxArrays, StreamData } from '../../../types';
-import { findCurrentPrice, findHighest, findLowest } from '../../api/priceAnalysis';
-import { OandaApiContext } from '../../api/OandaApi';
-import { SymbolsToDigits, symbolsToDigits, BOX_SIZES } from '../../utils/constants';
-import BoxChart from '../BoxChart';
-import ResoBox from '../ResoBox';
+
+import { CandleData, Box, BoxArrays, StreamData } from '../../types';
+import { findCurrentPrice, findHighest, findLowest } from '../api/priceAnalysis';
+import { OandaApiContext } from '../api/OandaApi';
+import { SymbolsToDigits, symbolsToDigits, BOX_SIZES } from '../utils/constants';
+import BoxChart from './BoxChart';
+import ResoBox from './ResoBox';
 
 interface BoxModelProps {
    pair: string;
@@ -186,57 +186,50 @@ const BoxesModel: React.FC<BoxModelProps> = ({ pair, streamData }) => {
    /* Modify renderToggleButtons function to apply active class */
    const renderToggleButtons = () => {
       return (
-         <div className={styles.buttonContainer}>
-            <button onClick={() => switchBoxArray('d')} className={`${styles.toggleButton} ${selectedBoxArray === 'd' ? styles.active : ''}`}>
-               d
-            </button>
-            <button onClick={() => switchBoxArray('1')} className={`${styles.toggleButton} ${selectedBoxArray === '1' ? styles.active : ''}`}>
-               1
-            </button>
-            <button onClick={() => switchBoxArray('2')} className={`${styles.toggleButton} ${selectedBoxArray === '2' ? styles.active : ''}`}>
-               2
-            </button>
-            <button onClick={() => switchBoxArray('3')} className={`${styles.toggleButton} ${selectedBoxArray === '3' ? styles.active : ''}`}>
-               3
-            </button>
+         <div className="flex space-x-2">
+            {['d', '1', '2', '3'].map(value => (
+               <button key={value} onClick={() => switchBoxArray(value)} className={`px-4 py-2 border border-gray-200 rounded ${selectedBoxArray === value ? 'bg-blue-500 text-white' : 'bg-white'}`}>
+                  {value}
+               </button>
+            ))}
          </div>
       );
    };
 
    // Render: Displays the current close price and a list of boxes with their respective sizes and states.
    return (
-      <div className={styles.container}>
+      <div className="p-4">
          {initializationComplete ? (
             <>
                <BoxChart boxArrays={boxArrays} />
                <ResoBox boxArrays={boxArrays} />
                {renderToggleButtons()}
-               <div>
-                  <span className={styles.title}>Current Close Price:</span> {currentClosePrice}
+               <div className="my-4">
+                  <span className="font-bold">Current Close Price:</span> {currentClosePrice}
                </div>
-               <table className={styles.boxTable}>
+               <table className="min-w-full table-auto">
                   <thead>
-                     <tr>
-                        <th>Box Size</th>
-                        <th>Status</th>
-                        <th>High</th>
-                        <th>Low</th>
+                     <tr className="bg-gray-200">
+                        <th className="px-4 py-2">Box Size</th>
+                        <th className="px-4 py-2">Status</th>
+                        <th className="px-4 py-2">High</th>
+                        <th className="px-4 py-2">Low</th>
                      </tr>
                   </thead>
                   <tbody>
                      {Object.entries(boxArrays).map(([size, box]) => (
                         <tr key={size}>
-                           <td>{size}</td>
-                           <td>{box.boxMovedUp ? 'UP' : box.boxMovedDn ? 'DOWN' : 'STABLE'}</td>
-                           <td>{box.high}</td>
-                           <td>{box.low}</td>
+                           <td className="px-4 py-2">{size}</td>
+                           <td className="px-4 py-2">{box.boxMovedUp ? 'UP' : box.boxMovedDn ? 'DOWN' : 'STABLE'}</td>
+                           <td className="px-4 py-2">{box.high}</td>
+                           <td className="px-4 py-2">{box.low}</td>
                         </tr>
                      ))}
                   </tbody>
                </table>
             </>
          ) : (
-            <div className={styles.loadingContainer}>Loading...</div>
+            <div className="flex justify-center items-center h-full">Loading...</div>
          )}
       </div>
    );

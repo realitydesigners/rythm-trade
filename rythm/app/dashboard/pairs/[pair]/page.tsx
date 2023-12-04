@@ -3,11 +3,10 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'next/navigation';
 import DataTable from '@/app/components/DataTable';
 import Stream from '@/app/components/Stream';
-import LineChart from '@/app/components/Linechart';
+import LineChart from '@/app/components/LineChart';
 import BoxesModel from '@/app/components/BoxesModel';
 import MasterPosition from '@/app/components/MasterPosition';
 import { OandaApiContext, api } from '@/app/api/OandaApi';
-import styles from './PairPage.module.css';
 import ElixrModel from '@/app/components/ElixrModel';
 import ThreeDModel from '@/app/components/ThreeDModel';
 //import ResoModel from '@/app/components/ResoModel';
@@ -54,7 +53,7 @@ const PairPage = () => {
 
    return (
       <OandaApiContext.Provider value={api}>
-         <div className={`{styles.container} pt-20 `}>
+         <div className="w-full pt-20">
             <div className="w-full pl-6 pr-6">
                <Stream pair={pair} data={streamData[pair]} />
             </div>
