@@ -36,23 +36,7 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
          setBotActive(!botActive);
       }
    };
-   useEffect(() => {
-      if (api) {
-         elixrInstance.current = new ElixrBot(pair, api);
 
-         // Check if the instance is not null before calling the method
-         if (elixrInstance.current) {
-            elixrInstance.current.startDataCollection();
-         }
-
-         // Cleanup function to stop data collection when the component unmounts
-         return () => {
-            if (elixrInstance.current) {
-               elixrInstance.current.stopDataCollection();
-            }
-         };
-      }
-   }, [api, pair]);
 
    const findLocalExtrema = (data: number[], findMax: boolean, numCandles: number = 5): number[] => {
       const extrema: number[] = [];

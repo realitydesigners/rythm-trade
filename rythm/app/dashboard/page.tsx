@@ -35,16 +35,10 @@ const DashboardPage = () => {
    useEffect(() => {
       const handleWebSocketMessage = (message: any) => {
          const { data, pair } = message;
-         console.log(pair);
-         if (data.type === 'HEARTBEAT') {
-            console.log('Heartbeat received:', data);
-            return;
-         }
-
-         if (pair && favoritePairs.includes(pair)) {
-            setStreamData(prevStreamData => ({
-               ...prevStreamData,
-               [pair]: data,
+         if (data.type !== 'HEARTBEAT') {
+            setStreamData(prevData => ({
+              ...prevData,
+              [pair]: data,
             }));
          }
       };
