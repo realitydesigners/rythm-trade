@@ -14,6 +14,8 @@ model User {
   name            String?
   clerkUserId     String           @unique
   forexPreference ForexPreference?
+  oandaApiKey     String?
+  oandaAccountId  String?
 }
 
 model ForexPair {

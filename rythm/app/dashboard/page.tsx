@@ -146,7 +146,7 @@ const DashboardPage = () => {
       };
 
       fetchPositionData();
-      const intervalId = setInterval(fetchPositionData, 1000);
+      const intervalId = setInterval(fetchPositionData, 60000);
 
       return () => clearInterval(intervalId);
    }, [user]);

@@ -21,4 +21,9 @@ router.get('/positions/:userId', async context => {
   return await oandaController.getAllPositions(userId);
 });
 
+// Get pair position summary for a given user and pair
+router.get('/pair-position-summary/:userId/:pair', async context => {
+  const { userId, pair } = context.params;
+  return await oandaController.getPairPositionSummary(userId, pair);
+});
 export default router;

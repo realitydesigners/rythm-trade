@@ -38,7 +38,7 @@ export class DatabaseService {
         update: { email: userEmail, name: userName },
         create: { clerkUserId, email: userEmail, name: userName },
       });
-      console.log(user)
+      console.log(user);
       return user;
     } catch (error) {
       console.error('Error in createUserOrUpdate:', error);
@@ -73,45 +73,58 @@ export class DatabaseService {
   public async setForexPreferences(userId: string, pairs: string[]): Promise<any> {
     try {
       console.log(`Setting Forex preferences for user: ${userId} with pairs: ${pairs.join(', ')}`);
-  
+
       // First, create or find the ForexPreference entity
       const forexPreference = await this.prisma.forexPreference.upsert({
         where: { userId },
         update: {},
         create: { userId },
       });
-  
+
       console.log(`ForexPreference entity created or found with ID: ${forexPreference.id}`);
-  
+
       // Delete existing ForexPairs for the preference
       const deleteResult = await this.prisma.forexPair.deleteMany({
         where: { forexPreferenceId: forexPreference.id },
       });
-  
+
       console.log(`Deleted ${deleteResult.count} existing ForexPair(s)`);
-  
+
       // Prepare new ForexPairs data
       const forexPairs = pairs.map(pair => ({
         forexPreferenceId: forexPreference.id,
         pair,
       }));
-  
+
       console.log('ForexPairs to be created:', forexPairs);
-  
+
       // Create new ForexPairs
       const createResult = await this.prisma.forexPair.createMany({
         data: forexPairs,
         skipDuplicates: true, // This might help avoid the unique constraint error
       });
-  
+
       console.log(`Created ${createResult.count} new ForexPair(s)`);
-  
+
       return forexPreference;
-  
     } catch (error) {
       console.error('Error in setForexPreferences:', error);
       throw error;
     }
   }
-  
+
+  /**
+   * Updates Oanda credentials (API key and account ID) for a user in the database.
+   * @param {string} userId - The user's ID.
+   * @param {string} apiKey - The new Oanda API key to set.
+   * @param {string} accountId - The new Oanda account ID to set.
+   * @returns {Promise<User>} A promise that resolves to the updated user data.
+   */
+  public async updateUserOandaCredentials(userId: string, apiKey: string, accountId: string): Promise<User> {
+    console.log(`Updating Oanda credentials for user ${userId}`);
+    return await this.prisma.user.update({
+      where: { clerkUserId: userId },
+      data: { oandaApiKey: apiKey, oandaAccountId: accountId },
+    });
+  }
 }

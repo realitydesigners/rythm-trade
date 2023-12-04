@@ -45,4 +45,42 @@ export class UserController {
   public async setForexPreferences(userId: string, pairs: string[]): Promise<any> {
     return await this.dbService.setForexPreferences(userId, pairs);
   }
+
+  /**
+   * Updates Oanda credentials for a user.
+   * @param {string} userId - The user's ID.
+   * @param {string} apiKey - The Oanda API key.
+   * @param {string} accountId - The Oanda account ID.
+   * @returns {Promise<any>} A promise that resolves to the updated user data.
+   */
+  public async updateOandaCredentials(userId: string, apiKey: string, accountId: string): Promise<any> {
+    console.log(`Updating Oanda credentials for user ${userId}: apiKey=${apiKey}, accountId=${accountId}`);
+    try {
+      return await this.dbService.updateUserOandaCredentials(userId, apiKey, accountId);
+    } catch (error) {
+      console.error('Error in updateOandaCredentials:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Retrieves Oanda credentials for a user.
+   * @param {string} userId - The user's ID.
+   * @returns {Promise<any>} A promise that resolves to the Oanda credentials.
+   */
+  public async getOandaCredentials(userId: string): Promise<any> {
+    try {
+      const user = await this.dbService.getUserByClerkId(userId);
+      if (!user) {
+        return { error: 'User not found' };
+      }
+      return {
+        apiKey: user.oandaApiKey ? '****' + user.oandaApiKey.slice(-4) : null,
+        accountId: user.oandaAccountId,
+      };
+    } catch (error) {
+      console.error('Error in getOandaCredentials:', error);
+      throw error;
+    }
+  }
 }
