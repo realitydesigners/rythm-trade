@@ -10,7 +10,7 @@ export class OandaApi {
   private stream_link: string;
   private activeStreams: Map<string, ReadableStreamDefaultReader<Uint8Array>> = new Map();
 
-  constructor(api_key: string = key, oanda_url: string = base_url, account_id: string = acc_id, stream_link: string = stream_url) {
+  constructor(api_key: string, oanda_url: string = base_url, account_id: string, stream_link: string = stream_url) {
     // Initialize Oanda API with optional API key, base URL, and account ID.
 
     this.api_key = api_key;

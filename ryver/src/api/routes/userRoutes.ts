@@ -22,4 +22,29 @@ router.get('/user/:userId', async ({ params }) => {
   return await userController.getUserByClerkId(userId);
 });
 
+
+// Update Oanda credentials for a user
+router.post('/user/:userId/oanda-credentials', async context => {
+  const { userId } = context.params;
+
+  try {
+    // Manually read and parse the JSON body from the stream
+    const body = await context.request.json();
+    const { apiKey, accountId } = body;
+    console.log(`Received credentials update for ${userId}: apiKey=${apiKey}, accountId=${accountId}`);
+
+    return await userController.updateOandaCredentials(userId, apiKey, accountId);
+  } catch (error) {
+    console.error('Error parsing request body:', error);
+  }
+});
+
+
+// Get Oanda credentials for a user
+router.get('/user/:userId/oanda-credentials', async context => {
+  const { userId } = context.params;
+  return await userController.getOandaCredentials(userId);
+});
+
+
 export default router;
