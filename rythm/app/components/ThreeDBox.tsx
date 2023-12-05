@@ -3,7 +3,7 @@ import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { BoxArrays } from '../../types';
 import * as THREE from 'three';
 import { DirectionalLight } from 'three';
-import { EffectComposer, DotScreen } from '@react-three/postprocessing';
+import { EffectComposer, DotScreen, Bloom, Scanline } from '@react-three/postprocessing';
 import { BlendFunction } from 'postprocessing';
 import { OrbitControls, PerspectiveCamera, Center } from '@react-three/drei';
 
@@ -34,6 +34,19 @@ const SingleBox: React.FC<SingleBoxProps> = ({ position, size, color, opacity })
    </mesh>
 );
 
+const ScannedBox: React.FC<SingleBoxProps> = props => {
+   return (
+      <EffectComposer>
+         <Scanline
+            blendFunction={BlendFunction.MULTIPLY} // blend mode
+            density={2} // scanline density
+         />
+
+         <SingleBox {...props} />
+      </EffectComposer>
+   );
+};
+
 const BoxGroup: React.FC<BoxGroupProps> = ({ boxes }) => {
    const boxesGroupRef = useRef<THREE.Group>(null);
 
@@ -45,8 +58,8 @@ const BoxGroup: React.FC<BoxGroupProps> = ({ boxes }) => {
 
    return (
       <group ref={boxesGroupRef}>
-         {boxes.map((boxProps: SingleBoxProps, index: number) => (
-            <SingleBox key={index} {...boxProps} />
+         {boxes.map((boxProps, index) => (
+            <ScannedBox key={index} {...boxProps} />
          ))}
       </group>
    );
@@ -54,18 +67,16 @@ const BoxGroup: React.FC<BoxGroupProps> = ({ boxes }) => {
 
 const ThreeDBox: React.FC<ThreeDBoxProps> = ({ boxArrays }) => {
    const boxes = useMemo(() => {
-      // Assuming boxArrays is an object where keys are strings and values have the properties you need
       return Object.keys(boxArrays).map((key, index) => {
          const numericKey = Number(key);
          const box = boxArrays[numericKey];
-         const colorUp = 'rgba(58, 153, 147, 0.8)';
-         const colorDown = 'rgba(191, 80, 96, 0.8)';
+         const colorUp = '#59cfc3';
+         const colorDown = '#cf598e';
          const color = box.boxMovedUp ? colorUp : colorDown;
          const size: [number, number, number] = [box.rngSize - index * 0.1, box.rngSize - index * 0.1, box.rngSize - index * 0.1];
          const position: [number, number, number] = [0, 0, 0];
-         const opacity = 1 - index * 0.075;
+         const opacity = 1 - index * 0.1;
 
-         // Ensure this object matches the SingleBoxProps type
          return { position, size, color, opacity };
       });
    }, [boxArrays]);
@@ -74,17 +85,17 @@ const ThreeDBox: React.FC<ThreeDBoxProps> = ({ boxArrays }) => {
       <Canvas style={{ width: '100%', height: '100%' }}>
          <PerspectiveCamera makeDefault position={[1.5, 0, 1.5]} fov={60} />
          <OrbitControls />
-         {/* LIGHTING */}
-         <ambientLight intensity={10} color={'rgb(150, 141, 255)'} receiveShadow={true} /> {/* Soft purple */}
-         <RotatingDirectionalLight position={[0, -10, -10]} color={'rgba(58, 153, 147, 0.8)'} intensity={4} /> {/* Turquoise */}
-         <RotatingDirectionalLight position={[10, 0, 10]} color={'rgb(255, 182, 193)'} intensity={4} /> {/* Light pink */}
-         {/* 3D BOX */}
-         <EffectComposer>
-            <DotScreen blendFunction={BlendFunction.NORMAL} angle={Math.PI * 10} scale={500} />
-            <Center>
-               <BoxGroup boxes={boxes} />
-            </Center>
-         </EffectComposer>
+
+         <ambientLight intensity={5} color={'#fff'} receiveShadow={true} />
+         <RotatingDirectionalLight position={[0, -10, -10]} color={'rgba(58, 153, 147)'} intensity={1} />
+         <RotatingDirectionalLight position={[10, 0, 10]} color={'rgb(255, 182, 193)'} intensity={1} />
+
+         <pointLight position={[0, 3, 0]} color={'#59cfc3'} intensity={100} />
+         <pointLight position={[0, -3, 0]} color={'#cf598e'} intensity={100} />
+
+         <Center>
+            <BoxGroup boxes={boxes} />
+         </Center>
       </Canvas>
    );
 };

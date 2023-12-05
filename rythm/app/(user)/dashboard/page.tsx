@@ -2,21 +2,21 @@
 
 import { useUser } from '@clerk/nextjs';
 import React, { useEffect, useState } from 'react';
-import Stream from '../components/Stream';
-import ResoModel from '../components/ResoModel';
-import ElixrModel from '../components/ElixrModel';
-import MasterProfile from '../components/MasterProfile';
-import { OandaApiContext, api } from '../api/OandaApi';
-import MasterPosition from '../components/MasterPosition';
+import Stream from '../../components/Stream';
+import ResoModel from '../../components/ResoModel';
+import ElixrModel from '../../components/ElixrModel';
+import MasterProfile from '../../components/MasterProfile';
+import { OandaApiContext, api } from '../../api/OandaApi';
+import MasterPosition from '../../components/MasterPosition';
 
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { fetchFavoritePairs, updateFavoritePairs, fetchInstruments, fetchAllPositions } from '../api/rest';
+import { fetchFavoritePairs, updateFavoritePairs, fetchInstruments, fetchAllPositions } from '../../api/rest';
 
 import { Button } from '@/components/ui/button';
-import { BOX_SIZES } from '../utils/constants';
+import { BOX_SIZES } from '../../utils/constants';
 import { PositionData } from '@/types';
-import { closeWebSocket, connectWebSocket, sendWebSocketMessage } from '../api/websocket';
+import { closeWebSocket, connectWebSocket, sendWebSocketMessage } from '../../api/websocket';
 
 const initialFavorites = ['GBP_USD', 'USD_JPY', 'AUD_USD', 'EUR_JPY', 'EUR_USD', 'USD_CAD', 'NZD_USD', 'GBP_JPY'];
 const DashboardPage = () => {
@@ -37,8 +37,8 @@ const DashboardPage = () => {
          const { data, pair } = message;
          if (data.type !== 'HEARTBEAT') {
             setStreamData(prevData => ({
-              ...prevData,
-              [pair]: data,
+               ...prevData,
+               [pair]: data,
             }));
          }
       };
