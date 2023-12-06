@@ -301,7 +301,9 @@ const DashboardPage = () => {
                </Select>
             </div>
          </div>
-         <MasterPosition positionData={positionData} />
+         <div className="w-full p-2 lg:p-4">
+            <MasterPosition positionData={positionData} />
+         </div>
       </OandaApiContext.Provider>
    );
 };
