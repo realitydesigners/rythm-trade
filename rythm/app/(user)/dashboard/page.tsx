@@ -243,7 +243,7 @@ const DashboardPage = () => {
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 lg:gap-4 w-full">
                {favoritePairs.slice(0, numDisplayedFavorites).map((pair, index) => (
-                  <div key={pair} className="w-full p-3 lg:p-6 border border-gray-600 h-[420px] sm:h-[550px] md:h-[575px] lg:h-[650px] rounded-lg" onDrop={e => handleDrop(e, 'favorites', index)} onDragOver={handleDragOver} draggable onDragStart={() => handleDragStart(pair)}>
+                  <div key={pair} className="w-full p-3 lg:p-6 border border-gray-600 h-[450px] sm:h-[575px] md:h-[60px] lg:h-[675px] rounded-lg" onDrop={e => handleDrop(e, 'favorites', index)} onDragOver={handleDragOver} draggable onDragStart={() => handleDragStart(pair)}>
                      <Button onClick={() => deleteFavoritePair(pair)}>Delete</Button>
                      <a href={`/dashboard/pairs/${pair}`}>
                         <Stream pair={pair} data={streamData[pair]} />
@@ -280,18 +280,24 @@ const DashboardPage = () => {
                   </div>
                ))}
                <Select onValueChange={pairToAdd => addToFavorites(pairToAdd)} value="">
-                  <SelectTrigger>
-                     <SelectValue>Add More Pairs</SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                     {currencyPairs
-                        .filter(pair => !favoritePairs.includes(pair))
-                        .map(pair => (
-                           <SelectItem key={pair} value={pair}>
-                              {pair}
-                           </SelectItem>
-                        ))}
-                  </SelectContent>
+                  <div className="w-full border border-gray-600 rounded-lg flex flex-col justify-center   items-center p-4 space-y-4 relative">
+                     <div className="text-9xl text-gray-600/75 pb-4">+</div>
+                     <div className="w-full flex justify-center z-10 text-center">
+                        <SelectTrigger>
+                           <button className="text-gray-200 font-mono text-xs w-full text-left p-2">Select Pair</button>
+                        </SelectTrigger>
+
+                        <SelectContent>
+                           {currencyPairs
+                              .filter(pair => !favoritePairs.includes(pair))
+                              .map(pair => (
+                                 <SelectItem key={pair} value={pair}>
+                                    {pair}
+                                 </SelectItem>
+                              ))}
+                        </SelectContent>
+                     </div>
+                  </div>
                </Select>
             </div>
          </div>
