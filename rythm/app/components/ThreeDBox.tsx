@@ -38,8 +38,8 @@ const ScannedBox: React.FC<SingleBoxProps> = props => {
    return (
       <EffectComposer>
          <Scanline
-            blendFunction={BlendFunction.MULTIPLY} // blend mode
-            density={2} // scanline density
+            blendFunction={BlendFunction.OVERLAY} // blend mode
+            density={5} // scanline density
          />
 
          <SingleBox {...props} />
