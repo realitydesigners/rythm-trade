@@ -284,7 +284,7 @@ const DashboardPage = () => {
                      <div className="text-9xl text-gray-600/75 pb-4">+</div>
                      <div className="w-full flex justify-center z-10 text-center">
                         <SelectTrigger>
-                           <button className="text-gray-200 font-mono text-xs w-full text-left p-2">Select Pair</button>
+                           <p className="text-gray-200 font-mono text-xs w-full text-left p-2">Select Pair</p>
                         </SelectTrigger>
 
                         <SelectContent>
