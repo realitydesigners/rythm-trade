@@ -34,19 +34,6 @@ const SingleBox: React.FC<SingleBoxProps> = ({ position, size, color, opacity })
    </mesh>
 );
 
-const ScannedBox: React.FC<SingleBoxProps> = props => {
-   return (
-      <EffectComposer>
-         <Scanline
-            blendFunction={BlendFunction.OVERLAY} // blend mode
-            density={5} // scanline density
-         />
-
-         <SingleBox {...props} />
-      </EffectComposer>
-   );
-};
-
 const BoxGroup: React.FC<BoxGroupProps> = ({ boxes }) => {
    const boxesGroupRef = useRef<THREE.Group>(null);
 
@@ -59,7 +46,7 @@ const BoxGroup: React.FC<BoxGroupProps> = ({ boxes }) => {
    return (
       <group ref={boxesGroupRef}>
          {boxes.map((boxProps, index) => (
-            <ScannedBox key={index} {...boxProps} />
+            <SingleBox key={index} {...boxProps} />
          ))}
       </group>
    );
@@ -94,7 +81,10 @@ const ThreeDBox: React.FC<ThreeDBoxProps> = ({ boxArrays }) => {
          <pointLight position={[0, -3, 0]} color={'#cf598e'} intensity={100} />
 
          <Center>
-            <BoxGroup boxes={boxes} />
+            <EffectComposer>
+               <Scanline blendFunction={BlendFunction.OVERLAY} density={5} />
+               <BoxGroup boxes={boxes} />
+            </EffectComposer>
          </Center>
       </Canvas>
    );
