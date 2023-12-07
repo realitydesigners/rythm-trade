@@ -69,24 +69,26 @@ const ThreeDBox: React.FC<ThreeDBoxProps> = ({ boxArrays }) => {
    }, [boxArrays]);
 
    return (
-      <Canvas style={{ width: '100%', height: '100%' }}>
-         <PerspectiveCamera makeDefault position={[1.5, 0, 1.5]} fov={60} />
-         <OrbitControls />
+      <div className="w-full h-[100vh]">
+         <Canvas style={{ width: '100%', height: '100%' }}>
+            <PerspectiveCamera makeDefault position={[1.5, 0, 1.5]} fov={60} />
+            <OrbitControls />
 
-         <ambientLight intensity={5} color={'#fff'} receiveShadow={true} />
-         <RotatingDirectionalLight position={[0, -10, -10]} color={'rgba(58, 153, 147)'} intensity={1} />
-         <RotatingDirectionalLight position={[10, 0, 10]} color={'rgb(255, 182, 193)'} intensity={1} />
+            <ambientLight intensity={5} color={'#fff'} receiveShadow={true} />
+            <RotatingDirectionalLight position={[0, -10, -10]} color={'rgba(58, 153, 147)'} intensity={1} />
+            <RotatingDirectionalLight position={[10, 0, 10]} color={'rgb(255, 182, 193)'} intensity={1} />
 
-         <pointLight position={[0, 3, 0]} color={'#59cfc3'} intensity={100} />
-         <pointLight position={[0, -3, 0]} color={'#cf598e'} intensity={100} />
+            <pointLight position={[0, 3, 0]} color={'#59cfc3'} intensity={100} />
+            <pointLight position={[0, -3, 0]} color={'#cf598e'} intensity={100} />
 
-         <Center>
-            <EffectComposer>
-               <Scanline blendFunction={BlendFunction.OVERLAY} density={5} />
-               <BoxGroup boxes={boxes} />
-            </EffectComposer>
-         </Center>
-      </Canvas>
+            <Center>
+               <EffectComposer>
+                  <Scanline blendFunction={BlendFunction.OVERLAY} density={5} />
+                  <BoxGroup boxes={boxes} />
+               </EffectComposer>
+            </Center>
+         </Canvas>
+      </div>
    );
 };
 

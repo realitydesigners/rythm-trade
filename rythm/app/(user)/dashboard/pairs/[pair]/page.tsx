@@ -76,31 +76,33 @@ const PairPage = () => {
       <OandaApiContext.Provider value={api}>
          <div className="w-full relative z-0">
             {/* Top component */}
-            <div className="w-full top-20 absolute z-30 pl-6 pr-6">
+            <div className="w-full top-20 fixed z-30 pl-6 pr-6">
                <Stream pair={pair} data={streamData[pair]} />
             </div>
 
             {/* 3D Model component */}
-            <div id="three" className="w-full flex h-screen absolute z-20">
-               <ThreeDModel pair={pair} streamData={streamData[pair]} selectedBoxArrayType={selectedBoxArrayType} />
-            </div>
+            <div className="w-full">
+               <div id="three" className="w-full flex h-screen absolute z-10">
+                  <ThreeDModel pair={pair} streamData={streamData[pair]} selectedBoxArrayType={selectedBoxArrayType} />
+               </div>
 
-            {/* Selection and Elixr Model component */}
-            <div className="w-auto  flex-rows  gap-2 flex absolute left-0 top-40 p-4" style={{ zIndex: 1001 }}>
-               <Select value={selectedBoxArrayType} onValueChange={handleBoxArrayTypeChange}>
-                  <SelectTrigger>
-                     <SelectValue>{selectedBoxArrayType}</SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                     {Object.keys(BOX_SIZES).map(arrayKey => (
-                        <SelectItem key={arrayKey} value={arrayKey}>
-                           {arrayKey}
-                        </SelectItem>
-                     ))}
-                  </SelectContent>
-               </Select>
-               <div id="elixr" className="w-full flex h-full">
-                  <ElixrModel pair={pair} streamData={streamData[pair]} />
+               {/* Selection and Elixr Model component */}
+               <div className="w-auto   flex-rows  gap-2 flex fixed left-0 top-40 p-4" style={{ zIndex: 1001 }}>
+                  <Select value={selectedBoxArrayType} onValueChange={handleBoxArrayTypeChange}>
+                     <SelectTrigger>
+                        <SelectValue>{selectedBoxArrayType}</SelectValue>
+                     </SelectTrigger>
+                     <SelectContent>
+                        {Object.keys(BOX_SIZES).map(arrayKey => (
+                           <SelectItem key={arrayKey} value={arrayKey}>
+                              {arrayKey}
+                           </SelectItem>
+                        ))}
+                     </SelectContent>
+                  </Select>
+                  <div id="elixr" className="w-full flex h-full">
+                     <ElixrModel pair={pair} streamData={streamData[pair]} />
+                  </div>
                </div>
             </div>
 

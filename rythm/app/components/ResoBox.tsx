@@ -27,7 +27,7 @@ const ResoBox: React.FC<BoxChartProps> = ({ boxArrays }) => {
 
       sortedData.forEach((d, index) => {
          // Set the base color based on whether the box moved up or down.
-         const fill = d.boxMovedUp ? 'rgb(91,226,186)' : 'rgb(200,100,104)';
+         const fill = d.boxMovedUp ? '#59cfc3' : '#cf598e';
 
          // Add the base color box.
          svg.append('rect')
@@ -77,8 +77,14 @@ const ResoBox: React.FC<BoxChartProps> = ({ boxArrays }) => {
 
       d3.select(svgRef.current).selectAll('*').remove();
 
-      const size = Math.min(containerWidth, 500);
-      const svg = d3.select(svgRef.current).attr('width', size).attr('height', size).append('g');
+      const padding = 40; // Adjust this value for desired padding
+      const size = containerWidth - padding * 2; // Subtract padding from both sides
+      const svg = d3
+         .select(svgRef.current)
+         .attr('width', size + padding * 2)
+         .attr('height', size + padding * 2)
+         .append('g')
+         .attr('transform', `translate(${padding}, ${padding})`); // Translate the g element by the padding amount
 
       const data = Object.entries(boxArrays)
          .map(([size, box]) => ({
@@ -111,7 +117,7 @@ const ResoBox: React.FC<BoxChartProps> = ({ boxArrays }) => {
    }, [boxArrays, containerWidth]);
 
    return (
-      <div ref={containerRef} className="w-full flex justify-center">
+      <div ref={containerRef} className="w-auto flex h-screen   pb-20 lg:pb-0 justify-center items-center">
          <svg ref={svgRef}></svg>
       </div>
    );
