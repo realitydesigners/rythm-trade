@@ -58,7 +58,7 @@ const ThreeDBox: React.FC<ThreeDBoxProps> = ({ boxArrays }) => {
          const numericKey = Number(key);
          const box = boxArrays[numericKey];
          const colorUp = '#59cfc3';
-         const colorDown = '#cf598e';
+         const colorDown = '#CF596E';
          const color = box.boxMovedUp ? colorUp : colorDown;
          const size: [number, number, number] = [box.rngSize - index * 0.1, box.rngSize - index * 0.1, box.rngSize - index * 0.1];
          const position: [number, number, number] = [0, 0, 0];
@@ -79,7 +79,7 @@ const ThreeDBox: React.FC<ThreeDBoxProps> = ({ boxArrays }) => {
             <RotatingDirectionalLight position={[10, 0, 10]} color={'rgb(255, 182, 193)'} intensity={1} />
 
             <pointLight position={[0, 3, 0]} color={'#59cfc3'} intensity={100} />
-            <pointLight position={[0, -3, 0]} color={'#cf598e'} intensity={100} />
+            <pointLight position={[0, -3, 0]} color={'#CF596E'} intensity={100} />
 
             <Center>
                <EffectComposer>

@@ -23,11 +23,11 @@ const ResoBox: React.FC<BoxChartProps> = ({ boxArrays }) => {
 
       // Apply a background color to the entire chart area that matches the last box's overlay
       // to create a smooth gradient effect across all boxes.
-      svg.append('rect').attr('width', size).attr('height', size).attr('fill', 'rgba(0,0,0,0.8)').attr('fill-opacity', maxOverlayOpacity);
+      svg.append('rect').attr('width', size).attr('height', size).attr('fill', 'rgba(#ffffff)').attr('fill-opacity', maxOverlayOpacity);
 
       sortedData.forEach((d, index) => {
          // Set the base color based on whether the box moved up or down.
-         const fill = d.boxMovedUp ? '#59cfc3' : '#cf598e';
+         const fill = d.boxMovedUp ? '#59cfc3' : '#CF596E';
 
          // Add the base color box.
          svg.append('rect')
