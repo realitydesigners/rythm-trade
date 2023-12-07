@@ -14,7 +14,7 @@ export const BOX_SIZES: Record<string, number[]> = {
 
    // old d: [300, 263, 230, 200, 176, 154, 134, 118, 103, 90, 79, 69, 60, 52, 46, 40, 35, 31, 27, 23, 20, 18, 16, 14, 12, 11, 10],
 
-   d: [10, 14, 20, 28, 40, 56, 80, 112, 160, 225, 320],
+   d: [10, 13, 17, 23, 31, 42, 56, 75, 100, 133],
 };
 export interface SymbolsToDigits {
    [key: string]: CurrencyPairDetails;

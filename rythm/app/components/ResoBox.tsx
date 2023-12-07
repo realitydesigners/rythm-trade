@@ -117,7 +117,7 @@ const ResoBox: React.FC<BoxChartProps> = ({ boxArrays }) => {
    }, [boxArrays, containerWidth]);
 
    return (
-      <div ref={containerRef} className="w-auto flex h-screen   pb-20 lg:pb-0 justify-center items-center">
+      <div ref={containerRef} className="w-auto flex h-auto   lg:pb-0 justify-center items-center">
          <svg ref={svgRef}></svg>
       </div>
    );
