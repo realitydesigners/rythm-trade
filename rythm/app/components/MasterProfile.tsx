@@ -1,30 +1,31 @@
+'use client';
 import React, { useEffect, useState } from 'react';
 import { useUser } from '@clerk/nextjs';
 import { Label } from '@/components/ui/label';
 
 const MasterProfile: React.FC = () => {
-  const [accountSummary, setAccountSummary] = useState<any>(null);
-  const { user } = useUser();
+   const [accountSummary, setAccountSummary] = useState<any>(null);
+   const { user } = useUser();
 
-  useEffect(() => {
-    const fetchAccountSummary = async () => {
-      if (user) {
-        const serverBaseUrl = process.env.NEXT_PUBLIC_SERVER_URL
-        try {
-          const response = await fetch(`${serverBaseUrl}/account/summary/${user.id}`);
-          if (!response.ok) {
-            throw new Error('Failed to fetch account summary');
-          }
-          const summary = await response.json();
-          setAccountSummary(summary);
-        } catch (error) {
-          console.error('Error fetching account summary:', error);
-        }
-      }
-    };
+   useEffect(() => {
+      const fetchAccountSummary = async () => {
+         if (user) {
+            const serverBaseUrl = process.env.NEXT_PUBLIC_SERVER_URL;
+            try {
+               const response = await fetch(`${serverBaseUrl}/account/summary/${user.id}`);
+               if (!response.ok) {
+                  throw new Error('Failed to fetch account summary');
+               }
+               const summary = await response.json();
+               setAccountSummary(summary);
+            } catch (error) {
+               console.error('Error fetching account summary:', error);
+            }
+         }
+      };
 
-    fetchAccountSummary();
-  }, [user]);
+      fetchAccountSummary();
+   }, [user]);
 
    return (
       <div>
