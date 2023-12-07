@@ -71,7 +71,7 @@ const ThreeDBox: React.FC<ThreeDBoxProps> = ({ boxArrays }) => {
    return (
       <div className="w-full h-[100vh]">
          <Canvas style={{ width: '100%', height: '100%' }}>
-            <PerspectiveCamera makeDefault position={[1.5, 0, 1.5]} fov={60} />
+            <PerspectiveCamera makeDefault position={[1, 0, 1]} fov={60} />
             <OrbitControls />
 
             <ambientLight intensity={5} color={'#fff'} receiveShadow={true} />
