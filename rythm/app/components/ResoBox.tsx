@@ -78,7 +78,7 @@ const ResoBox: React.FC<BoxChartProps> = ({ boxArrays }) => {
 
       d3.select(svgRef.current).selectAll('*').remove();
 
-      const padding = 80; // Adjust this value for desired padding
+      const padding = 20; // Adjust this value for desired padding
       const size = containerWidth - padding * 2; // Subtract padding from both sides
       const svg = d3
          .select(svgRef.current)
