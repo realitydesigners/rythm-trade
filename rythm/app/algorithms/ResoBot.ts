@@ -31,9 +31,7 @@ class ResoBot {
    private pairPositionSummary: any = null;
    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
    private positionSummary: any = null;
-   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
    private isProcessingTrade = false;
-   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 
    private isActive = false;
 

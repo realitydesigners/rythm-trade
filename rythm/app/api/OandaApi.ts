@@ -95,7 +95,7 @@ export class OandaApi {
       }
    }
    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-   private async makeRequest(url: string, method: 'get' | 'post' | 'put' = 'get', expectedStatusCode: number = 200, params: any = {}, data: any = {}): Promise<[boolean, any]> {
+   private async makeRequest(url: string, method: 'get' | 'post' | 'put' = 'get', expectedStatusCode = 200, params: any = {}, data: any = {}): Promise<[boolean, any]> {
       let full_url = `${this.oanda_url}/${url}`;
 
       const headers = {
@@ -144,6 +144,7 @@ export class OandaApi {
       console.error(`ERROR getAccountEP(${endpoint})`, data);
       return null;
    }
+   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
    private async getInstrumentEP(endpoint: string, params: any) {
       if (!this.api_key) {
          console.error('API key is missing.');
@@ -169,7 +170,7 @@ export class OandaApi {
       console.error('ERROR getAccounts()', data);
       return null;
    }
-   public async fetchLargeCandles(pairName: string, total_count: number = 6000, granularity: string = 'M1', price: string = 'MBA') {
+   public async fetchLargeCandles(pairName: string, total_count = 6000, granularity = 'M1', price = 'MBA') {
       if (!this.api_key || !this.account_id) {
          console.error('API key or account ID is missing.');
          return null;
@@ -218,7 +219,7 @@ export class OandaApi {
       return allCandles;
    }
 
-   public async fetchCandles(pairName: string, count: number = 10, granularity: string = 'H1', price: string = 'MBA', dateFrom: Date | null = null, dateTo: Date | null = null) {
+   public async fetchCandles(pairName: string, count = 10, granularity = 'H1', price = 'MBA', dateFrom: Date | null = null, dateTo: Date | null = null) {
       // Fetch candle data. Returns an array of candle data.
 
       const url = `instruments/${pairName}/candles`;
@@ -347,10 +348,7 @@ export class OandaApi {
 
    public async placeTrade(pairName: string, units: number, direction: number, orderType: 'MARKET' | 'LIMIT' = 'MARKET', price?: number, stopLossPrice?: number, takeProfitPrice?: number): Promise<string | null> {
       const url = `accounts/${this.account_id}/orders`;
-      units = Math.round(units);
-      if (direction === -1) {
-         units *= -1;
-      }
+      const adjustedUnits = direction === -1 ? Math.round(units) * -1 : Math.round(units);
 
       // Declare orderData with a flexible type
       // biome-ignore lint/suspicious/noExplicitAny: <explanation>

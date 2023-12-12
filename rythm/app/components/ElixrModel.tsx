@@ -41,7 +41,7 @@ const ElixrModel: React.FC<ElixrModelProps> = ({ pair, streamData }) => {
 	const findLocalExtrema = (
 		data: number[],
 		findMax: boolean,
-		numCandles: number = 5,
+		numCandles = 5,
 	): number[] => {
 		const extrema: number[] = [];
 		for (let i = numCandles; i < data.length - numCandles; i++) {

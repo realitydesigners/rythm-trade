@@ -29,24 +29,28 @@ const LineChart: React.FC<{ data: CandleData[] }> = ({ data }) => {
 
 	useEffect(() => {
 		if (!svgRef.current || !containerRef.current) return;
-		let container = d3.select(containerRef.current);
+		const container = d3.select(containerRef.current);
 
 		const { width, height, margin } = CHART_DIMENSIONS;
 
-		let x = d3
+		const x = d3
 			.scaleBand()
 			.rangeRound([margin.left, width - margin.right])
 			.padding(0.2);
-		let y = d3.scaleLinear().rangeRound([height - margin.bottom, margin.top]);
+		const y = d3.scaleLinear().rangeRound([height - margin.bottom, margin.top]);
 
 		x.domain(data.map((d) => d.time));
 		const dataRange =
+			// biome-ignore lint/style/noNonNullAssertion: <explanation>
 			d3.max(data, (d) => parseFloat(d.mid.h))! -
+			// biome-ignore lint/style/noNonNullAssertion: <explanation>
 			d3.min(data, (d) => parseFloat(d.mid.l))!;
 		const padding = dataRange * 0.05;
 
 		y.domain([
+			// biome-ignore lint/style/noNonNullAssertion: <explanation>
 			d3.min(data, (d) => parseFloat(d.mid.l))! - padding,
+			// biome-ignore lint/style/noNonNullAssertion: <explanation>
 			d3.max(data, (d) => parseFloat(d.mid.h))! + padding,
 		]);
 
@@ -105,18 +109,20 @@ const LineChart: React.FC<{ data: CandleData[] }> = ({ data }) => {
 			.attr("fill", "none")
 			.attr("stroke", LIGHT_THEME.lineColor)
 			.attr("strokeWidth", 1)
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			.attr("d", line as any);
 	}, [data]);
 
 	return (
 		<div className="w-full">
+			{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
 			<svg
 				ref={svgRef}
 				width={CHART_DIMENSIONS.width}
 				height={CHART_DIMENSIONS.height}
 			>
 				<g ref={containerRef}>
-					<g ref={chartAreaRef}></g>
+					<g ref={chartAreaRef} />
 				</g>
 			</svg>
 		</div>

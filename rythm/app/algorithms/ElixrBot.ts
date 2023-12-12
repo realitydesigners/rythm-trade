@@ -17,8 +17,8 @@ class ElixrBot {
    private pairPositionSummary: any = null;
    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
    private positionSummary: any = null;
-   private isProcessingTrade: boolean = false;
-   private isActive: boolean = false;
+   private isProcessingTrade = false;
+   private isActive = false;
 
    constructor(symbol: string, apiContext: OandaApi) {
       this.symbol = symbol;
