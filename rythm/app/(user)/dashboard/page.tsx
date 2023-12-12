@@ -195,17 +195,12 @@ const DashboardPage = () => {
 	}, [user]);
 
 	useEffect(() => {
-		// Update favorite pairs on the server only when there's a change
-		const updateFavoritePairsOnServer = async () => {
-			if (JSON.stringify(favoritePairs) !== JSON.stringify(initialFavorites)) {
-				await handleUpdateFavoritePairs(favoritePairs);
-			}
-		};
-
-		if (favoritePairs.length > 0) {
-			updateFavoritePairsOnServer();
-		}
-	}, [favoritePairs, handleUpdateFavoritePairs]);
+		const displayedFavorites = favoritePairs.slice(0, numDisplayedFavorites);
+		const filteredPairs = allPairs.filter(
+			(pair) => !displayedFavorites.includes(pair),
+		);
+		setCurrencyPairs(filteredPairs);
+	}, [favoritePairs, allPairs, numDisplayedFavorites]);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
