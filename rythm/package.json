@@ -56,5 +56,8 @@
     "uuid": "^9.0.1",
     "websocket": "^1.0.34",
     "ws": "^8.14.2"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.4.1"
   }
 }
