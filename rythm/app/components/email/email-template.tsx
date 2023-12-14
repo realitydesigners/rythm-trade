@@ -23,7 +23,7 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
 					Thanks For Reaching Out, <strong>{firstName}</strong>
 				</Heading>
 				<Text className="text-black text-[16px] leading-[24px]">
-					We'll get back to you with more information shortly.
+					We will get back to you with more information shortly.
 				</Text>
 			</Body>
 		</Tailwind>
