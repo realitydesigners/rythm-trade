@@ -7,6 +7,7 @@ import Scale from "@/public/icons/scale.svg";
 import Repeat from "@/public/icons/repeat.svg";
 import Quant from "@/public/icons/quant.svg";
 import Prop from "@/public/icons/prop.svg";
+import Newsletter from "@/app/components/email/Newsletter";
 import { staatliches, inter, jura } from "@/app/fonts";
 
 const featureData = [
@@ -57,16 +58,9 @@ const AboutPage = () => {
 					state-of-the-art technology, Rythm analyzes market patterns to help
 					make informed decisions that propel you towards a profitable future.
 				</p>
-				<div className="mt-10">
-					<div className="pt-8 ">
-						<Link
-							href="/about"
-							className={`${staatliches.className} text-xl uppercase inline-block bg-black hover:bg-gray-200 hover:text-black text-white font-bold py-2 px-8 border border-gray-600 rounded-lg transition duration-300 transform hover:scale-105`}
-						>
-							Join Beta v1.0
-						</Link>
-					</div>
-				</div>
+			</div>
+			<div className="w-full flex justify-center h-auto pb-20">
+				<Newsletter />
 			</div>
 
 			<section className="bg-black pt-20 pb-40 px-4 lg:px-20">
