@@ -5,30 +5,30 @@
 "use client";
 
 import React, {
-	useState,
-	useEffect,
-	useContext,
 	useCallback,
+	useContext,
+	useEffect,
 	useRef,
+	useState,
 } from "react";
 
-import { CandleData, Box, BoxArrays, StreamData } from "../../types";
+import { Button } from "../../components/ui/button";
+import { Box, BoxArrays, CandleData, StreamData } from "../../types";
+import { OandaApiContext } from "../api/OandaApi";
 import {
 	findCurrentPrice,
 	findHighest,
 	findLowest,
 } from "../api/priceAnalysis";
-import { OandaApiContext } from "../api/OandaApi";
 import {
+	BOX_SIZES,
 	SymbolsToDigits,
 	symbolsToDigits,
-	BOX_SIZES,
 } from "../utils/constants";
-import { Button } from "../../components/ui/button";
 
+import ResoBot from "@/app/algorithms/ResoBot";
 import ResoBox from "./ResoBox";
 import ThreeDBox from "./ThreeDBox";
-import ResoBot from "@/app/algorithms/ResoBot";
 
 interface ResoModelProps {
 	pair: string;
@@ -281,7 +281,7 @@ const ThreeDModel: React.FC<ResoModelProps> = ({
 			{initializationComplete ? (
 				<>
 					<div className="grid grid-cols-1 lg:grid-cols-2 w-full h-screen min-h-screen items-center justify-center gap-[1em] lg:pl-0 lg:pr-8 ">
-						<ThreeDBox boxArrays={boxArrays} />
+						{/* <ThreeDBox boxArrays={boxArrays} /> */}
 						<ResoBox boxArrays={boxArrays} />
 						<div className="w-full fixed top-56 left-4 ">
 							<Button onClick={toggleBot}>

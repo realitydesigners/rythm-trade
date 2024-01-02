@@ -1,24 +1,24 @@
 "use client";
 import { useUser } from "@clerk/nextjs";
 
-import React, { useState, useEffect, useContext } from "react";
-import { useParams } from "next/navigation";
-import Stream from "@/app/components/Stream";
-import MasterPosition from "@/app/components/MasterPosition";
 import { OandaApiContext, api } from "@/app/api/OandaApi";
 import ElixrModel from "@/app/components/ElixrModel";
+import MasterPosition from "@/app/components/MasterPosition";
+import Stream from "@/app/components/Stream";
 import ThreeDModel from "@/app/components/ThreeDModel";
+import { useParams } from "next/navigation";
+import React, { useContext, useEffect, useState } from "react";
 
+import { fetchPairPositionSummary } from "@/app/api/rest";
+import { closeWebSocket, connectWebSocket } from "@/app/api/websocket";
+import { BOX_SIZES } from "@/app/utils/constants";
 import {
 	Select,
-	SelectTrigger,
-	SelectValue,
 	SelectContent,
 	SelectItem,
+	SelectTrigger,
+	SelectValue,
 } from "@/components/ui/select";
-import { BOX_SIZES } from "@/app/utils/constants";
-import { closeWebSocket, connectWebSocket } from "@/app/api/websocket";
-import { fetchPairPositionSummary } from "@/app/api/rest";
 
 const PairPage = () => {
 	const { user } = useUser();
