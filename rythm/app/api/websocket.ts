@@ -4,42 +4,47 @@ let websocket: WebSocket | null = null;
 const websocketUrl = process.env.NEXT_PUBLIC_WEBSOCKET_URL as string;
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-export const connectWebSocket = (userId: string, onMessage: (data: any) => void, onError: (event: Event) => void, onClose: () => void) => {
-   if (websocket && websocket.readyState === WebSocket.OPEN) {
-      websocket.close();
-   }
+export const connectWebSocket = (
+	userId: string,
+	onMessage: (data: any) => void,
+	onError: (event: Event) => void,
+	onClose: () => void,
+) => {
+	if (websocket && websocket.readyState === WebSocket.OPEN) {
+		websocket.close();
+	}
 
-   websocket = new WebSocket(websocketUrl);
+	websocket = new WebSocket(websocketUrl);
 
-   websocket.onopen = () => {
-      console.log('WebSocket Connected');
-      sendWebSocketMessage({ userId }); // Send userId upon connection
-   };
+	websocket.onopen = () => {
+		console.log("WebSocket Connected");
+		sendWebSocketMessage({ userId }); // Send userId upon connection
+	};
 
-   websocket.onmessage = event => {
-      const data = JSON.parse(event.data);
-      onMessage(data);
-   };
+	websocket.onmessage = (event) => {
+		const data = JSON.parse(event.data);
+		onMessage(data);
+	};
 
-   websocket.onerror = event => {
-      console.error('WebSocket Error:', event);
-      onError(event);
-   };
+	websocket.onerror = (event) => {
+		console.error("WebSocket Error:", event);
+		onError(event);
+	};
 
-   websocket.onclose = () => {
-      console.log('WebSocket Disconnected');
-      onClose();
-   };
+	websocket.onclose = () => {
+		console.log("WebSocket Disconnected");
+		onClose();
+	};
 };
 
 export const closeWebSocket = () => {
-   if (websocket && websocket.readyState === WebSocket.OPEN) {
-      websocket.close();
-   }
+	if (websocket && websocket.readyState === WebSocket.OPEN) {
+		websocket.close();
+	}
 };
 
 export const sendWebSocketMessage = (message: object) => {
-   if (websocket && websocket.readyState === WebSocket.OPEN) {
-      websocket.send(JSON.stringify(message));
-   }
+	if (websocket && websocket.readyState === WebSocket.OPEN) {
+		websocket.send(JSON.stringify(message));
+	}
 };

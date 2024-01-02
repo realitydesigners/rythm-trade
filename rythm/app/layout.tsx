@@ -1,23 +1,26 @@
-import './globals.css';
-import type { Metadata } from 'next';
+import "./globals.css";
+import type { Metadata } from "next";
 
-import Navbar from '@/components/ui/Navbar';
-import { ClerkProvider } from '@clerk/nextjs';
+import Navbar from "@/components/ui/Navbar";
+import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
-   title: 'RYTHM - High Precision Algorithmic Trading',
-   description: 'A geometrical trading model inspired by fractal mathematics and multi-dimensional time series.',
+	title: "RYTHM - High Precision Algorithmic Trading",
+	description:
+		"A geometrical trading model inspired by fractal mathematics and multi-dimensional time series.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-   return (
-      <ClerkProvider>
-         <html lang="en">
-            <body className="bg-black">
-               <Navbar />
-               <div className="p-0">{children}</div>
-            </body>
-         </html>
-      </ClerkProvider>
-   );
+export default function RootLayout({
+	children,
+}: { children: React.ReactNode }) {
+	return (
+		<ClerkProvider>
+			<html lang="en">
+				<body className="bg-black">
+					<Navbar />
+					<div className="p-0">{children}</div>
+				</body>
+			</html>
+		</ClerkProvider>
+	);
 }

@@ -1,25 +1,26 @@
 {
-  "name": "ryver",
-  "version": "1.0.50",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
-  },
-  "dependencies": {
-    "@elysiajs/cors": "^0.7.2",
-    "@elysiajs/swagger": "^0.7.4",
-    "@prisma/client": "^5.6.0",
-    "axios": "^1.6.2",
-    "elysia": "latest",
-    "mysql2": "^3.6.5",
-    "prisma": "^5.6.0"
-  },
-  "devDependencies": {
-    "bun-types": "latest"
-  },
-  "module": "src/index.js",
-  "type": "module",
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  }
+	"name": "ryver",
+	"version": "1.0.50",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"dev": "bun run --watch src/index.ts",
+		"format": "biome format --write ./src"
+	},
+	"dependencies": {
+		"@elysiajs/cors": "^0.7.2",
+		"@elysiajs/swagger": "^0.7.4",
+		"@prisma/client": "^5.6.0",
+		"axios": "^1.6.2",
+		"elysia": "latest",
+		"mysql2": "^3.6.5",
+		"prisma": "^5.6.0"
+	},
+	"devDependencies": {
+		"bun-types": "latest"
+	},
+	"module": "src/index.js",
+	"type": "module",
+	"peerDependencies": {
+		"typescript": "^5.0.0"
+	}
 }
