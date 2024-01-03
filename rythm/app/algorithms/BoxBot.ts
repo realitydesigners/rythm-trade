@@ -1,6 +1,6 @@
 import { OandaApi } from "../api/OandaApi";
 
-class ElixrBot {
+class BoxBot {
 	private symbol: string;
 	private apiContext: OandaApi;
 	private dataFetchIntervalId: NodeJS.Timeout | null = null;
@@ -87,7 +87,7 @@ class ElixrBot {
 
 	onData(
 		currentPrice: number,
-		priceToElixrRatio: number,
+		priceToBoxRatio: number,
 		intersectingPrice: number,
 	) {
 		if (!this.isActive || this.isProcessingTrade) {
@@ -161,7 +161,7 @@ class ElixrBot {
 				if (
 					this.shouldSell(
 						currentPrice,
-						priceToElixrRatio,
+						priceToBoxRatio,
 						intersectingPrice,
 						shortUnits,
 					)
@@ -170,7 +170,7 @@ class ElixrBot {
 				} else if (
 					this.shouldBuy(
 						currentPrice,
-						priceToElixrRatio,
+						priceToBoxRatio,
 						intersectingPrice,
 						longUnits,
 					)
@@ -183,16 +183,16 @@ class ElixrBot {
 
 	shouldBuy(
 		currentPrice: number,
-		priceToElixrRatio: number,
+		priceToBoxRatio: number,
 		intersectingPrice: number,
 		longUnits: number,
 	): boolean {
 		const result =
-			(priceToElixrRatio === 0.0 || currentPrice < intersectingPrice) &&
+			(priceToBoxRatio === 0.0 || currentPrice < intersectingPrice) &&
 			longUnits === 0;
 		console.log("shouldBuy decision:", {
 			currentPrice,
-			priceToElixrRatio,
+			priceToBoxRatio,
 			intersectingPrice,
 			longUnits,
 			result,
@@ -202,16 +202,16 @@ class ElixrBot {
 
 	shouldSell(
 		currentPrice: number,
-		priceToElixrRatio: number,
+		priceToBoxRatio: number,
 		intersectingPrice: number,
 		shortUnits: number,
 	): boolean {
 		const result =
-			(priceToElixrRatio === 1.0 || currentPrice > intersectingPrice) &&
+			(priceToBoxRatio === 1.0 || currentPrice > intersectingPrice) &&
 			shortUnits === 0;
 		console.log("shouldSell decision:", {
 			currentPrice,
-			priceToElixrRatio,
+			priceToBoxRatio,
 			intersectingPrice,
 			shortUnits,
 			result,
@@ -220,4 +220,4 @@ class ElixrBot {
 	}
 }
 
-export default ElixrBot;
+export default BoxBot;

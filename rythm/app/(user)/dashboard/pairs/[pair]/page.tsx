@@ -2,7 +2,7 @@
 import { useUser } from "@clerk/nextjs";
 
 import { OandaApiContext, api } from "@/app/api/OandaApi";
-import ElixrModel from "@/app/components/ElixrModel";
+import BoxModel from "@/app/components/BoxModel";
 import MasterPosition from "@/app/components/MasterPosition";
 import Stream from "@/app/components/Stream";
 import ThreeDModel from "@/app/components/ThreeDModel";
@@ -126,7 +126,7 @@ const PairPage = () => {
 							</SelectContent>
 						</Select>
 						<div id="elixr" className="w-full flex h-full">
-							<ElixrModel pair={pair} streamData={streamData[pair]} />
+							<BoxModel pair={pair} streamData={streamData[pair]} />
 						</div>
 					</div>
 				</div>

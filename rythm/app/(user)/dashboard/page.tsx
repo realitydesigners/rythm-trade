@@ -31,7 +31,7 @@ import {
 	connectWebSocket,
 	sendWebSocketMessage,
 } from "../../api/websocket";
-import ElixrModel from "../../components/ElixrModel";
+import BoxModel from "../../components/BoxModel";
 import MasterPosition from "../../components/MasterPosition";
 import MasterProfile from "../../components/MasterProfile";
 import ResoModel from "../../components/ResoModel";
@@ -350,7 +350,7 @@ const DashboardPage = () => {
 									</SelectContent>
 								</Select>
 							</div>
-							<ElixrModel pair={pair} streamData={streamData[pair]} />
+							<BoxModel pair={pair} streamData={streamData[pair]} />
 						</div>
 					))}
 					<Select
