@@ -112,7 +112,7 @@ export class OandaApi {
 	private async makeRequest(
 		url: string,
 		method: "get" | "post" | "put" = "get",
-		expectedStatusCode: number = 200,
+		expectedStatusCode = 200,
 		params: any = {},
 		data: any = {},
 	): Promise<[boolean, any]> {
@@ -198,9 +198,9 @@ export class OandaApi {
 	}
 	public async fetchLargeCandles(
 		pairName: string,
-		total_count: number = 6000,
-		granularity: string = "M1",
-		price: string = "MBA",
+		total_count = 6000,
+		granularity = "M1",
+		price = "MBA",
 	) {
 		if (!this.api_key || !this.account_id) {
 			console.error("API key or account ID is missing.");
@@ -254,9 +254,9 @@ export class OandaApi {
 
 	public async fetchCandles(
 		pairName: string,
-		count: number = 10,
-		granularity: string = "H1",
-		price: string = "MBA",
+		count = 10,
+		granularity = "H1",
+		price = "MBA",
 		dateFrom: Date | null = null,
 		dateTo: Date | null = null,
 	) {
