@@ -1,6 +1,15 @@
 // src/api/rest.ts
 const serverBaseUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+const handleResponse = async (response: any) => {
+	if (!response.ok) {
+		const errorData = await response.text();
+		throw new Error(`Error: ${response.status}, ${errorData}`);
+	}
+	return response.json();
+};
+
 /**
  * Fetches favorite currency pairs for a given user.
  * @param {string} userId - The user's unique identifier.
@@ -11,13 +20,12 @@ const serverBaseUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export const fetchFavoritePairs = async (userId: any) => {
 	try {
+		console.log("Fetching favorite pairs for userId:", userId);
 		const response = await fetch(
 			`${serverBaseUrl}/forex-preferences/${userId}`,
 		);
-		if (!response.ok) {
-			throw new Error("Network response was not ok");
-		}
-		const data = await response.json();
+		const data = await handleResponse(response);
+		// Assuming data.pairs is an array of objects with a 'pair' property
 		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		return data.pairs.map((pair: { pair: any }) => pair.pair);
 	} catch (error) {
@@ -36,6 +44,7 @@ export const fetchFavoritePairs = async (userId: any) => {
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export const updateFavoritePairs = async (userId: any, newPairs: any) => {
 	try {
+		console.log("Updating favorite pairs for userId:", userId);
 		const response = await fetch(`${serverBaseUrl}/forex-preferences`, {
 			method: "POST",
 			headers: {
@@ -43,9 +52,7 @@ export const updateFavoritePairs = async (userId: any, newPairs: any) => {
 			},
 			body: JSON.stringify({ userId, pairs: newPairs }),
 		});
-		if (!response.ok) {
-			throw new Error("Network response was not ok");
-		}
+		await handleResponse(response);
 	} catch (error) {
 		console.error("Error updating favorite pairs:", error);
 		throw error;
