@@ -1,12 +1,7 @@
-let websocket: WebSocket | null = null;
-const websocketUrl = process.env.NEXT_PUBLIC_WEBSOCKET_URL as string;
+let websocket = null;
+const websocketUrl = process.env.NEXT_PUBLIC_WEBSOCKET_URL;
 
-export const connectWebSocket = (
-	userId: string,
-	onMessage: (data: any) => void,
-	onError: (event: Event) => void,
-	onClose: () => void,
-) => {
+export const connectWebSocket = (userId, onMessage, onError, onClose) => {
 	if (websocket && websocket.readyState === WebSocket.OPEN) {
 		websocket.close();
 	}
@@ -18,12 +13,12 @@ export const connectWebSocket = (
 		sendWebSocketMessage({ userId });
 	};
 
-	websocket.onmessage = (event: MessageEvent) => {
+	websocket.onmessage = (event) => {
 		const data = JSON.parse(event.data);
 		onMessage(data);
 	};
 
-	websocket.onerror = (event: Event) => {
+	websocket.onerror = (event) => {
 		console.error("WebSocket Error:", event);
 		onError(event);
 	};
@@ -40,7 +35,7 @@ export const closeWebSocket = () => {
 	}
 };
 
-export const sendWebSocketMessage = (message: object) => {
+export const sendWebSocketMessage = (message) => {
 	if (websocket && websocket.readyState === WebSocket.OPEN) {
 		websocket.send(JSON.stringify(message));
 	}
@@ -48,12 +43,8 @@ export const sendWebSocketMessage = (message: object) => {
 
 // Server-side code using Bun
 export const startWebSocketServer = () => {
-	if (typeof Bun === "undefined") {
-		return;
-	}
-
 	Bun.serve({
-		fetch(req: Request, server: any) {
+		fetch(req, server) {
 			if (req.headers.get("Upgrade") === "websocket") {
 				server.upgrade(req);
 				return;
@@ -61,22 +52,21 @@ export const startWebSocketServer = () => {
 			return new Response("Not a WebSocket request", { status: 400 });
 		},
 		websocket: {
-			open(ws: any) {
+			open(ws) {
 				console.log("WebSocket Connected with Bun");
 				ws.send(JSON.stringify({ message: "Connection established" }));
 			},
-			message(ws: any, message: string) {
+			message(ws, message) {
 				console.log("Message received:", message);
 				ws.send(message); // Echo back the message
 			},
-			close(ws: any) {
+			close(ws) {
 				console.log("WebSocket Disconnected");
 			},
 		},
 	});
 };
 
-// Usage
 if (typeof Bun !== "undefined") {
 	startWebSocketServer();
 }

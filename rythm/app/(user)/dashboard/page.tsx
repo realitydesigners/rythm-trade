@@ -1,28 +1,6 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
-import React, { useEffect, useState } from "react";
-import Stream from "../../components/Stream";
-import ResoModel from "../../components/ResoModel";
-import ElixrModel from "../../components/ElixrModel";
-import MasterProfile from "../../components/MasterProfile";
-import { OandaApiContext, api } from "../../api/OandaApi";
-import MasterPosition from "../../components/MasterPosition";
 import { Button } from "@/components/ui/button";
-import { BOX_SIZES } from "../../utils/constants";
-import { PositionData } from "@/types";
-import {
-	closeWebSocket,
-	connectWebSocket,
-	sendWebSocketMessage,
-} from "../../api/websocket";
-import {
-	Select,
-	SelectTrigger,
-	SelectValue,
-	SelectContent,
-	SelectItem,
-} from "@/components/ui/select";
 import {
 	Dialog,
 	DialogContent,
@@ -32,11 +10,33 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import {
-	fetchFavoritePairs,
-	updateFavoritePairs,
-	fetchInstruments,
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import { PositionData } from "@/types";
+import { useUser } from "@clerk/nextjs";
+import React, { useEffect, useState } from "react";
+import { OandaApiContext, api } from "../../api/OandaApi";
+import {
 	fetchAllPositions,
+	fetchFavoritePairs,
+	fetchInstruments,
+	updateFavoritePairs,
 } from "../../api/rest";
+import {
+	closeWebSocket,
+	connectWebSocket,
+	sendWebSocketMessage,
+} from "../../api/websocket";
+import ElixrModel from "../../components/ElixrModel";
+import MasterPosition from "../../components/MasterPosition";
+import MasterProfile from "../../components/MasterProfile";
+import ResoModel from "../../components/ResoModel";
+import Stream from "../../components/Stream";
+import { BOX_SIZES } from "../../utils/constants";
 
 const initialFavorites = [
 	"GBP_USD",

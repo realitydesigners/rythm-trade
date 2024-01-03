@@ -24,9 +24,11 @@ export class WebSocketServer {
 				return new Response("Not Found", { status: 404 });
 			},
 			websocket: {
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				open: (ws: ServerWebSocket<any>) => {
 					console.log("WebSocket connection opened");
 				},
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				close: (ws: ServerWebSocket<any>) => {
 					console.log("WebSocket connection closed");
 				},
