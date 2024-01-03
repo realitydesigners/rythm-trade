@@ -1,21 +1,35 @@
+import { cors } from "@elysiajs/cors";
+import { swagger } from "@elysiajs/swagger";
 // Main server file adjustments
 import { Context, Elysia, t } from "elysia";
-import { swagger } from "@elysiajs/swagger";
+import forexPreferenceRoutes from "./api/routes/forexPreferenceRoutes";
 import oandaRoutes from "./api/routes/oandaRoutes";
 import userRoutes from "./api/routes/userRoutes";
-import forexPreferenceRoutes from "./api/routes/forexPreferenceRoutes";
-import { cors } from "@elysiajs/cors";
 import { WebSocketServer } from "./services/websocketServer";
 
-const app = new Elysia()
-	.use(swagger())
-	.use(cors())
-	.use(oandaRoutes)
-	.use(userRoutes)
-	.use(forexPreferenceRoutes)
-	.listen(8080, () =>
-		console.log(`HTTP Server is running at http://localhost:8080`),
-	);
+const createServer = () => {
+	const app = new Elysia()
+		.use(swagger())
+		.use(cors())
+		.use(oandaRoutes)
+		.use(userRoutes)
+		.use(forexPreferenceRoutes);
+
+	return app;
+};
+
+const startServer = async () => {
+	const app = createServer();
+
+	// Define the port based on the environment (process.env.PORT for Vercel)
+	const port = process.env.PORT || 8080;
+
+	await app.listen(port);
+	console.log(`HTTP Server is running on port ${port}`);
+};
+
+const app = createServer();
+startServer();
 
 const websocketServer = new WebSocketServer();
 websocketServer.start();
