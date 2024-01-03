@@ -1,5 +1,5 @@
 // src/api/rest.ts
-const serverBaseUrl = process.env.NEXT_PUBLIC_SERVER_URL;
+const serverBaseUrl = "https://www.rythm.capital";
 
 /**
  * Fetches favorite currency pairs for a given user.

@@ -21,7 +21,6 @@ const createServer = () => {
 const startServer = async () => {
 	const app = createServer();
 
-	// Define the port based on the environment (process.env.PORT for Vercel)
 	const port = process.env.PORT || 8080;
 
 	await app.listen(port);
