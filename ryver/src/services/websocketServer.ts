@@ -1,5 +1,3 @@
-// src/services/WebSocketServer.ts
-
 import { Server, ServerWebSocket } from "bun";
 import { StreamingService } from "./streamingService";
 
@@ -11,9 +9,11 @@ export class WebSocketServer {
 	}
 
 	public start() {
-		console.log("Starting WebSocket Server on port 8081...");
+		const port = parseInt(process.env.PORT || "8081", 10);
+		console.log(`Starting WebSocket Server on port ${port}...`);
+
 		Bun.serve({
-			port: 8081,
+			port: port,
 			fetch: (req, server) => {
 				console.log(`Incoming request on ${req.url}`);
 				if (server.upgrade(req)) {
@@ -36,15 +36,12 @@ export class WebSocketServer {
 					const messageString =
 						message instanceof Buffer ? message.toString() : message;
 					try {
-						const { userId } = JSON.parse(messageString);
-						if (userId) {
-							this.streamingService.addClient(userId, ws);
-						}
-					} catch (error) {
-						console.error("Error parsing message:", error);
-					}
-					try {
 						const parsedMessage = JSON.parse(messageString);
+
+						if (parsedMessage.userId) {
+							this.streamingService.addClient(parsedMessage.userId, ws);
+						}
+
 						if (parsedMessage.userId && parsedMessage.favoritePairs) {
 							this.streamingService.handleFavoritePairsUpdate(
 								parsedMessage.userId,
