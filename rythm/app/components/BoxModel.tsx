@@ -1,6 +1,5 @@
 "use client";
 
-
 import { symbolsToDigits } from "@/app/utils/constants";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Button } from "../../components/ui/button";
@@ -38,7 +37,6 @@ const BoxModel: React.FC<PriceBoxModelProps> = ({ pair, streamData }) => {
 	const toggleBot = () => {
 		setBotActive(!botActive);
 	};
-
 
 	const findLocalExtrema = (
 		data: number[],
@@ -105,28 +103,26 @@ const BoxModel: React.FC<PriceBoxModelProps> = ({ pair, streamData }) => {
 	};
 	const calculatePriceBoxIntersection = (
 		boxMax: { intercept: number; slope: number },
-		boxMin: { intercept: number; slope: number }
+		boxMin: { intercept: number; slope: number },
 	) => {
 		if (
 			boxMax.slope === boxMin.slope ||
-			(boxMax.slope < boxMin.slope &&
-				boxMax.intercept < boxMin.intercept) ||
-			(boxMax.slope > boxMin.slope &&
-				boxMax.intercept > boxMin.intercept)
+			(boxMax.slope < boxMin.slope && boxMax.intercept < boxMin.intercept) ||
+			(boxMax.slope > boxMin.slope && boxMax.intercept > boxMin.intercept)
 		) {
 			return null;
 		}
 
 		const xIntersection =
-			(boxMin.intercept - boxMax.intercept) /
-			(boxMax.slope - boxMin.slope);
-		const intersectingPrice =
-			boxMax.slope * xIntersection + boxMax.intercept;
+			(boxMin.intercept - boxMax.intercept) / (boxMax.slope - boxMin.slope);
+		const intersectingPrice = boxMax.slope * xIntersection + boxMax.intercept;
 
 		return intersectingPrice;
-	}
+	};
 
-	const calculatePriceBoxes = (oandaData: CandleData[]): {
+	const calculatePriceBoxes = (
+		oandaData: CandleData[],
+	): {
 		priceBoxMax: PriceBox[];
 		priceBoxMin: PriceBox[];
 	} => {
@@ -154,15 +150,14 @@ const BoxModel: React.FC<PriceBoxModelProps> = ({ pair, streamData }) => {
 		}
 
 		const touchedPriceBoxMax = countTouches(highs, priceBoxMax).filter(
-			(priceBox) => priceBox.touches >= 10
+			(priceBox) => priceBox.touches >= 10,
 		);
 		const touchedPriceBoxMin = countTouches(lows, priceBoxMin).filter(
-			(priceBox) => priceBox.touches >= 10
+			(priceBox) => priceBox.touches >= 10,
 		);
 
 		return { priceBoxMax: touchedPriceBoxMax, priceBoxMin: touchedPriceBoxMin };
 	};
-
 
 	const calculateAveragePriceBox = (boxes: PriceBox[]): PriceBox => {
 		const numElixrs = boxes.length;
@@ -192,19 +187,20 @@ const BoxModel: React.FC<PriceBoxModelProps> = ({ pair, streamData }) => {
 		};
 	};
 
-	const generateMasterPriceBoxesAndUpdatePrice = (
-		oandaData: CandleData[]
-	) => {
+	const generateMasterPriceBoxesAndUpdatePrice = (oandaData: CandleData[]) => {
 		const boxes = calculatePriceBoxes(oandaData);
 
 		const averageBoxMax = calculateAveragePriceBox(boxes.priceBoxMax);
 		const averageBoxMin = calculateAveragePriceBox(boxes.priceBoxMin);
 
-		setPriceBoxes({ priceBoxMax: [averageBoxMax], priceBoxMin: [averageBoxMin] });
+		setPriceBoxes({
+			priceBoxMax: [averageBoxMax],
+			priceBoxMin: [averageBoxMin],
+		});
 
 		const intersectPrice = calculatePriceBoxIntersection(
 			averageBoxMax,
-			averageBoxMin
+			averageBoxMin,
 		);
 		if (intersectPrice !== null) {
 			setIntersectingPrice(intersectPrice);
@@ -237,8 +233,7 @@ const BoxModel: React.FC<PriceBoxModelProps> = ({ pair, streamData }) => {
 				const distanceToMax = Math.abs(currentPrice - maxBoxPrice);
 				const distanceToMin = Math.abs(currentPrice - minBoxPrice);
 				const totalDistance = distanceToMax + distanceToMin;
-				const ratio =
-					totalDistance > 0 ? distanceToMin / totalDistance : 0.5;
+				const ratio = totalDistance > 0 ? distanceToMin / totalDistance : 0.5;
 				setPriceToBoxRatio(ratio);
 			}
 		}
@@ -257,10 +252,7 @@ const BoxModel: React.FC<PriceBoxModelProps> = ({ pair, streamData }) => {
 			if (bidPrice !== null && askPrice !== null) {
 				const currentPrice = (bidPrice + askPrice) / 2;
 				setCurrentPrice(currentPrice);
-
-
 			}
-
 		}
 	}, [
 		streamData,
@@ -308,7 +300,6 @@ const BoxModel: React.FC<PriceBoxModelProps> = ({ pair, streamData }) => {
 				</>
 			) : (
 				<div className="w-full p-2 h-auto flex justify-center">
-
 					{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
 					<svg
 						width="25"
@@ -343,4 +334,3 @@ const BoxModel: React.FC<PriceBoxModelProps> = ({ pair, streamData }) => {
 };
 
 export default BoxModel;
-
