@@ -1,4 +1,4 @@
-import { OandaApi } from "../api/OandaApi";
+import { OandaApi } from "../../../ryver/src/services/OandaApi";
 
 class BoxBot {
 	private symbol: string;

@@ -1,5 +1,5 @@
 import { BoxArrays } from "@/types";
-import { OandaApi } from "../api/OandaApi";
+import { OandaApi } from "../../../ryver/src/services/OandaApi";
 
 enum TradeState {
 	Initialized = 0,

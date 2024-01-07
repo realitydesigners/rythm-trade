@@ -1,7 +1,10 @@
 "use client";
-import React, { useEffect, useState, useContext } from "react";
-import { OandaApiContext } from "../api/OandaApi";
 import { CandleData } from "@/types";
+import React, { Context, useContext, useEffect, useState } from "react";
+import {
+	OandaApi,
+	OandaApiContext,
+} from "../../../ryver/src/services/OandaApi";
 
 interface DataTableProps {
 	pair: string;
@@ -10,7 +13,7 @@ interface DataTableProps {
 function DataTable({ pair }: DataTableProps) {
 	const [data, setData] = useState<CandleData[]>([]);
 	const [loading, setLoading] = useState(true);
-	const api = useContext(OandaApiContext);
+	const api = useContext(OandaApiContext as Context<OandaApi | null>);
 
 	useEffect(() => {
 		const getData = async () => {
