@@ -1,6 +1,6 @@
 "use client";
 import { OandaApiContext, api } from "@/app/api/OandaApi";
-import { fetchPairPositionSummary } from "@/app/api/rest";
+import { fetchPairPosition } from "@/app/api/actions/fetchPositionData";
 import { closeWebSocket, connectWebSocket } from "@/app/api/websocket";
 import {
 	BoxModel,
@@ -15,6 +15,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/app/components/ui";
+
 import { BOX_SIZES } from "@/app/utils/constants";
 import { useUser } from "@clerk/nextjs";
 import { useParams } from "next/navigation";
@@ -55,24 +56,19 @@ const PairPage = () => {
 	const { user } = useUser();
 	const params = useParams();
 	const pair = Array.isArray(params.pair) ? params.pair[0] : params.pair || "";
-	const [positionData, setPositionData] = useState<Record<
-		string,
-		unknown
-	> | null>(null);
+	const [positionData, setPositionData] = useState(null);
 	const [selectedBoxArrayType, setSelectedBoxArrayType] = useState("d");
 	const streamData = useWebSocketData(user?.id, pair);
 
 	useEffect(() => {
-		const fetchPosition = async () => {
+		const getPositionData = async () => {
 			if (user?.id) {
-				const position = await fetchPairPositionSummary(user.id, pair);
+				const position = await fetchPairPosition(user.id, pair);
 				setPositionData(position);
 			}
 		};
 
-		fetchPosition();
-		const intervalId = setInterval(fetchPosition, 60000);
-		return () => clearInterval(intervalId);
+		getPositionData();
 	}, [user?.id, pair]);
 
 	const handleBoxArrayTypeChange = useCallback(
