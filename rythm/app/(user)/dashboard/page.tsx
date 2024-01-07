@@ -1,4 +1,5 @@
 "use client";
+import { fetchAllPairPositions } from "@/app/api/actions/fetchPositionData";
 import {
 	BoxModel,
 	MasterPosition,
@@ -22,7 +23,6 @@ import { useUser } from "@clerk/nextjs";
 import React, { useEffect, useState } from "react";
 import { OandaApiContext, api } from "../../api/OandaApi";
 import {
-	fetchAllPositions,
 	fetchFavoritePairs,
 	fetchInstruments,
 	updateFavoritePairs,
@@ -173,22 +173,15 @@ const DashboardPage = () => {
 
 	// Fetch position data periodically
 	useEffect(() => {
-		const fetchPositionData = async () => {
-			if (user) {
-				try {
-					const positions = await fetchAllPositions(user.id);
-					setPositionData(positions);
-				} catch (error) {
-					console.error("Error fetching positions:", error);
-				}
+		const getPositionData = async () => {
+			if (user?.id) {
+				const positions = await fetchAllPairPositions(user.id);
+				setPositionData(positions);
 			}
 		};
 
-		fetchPositionData();
-		const intervalId = setInterval(fetchPositionData, 60000);
-
-		return () => clearInterval(intervalId);
-	}, [user]);
+		getPositionData();
+	}, [user?.id]);
 
 	useEffect(() => {
 		const displayedFavorites = favoritePairs.slice(0, numDisplayedFavorites);
