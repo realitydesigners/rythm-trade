@@ -27,9 +27,6 @@
 		"**/*.ts",
 		"**/*.tsx",
 		".next/types/**/*.ts",
-		"app/components/email/Newsletter.jsx",
-		"app/api/send/route.js",
-		"app/api/websocket.js"
 	],
 	"exclude": ["node_modules"]
 }

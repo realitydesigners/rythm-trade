@@ -1,14 +1,14 @@
 "use client";
-import React from "react";
-import Link from "next/link";
-import Image from "next/image";
-import Secure from "@/public/icons/secure.svg";
-import Scale from "@/public/icons/scale.svg";
-import Repeat from "@/public/icons/repeat.svg";
-import Quant from "@/public/icons/quant.svg";
+import Newsletter from "@/app/api/send/Newsletter";
+import { jura, staatliches } from "@/app/fonts";
 import Prop from "@/public/icons/prop.svg";
-import Newsletter from "@/app/components/email/Newsletter";
-import { staatliches, inter, jura } from "@/app/fonts";
+import Quant from "@/public/icons/quant.svg";
+import Repeat from "@/public/icons/repeat.svg";
+import Scale from "@/public/icons/scale.svg";
+import Secure from "@/public/icons/secure.svg";
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
 
 const featureData = [
 	{

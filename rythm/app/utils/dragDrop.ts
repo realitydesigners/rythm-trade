@@ -3,8 +3,8 @@ export interface DragItem {
 	type: string;
 }
 const dragDrop = {
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	onDragEnd: (
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		result: { source: any; destination: any },
 		favoritePairs: Iterable<unknown> | ArrayLike<unknown>,
 		setFavoritePairs: (arg0: unknown[]) => void,

@@ -1,12 +1,12 @@
 "use client";
+import { staatliches } from "@/app/fonts";
 import React from "react";
-import { staatliches, jura } from "@/app/fonts";
 
 const EmailForm = () => {
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		const email = event.target.email.value;
-		const name = event.target.name.value; // New field for the name
+		const name = event.target.name.value;
 
 		try {
 			const response = await fetch("/api/send", {
@@ -14,7 +14,7 @@ const EmailForm = () => {
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ email, name }), // Include all data in the body
+				body: JSON.stringify({ email, name }),
 			});
 
 			const result = await response.json();
