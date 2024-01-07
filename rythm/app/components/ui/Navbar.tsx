@@ -120,8 +120,9 @@ export default function Navbar() {
 			<div
 				id="nav-content"
 				role="menu"
-				className={`absolute lg:relative top-0 left-0 w-full bg-black lg:bg-transparent lg:w-full  h-screen lg:h-auto items-center overflow-y-auto lg:overflow-y-visible  transition-transform duration-300 ease-in-out ${isNavOpen ? "translate-x-0" : "-translate-x-full"
-					} lg:translate-x-0 flex flex-col lg:flex-row lg:justify-evenly justify-center p-8 lg:p-0`}
+				className={`absolute lg:relative top-0 left-0 w-full bg-black lg:bg-transparent lg:w-full  h-screen lg:h-auto items-center overflow-y-auto lg:overflow-y-visible  transition-transform duration-300 ease-in-out ${
+					isNavOpen ? "translate-x-0" : "-translate-x-full"
+				} lg:translate-x-0 flex flex-col lg:flex-row lg:justify-evenly justify-center p-8 lg:p-0`}
 			>
 				<div className="w-auto  flex ">
 					<p

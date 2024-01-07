@@ -1,21 +1,22 @@
 "use client";
-
-import { Button } from "@/app/components/ui/button";
 import {
+	BoxModel,
+	MasterPosition,
+	MasterProfile,
+	ResoModel,
+	Stream,
+} from "@/app/components/index";
+import {
+	Button,
 	Dialog,
 	DialogContent,
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
 	DialogTrigger,
-} from "@/app/components/ui/dialog";
-import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/app/components/ui/select";
+} from "@/app/components/ui";
 import { PositionData } from "@/types";
 import { useUser } from "@clerk/nextjs";
 import React, { useEffect, useState } from "react";
@@ -31,11 +32,6 @@ import {
 	connectWebSocket,
 	sendWebSocketMessage,
 } from "../../api/websocket";
-import BoxModel from "../../components/BoxModel";
-import MasterPosition from "../../components/MasterPosition";
-import MasterProfile from "../../components/MasterProfile";
-import ResoModel from "../../components/ResoModel";
-import Stream from "../../components/Stream";
 import { BOX_SIZES } from "../../utils/constants";
 
 const initialFavorites = [

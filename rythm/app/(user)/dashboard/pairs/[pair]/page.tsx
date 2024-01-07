@@ -1,25 +1,20 @@
 "use client";
-import { useUser } from "@clerk/nextjs";
-
 import { OandaApiContext, api } from "@/app/api/OandaApi";
-import BoxModel from "@/app/components/BoxModel";
-import MasterPosition from "@/app/components/MasterPosition";
-import Stream from "@/app/components/Stream";
-import ThreeDModel from "@/app/components/ThreeDModel";
-import { useParams } from "next/navigation";
-import React, { useContext, useEffect, useState } from "react";
-
 import { fetchPairPositionSummary } from "@/app/api/rest";
 import { closeWebSocket, connectWebSocket } from "@/app/api/websocket";
+import ThreeDModel from "@/app/components/ThreeDModel";
+import { BoxModel, MasterPosition, Stream } from "@/app/components/index";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/app/components/ui/select";
+} from "@/app/components/ui";
 import { BOX_SIZES } from "@/app/utils/constants";
-
+import { useUser } from "@clerk/nextjs";
+import { useParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 const PairPage = () => {
 	const { user } = useUser();

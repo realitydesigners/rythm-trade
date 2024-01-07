@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/app/components/ui/button"
+import { Button } from "@/app/components/ui/button";
 import { symbolsToDigits } from "@/app/utils/constants";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { CandleData, StreamData } from "../../types";

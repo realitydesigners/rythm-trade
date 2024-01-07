@@ -56,7 +56,7 @@ const ResoBox: React.FC<BoxChartProps> = ({ boxArrays }) => {
 			let overlayOpacity =
 				minOverlayOpacity +
 				(maxOverlayOpacity - minOverlayOpacity) *
-				(index / (sortedData.length - 1));
+					(index / (sortedData.length - 1));
 
 			// Add the white overlay box.
 			svg
