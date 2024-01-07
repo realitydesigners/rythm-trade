@@ -1,5 +1,5 @@
-import { DatabaseService } from "./DatabaseService";
 import { ServerWebSocket } from "bun";
+import { DatabaseService } from "./DatabaseService";
 import { OandaApi } from "./OandaApi";
 
 export class StreamingService {
@@ -50,7 +50,12 @@ export class StreamingService {
 		const pairsToUnsubscribe = currentPairs.filter(
 			(p) => !newPairs.includes(p),
 		);
-		await oandaApi.unsubscribeFromPairs(pairsToUnsubscribe);
+		if (pairsToUnsubscribe.length > 0) {
+			await oandaApi.unsubscribeFromPairs(pairsToUnsubscribe);
+			for (const p of pairsToUnsubscribe) {
+				this.activeStreams.delete(p);
+			}
+		}
 
 		// Subscribe to new pairs in preferences
 		const pairsToSubscribe = newPairs.filter(
@@ -106,11 +111,20 @@ export class StreamingService {
 		pairs: string[],
 		oandaApi: OandaApi,
 	) {
+		// Add pairs to active streams
+		for (const p of pairs) {
+			this.activeStreams.add(p);
+		}
+
 		oandaApi.subscribeToPairs(pairs, (data, pair) => {
-			pairs.forEach((p) => this.activeStreams.add(p));
 			const client = this.clients.get(userId);
 			if (client && client.readyState === WebSocket.OPEN) {
-				client.send(JSON.stringify({ pair, data }));
+				try {
+					client.send(JSON.stringify({ pair, data }));
+				} catch (error) {
+					console.error(`Error sending data to client for ${userId}:`, error);
+					// Handle error (e.g., remove client, stop streaming for this client)
+				}
 			}
 		});
 	}
