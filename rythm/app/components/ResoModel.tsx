@@ -5,6 +5,7 @@
 "use client";
 
 import React, {
+	Context,
 	useCallback,
 	useContext,
 	useEffect,
@@ -13,8 +14,11 @@ import React, {
 } from "react";
 
 import { Button } from "@/app/components/ui/button";
+import {
+	OandaApi,
+	OandaApiContext,
+} from "../../../ryver/src/services/OandaApi";
 import { Box, BoxArrays, CandleData, StreamData } from "../../types";
-import { OandaApiContext } from "../api/OandaApi";
 import {
 	findCurrentPrice,
 	findHighest,
@@ -56,7 +60,8 @@ const ResoModel: React.FC<ResoModelProps> = ({
 	streamData,
 	selectedBoxArrayType,
 }) => {
-	const api = useContext(OandaApiContext);
+	const api = useContext(OandaApiContext as Context<OandaApi | null>);
+
 	const [currentClosePrice, setCurrentClosePrice] = useState<number | null>(
 		null,
 	);

@@ -1,5 +1,4 @@
 "use client";
-import { OandaApiContext, api } from "@/app/api/OandaApi";
 import { fetchPairPosition } from "@/app/api/actions/fetchPositionData";
 import { closeWebSocket, connectWebSocket } from "@/app/api/websocket";
 import {
@@ -15,6 +14,10 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/app/components/ui";
+import {
+	OandaApiContext,
+	api,
+} from "../../../../../../ryver/src/services/OandaApi";
 
 import { BOX_SIZES } from "@/app/utils/constants";
 import { useUser } from "@clerk/nextjs";

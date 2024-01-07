@@ -5,6 +5,7 @@
 "use client";
 
 import React, {
+	Context,
 	useCallback,
 	useContext,
 	useEffect,
@@ -13,8 +14,11 @@ import React, {
 } from "react";
 
 import { Button } from "@/app/components/ui/button";
+import {
+	OandaApi,
+	OandaApiContext,
+} from "../../../ryver/src/services/OandaApi";
 import { Box, BoxArrays, CandleData, StreamData } from "../../types";
-import { OandaApiContext } from "../api/OandaApi";
 import {
 	findCurrentPrice,
 	findHighest,
@@ -56,7 +60,8 @@ const ThreeDModel: React.FC<ResoModelProps> = ({
 	streamData,
 	selectedBoxArrayType,
 }) => {
-	const api = useContext(OandaApiContext);
+	const api = useContext(OandaApiContext as Context<OandaApi | null>);
+
 	const [currentClosePrice, setCurrentClosePrice] = useState<number | null>(
 		null,
 	);
@@ -73,23 +78,7 @@ const ThreeDModel: React.FC<ResoModelProps> = ({
 			setBotActive(!botActive); // Toggle the bot active state
 		}
 	};
-	useEffect(() => {
-		if (api) {
-			resoInstance.current = new ResoBot(pair, api);
 
-			// Check if the instance is not null before calling the method
-			if (resoInstance.current) {
-				resoInstance.current.startDataCollection();
-			}
-
-			// Cleanup function to stop data collection when the component unmounts
-			return () => {
-				if (resoInstance.current) {
-					resoInstance.current.stopDataCollection();
-				}
-			};
-		}
-	}, [api, pair]);
 	// calculateAllBoxes: Calculates the high and low values for each box size based on the candle data.
 	const calculateAllBoxes = useCallback(
 		(C: number, oandaData: CandleData[], boxSizeMap: Map<number, number>) => {

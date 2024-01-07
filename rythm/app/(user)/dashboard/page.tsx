@@ -21,7 +21,7 @@ import {
 import { PositionData } from "@/types";
 import { useUser } from "@clerk/nextjs";
 import React, { useEffect, useState } from "react";
-import { OandaApiContext, api } from "../../api/OandaApi";
+import { OandaApiContext, api } from "../../../../ryver/src/services/OandaApi";
 import {
 	fetchFavoritePairs,
 	fetchInstruments,

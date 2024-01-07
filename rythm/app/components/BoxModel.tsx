@@ -2,9 +2,12 @@
 
 import { Button } from "@/app/components/ui/button";
 import { symbolsToDigits } from "@/app/utils/constants";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { Context, useContext, useEffect, useRef, useState } from "react";
+import {
+	OandaApi,
+	OandaApiContext,
+} from "../../../ryver/src/services/OandaApi";
 import { CandleData, StreamData } from "../../types";
-import { OandaApiContext } from "../api/OandaApi";
 
 interface PriceBoxModelProps {
 	pair: string;
@@ -20,7 +23,8 @@ interface PriceBox {
 }
 
 const BoxModel: React.FC<PriceBoxModelProps> = ({ pair, streamData }) => {
-	const api = useContext(OandaApiContext);
+	const api = useContext(OandaApiContext as Context<OandaApi | null>);
+
 	const priceBoxInstance = useRef<PriceBox | null>(null);
 
 	const [initializationComplete, setInitializationComplete] =
