@@ -2,8 +2,12 @@
 import { OandaApiContext, api } from "@/app/api/OandaApi";
 import { fetchPairPositionSummary } from "@/app/api/rest";
 import { closeWebSocket, connectWebSocket } from "@/app/api/websocket";
-import ThreeDModel from "@/app/components/ThreeDModel";
-import { BoxModel, MasterPosition, Stream } from "@/app/components/index";
+import {
+	BoxModel,
+	MasterPosition,
+	Stream,
+	ThreeDModel,
+} from "@/app/components/index";
 import {
 	Select,
 	SelectContent,
@@ -14,129 +18,163 @@ import {
 import { BOX_SIZES } from "@/app/utils/constants";
 import { useUser } from "@clerk/nextjs";
 import { useParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
-const PairPage = () => {
-	const { user } = useUser();
-
-	const params = useParams();
-
-	const pair = Array.isArray(params.pair) ? params.pair[0] : params.pair || "";
+type CommonComponentProps = {
+	pair: string;
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	const [streamData, setStreamData] = useState<{ [pair: string]: any }>({});
-	const [positionData, setPositionData] = useState(null);
-	// State for selected box array type
-	const [selectedBoxArrayType, setSelectedBoxArrayType] = useState<string>("d");
+	data: any;
+	selectedBoxArrayType?: string;
+	onBoxArrayTypeChange?: (newType: string) => void;
+};
 
-	// Function to handle change in selected box array type
-	const handleBoxArrayTypeChange = (newType: string) => {
-		setSelectedBoxArrayType(newType);
-	};
+const useWebSocketData = (userId: string | undefined, pair: string) => {
+	const [streamData, setStreamData] = useState<Record<string, unknown>>({});
+
 	useEffect(() => {
 		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		const handleWebSocketMessage = (message: any) => {
-			const { data, pair } = message;
-			if (data.type !== "HEARTBEAT") {
-				setStreamData((prevData) => ({
-					...prevData,
-					[pair]: data,
-				}));
+			const { data } = message;
+			if (data?.type !== "HEARTBEAT") {
+				setStreamData((prevData) => ({ ...prevData, [pair]: data }));
 			}
 		};
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-		const handleWebSocketError = (event: any) => {
-			console.error("WebSocket Error:", event);
-		};
 
-		const handleWebSocketClose = () => {
-			console.log("WebSocket Disconnected");
-		};
-
-		if (user) {
-			connectWebSocket(
-				user.id,
-				handleWebSocketMessage,
-				handleWebSocketError,
-				handleWebSocketClose,
+		if (userId) {
+			connectWebSocket(userId, handleWebSocketMessage, console.error, () =>
+				console.log("WebSocket Disconnected"),
 			);
+			return () => closeWebSocket();
 		}
+	}, [userId, pair]);
 
-		return () => {
-			closeWebSocket();
-		};
-	}, [user]);
+	return streamData;
+};
+
+const PairPage = () => {
+	const { user } = useUser();
+	const params = useParams();
+	const pair = Array.isArray(params.pair) ? params.pair[0] : params.pair || "";
+	const [positionData, setPositionData] = useState<Record<
+		string,
+		unknown
+	> | null>(null);
+	const [selectedBoxArrayType, setSelectedBoxArrayType] = useState("d");
+	const streamData = useWebSocketData(user?.id, pair);
 
 	useEffect(() => {
-		if (user) {
-			const fetchPosition = async () => {
+		const fetchPosition = async () => {
+			if (user?.id) {
 				const position = await fetchPairPositionSummary(user.id, pair);
-				console.log(position);
 				setPositionData(position);
-			};
+			}
+		};
 
-			fetchPosition();
-			const intervalId = setInterval(fetchPosition, 60000);
+		fetchPosition();
+		const intervalId = setInterval(fetchPosition, 60000);
+		return () => clearInterval(intervalId);
+	}, [user?.id, pair]);
 
-			return () => {
-				clearInterval(intervalId);
-			};
-		}
-	}, [pair, user]);
+	const handleBoxArrayTypeChange = useCallback(
+		(newType: string) => setSelectedBoxArrayType(newType),
+		[],
+	);
 
 	return (
 		<OandaApiContext.Provider value={api}>
 			<div className="w-full relative z-0">
-				{/* Top component */}
-				<div className="w-full top-20 fixed z-30 pl-6 pr-6">
-					<Stream pair={pair} data={streamData[pair]} />
-				</div>
-
-				{/* 3D Model component */}
-				<div className="w-full">
-					<div id="three" className="w-full flex h-screen absolute z-10">
-						<ThreeDModel
-							pair={pair}
-							streamData={streamData[pair]}
-							selectedBoxArrayType={selectedBoxArrayType}
-						/>
-					</div>
-
-					{/* Selection and Elixr Model component */}
-					<div
-						className="w-auto   flex-rows  gap-2 flex fixed left-0 top-40 p-4"
-						style={{ zIndex: 1001 }}
-					>
-						<Select
-							value={selectedBoxArrayType}
-							onValueChange={handleBoxArrayTypeChange}
-						>
-							<SelectTrigger>
-								<SelectValue>{selectedBoxArrayType}</SelectValue>
-							</SelectTrigger>
-							<SelectContent>
-								{Object.keys(BOX_SIZES).map((arrayKey) => (
-									<SelectItem key={arrayKey} value={arrayKey}>
-										{arrayKey}
-									</SelectItem>
-								))}
-							</SelectContent>
-						</Select>
-						<div id="elixr" className="w-full flex h-full">
-							<BoxModel pair={pair} streamData={streamData[pair]} />
-						</div>
-					</div>
-				</div>
-
-				{/* Master Position component */}
-				<div className="w-full fixed bottom-0 " style={{ zIndex: 1000 }}>
-					<div className="w-full p-2 lg:p-4">
-						{positionData && <MasterPosition positionData={[positionData]} />}
-						{!positionData && <p>No position data available for {pair}</p>}
-					</div>
-				</div>
+				<StreamSection pair={pair} data={streamData[pair]} />
+				<ThreeDModelSection
+					pair={pair}
+					data={streamData[pair]}
+					selectedBoxArrayType={selectedBoxArrayType}
+				/>
+				<BoxModelSection
+					pair={pair}
+					data={streamData[pair]}
+					selectedBoxArrayType={selectedBoxArrayType}
+					onBoxArrayTypeChange={handleBoxArrayTypeChange}
+				/>
+				<MasterPositionSection data={positionData} pair={""} />
 			</div>
 		</OandaApiContext.Provider>
 	);
 };
+
+const StreamSection: React.FC<CommonComponentProps> = ({ pair, data }) => (
+	<div className="w-full top-20 fixed z-30 pl-6 pr-6">
+		<Stream pair={pair} data={data} />
+	</div>
+);
+
+const ThreeDModelSection: React.FC<CommonComponentProps> = ({
+	pair,
+	data,
+	selectedBoxArrayType,
+}) => (
+	<div className="w-full">
+		<div id="three" className="w-full flex h-screen absolute z-10">
+			<ThreeDModel
+				pair={pair}
+				streamData={data}
+				selectedBoxArrayType={selectedBoxArrayType || ""}
+			/>
+		</div>
+	</div>
+);
+
+const BoxModelSection: React.FC<CommonComponentProps> = ({
+	pair,
+	data,
+	selectedBoxArrayType,
+	onBoxArrayTypeChange,
+}) => (
+	<div className="w-full">
+		<SelectBoxArrayType
+			selectedBoxArrayType={selectedBoxArrayType}
+			onBoxArrayTypeChange={onBoxArrayTypeChange}
+			pair={""}
+			data={undefined}
+		/>
+		<div id="elixr" className="w-full flex h-full">
+			<BoxModel pair={pair} streamData={data} />
+		</div>
+	</div>
+);
+
+const SelectBoxArrayType: React.FC<CommonComponentProps> = ({
+	selectedBoxArrayType,
+	onBoxArrayTypeChange,
+}) => (
+	<div
+		className="flex-rows gap-2 flex fixed left-0 top-40 p-4"
+		style={{ zIndex: 1001 }}
+	>
+		<Select value={selectedBoxArrayType} onValueChange={onBoxArrayTypeChange}>
+			<SelectTrigger>
+				<SelectValue>{selectedBoxArrayType}</SelectValue>
+			</SelectTrigger>
+			<SelectContent>
+				{Object.keys(BOX_SIZES).map((arrayKey) => (
+					<SelectItem key={arrayKey} value={arrayKey}>
+						{arrayKey}
+					</SelectItem>
+				))}
+			</SelectContent>
+		</Select>
+	</div>
+);
+
+const MasterPositionSection: React.FC<CommonComponentProps> = ({ data }) => (
+	<div className="w-full fixed bottom-0" style={{ zIndex: 1000 }}>
+		<div className="w-full p-2 lg:p-4">
+			{data ? (
+				<MasterPosition positionData={[data]} />
+			) : (
+				<p>No position data available.</p>
+			)}
+		</div>
+	</div>
+);
 
 export default PairPage;
