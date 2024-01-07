@@ -1,8 +1,8 @@
 "use client";
 
+import { Button } from "@/app/components/ui/button"
 import { symbolsToDigits } from "@/app/utils/constants";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Button } from "../../components/ui/button";
 import { CandleData, StreamData } from "../../types";
 import { OandaApiContext } from "../api/OandaApi";
 

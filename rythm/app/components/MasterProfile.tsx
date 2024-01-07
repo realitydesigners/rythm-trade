@@ -1,7 +1,7 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { Label } from "@/app/components/ui/label";
 import { useUser } from "@clerk/nextjs";
-import { Label } from "@/components/ui/label";
+import React, { useEffect, useState } from "react";
 
 const MasterProfile: React.FC = () => {
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>

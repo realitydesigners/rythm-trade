@@ -19,6 +19,7 @@ export interface StreamData {
 }
 
 export interface Price {
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	value: any;
 	bid: string | null;
 	ask: string | null;

@@ -12,7 +12,7 @@ import React, {
 	useState,
 } from "react";
 
-import { Button } from "../../components/ui/button";
+import { Button } from "@/app/components/ui/button"
 import { Box, BoxArrays, CandleData, StreamData } from "../../types";
 import { OandaApiContext } from "../api/OandaApi";
 import {

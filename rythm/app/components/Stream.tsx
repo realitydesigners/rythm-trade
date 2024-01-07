@@ -1,6 +1,6 @@
-import React from "react";
-import { Label } from "@/components/ui/label";
+import { Label } from "@/app/components/ui/label";
 import { StreamData } from "@/types";
+import React from "react";
 
 interface StreamProps {
 	pair: string;

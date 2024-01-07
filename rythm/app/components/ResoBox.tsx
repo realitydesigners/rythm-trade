@@ -1,6 +1,6 @@
 "use client";
-import React, { useEffect, useRef, useState, useCallback } from "react";
 import * as d3 from "d3";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { BoxArrays } from "../../types";
 
 interface BoxChartProps {
@@ -56,7 +56,7 @@ const ResoBox: React.FC<BoxChartProps> = ({ boxArrays }) => {
 			let overlayOpacity =
 				minOverlayOpacity +
 				(maxOverlayOpacity - minOverlayOpacity) *
-					(index / (sortedData.length - 1));
+				(index / (sortedData.length - 1));
 
 			// Add the white overlay box.
 			svg

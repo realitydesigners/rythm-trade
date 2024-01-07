@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
@@ -8,14 +8,14 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@/app/components/ui/dialog";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/ui/select";
+} from "@/app/components/ui/select";
 import { PositionData } from "@/types";
 import { useUser } from "@clerk/nextjs";
 import React, { useEffect, useState } from "react";

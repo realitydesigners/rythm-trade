@@ -11,14 +11,15 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { fetchPairPositionSummary } from "@/app/api/rest";
 import { closeWebSocket, connectWebSocket } from "@/app/api/websocket";
-import { BOX_SIZES } from "@/app/utils/constants";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/ui/select";
+} from "@/app/components/ui/select";
+import { BOX_SIZES } from "@/app/utils/constants";
+
 
 const PairPage = () => {
 	const { user } = useUser();
