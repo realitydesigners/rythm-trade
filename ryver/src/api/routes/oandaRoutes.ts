@@ -26,4 +26,18 @@ router.get("/pair-position-summary/:userId/:pair", async (context) => {
 	const { userId, pair } = context.params;
 	return await oandaController.getPairPositionSummary(userId, pair);
 });
+
+router.get("/candles/:userId/:pair", async (context) => {
+	const { userId, pair } = context.params;
+
+	if (typeof userId !== "string" || typeof pair !== "string") {
+		return { error: "Invalid userId or pair" };
+	}
+
+	const count = parseInt(context.query.count as string) || 300;
+	const granularity = (context.query.granularity as string) || "M1";
+
+	return await oandaController.fetchCandles(userId, pair, count, granularity);
+});
+
 export default router;

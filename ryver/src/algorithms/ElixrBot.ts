@@ -1,6 +1,6 @@
-import { OandaApi } from "../../../ryver/src/services/OandaApi";
+import { OandaApi } from "../api/OandaApi";
 
-class BoxBot {
+class ElixrBot {
 	private symbol: string;
 	private apiContext: OandaApi;
 	private dataFetchIntervalId: NodeJS.Timeout | null = null;
@@ -11,14 +11,11 @@ class BoxBot {
 	private marginCloseoutPercent: number | null = null;
 	private unitsLong: number | null = null;
 	private unitsShort: number | null = null;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	private accountSummary: any = null;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	private pairPositionSummary: any = null;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	private positionSummary: any = null;
-	private isProcessingTrade = false;
-	private isActive = false;
+	private isProcessingTrade: boolean = false;
+	private isActive: boolean = false;
 
 	constructor(symbol: string, apiContext: OandaApi) {
 		this.symbol = symbol;
@@ -28,7 +25,7 @@ class BoxBot {
 	toggleActive() {
 		this.isActive = !this.isActive;
 	}
-	public async startDataCollection(interval = 10000) {
+	public async startDataCollection(interval: number = 10000) {
 		this.stopDataCollection();
 
 		await this.fetchData();
@@ -87,7 +84,7 @@ class BoxBot {
 
 	onData(
 		currentPrice: number,
-		priceToBoxRatio: number,
+		priceToElixrRatio: number,
 		intersectingPrice: number,
 	) {
 		if (!this.isActive || this.isProcessingTrade) {
@@ -161,7 +158,7 @@ class BoxBot {
 				if (
 					this.shouldSell(
 						currentPrice,
-						priceToBoxRatio,
+						priceToElixrRatio,
 						intersectingPrice,
 						shortUnits,
 					)
@@ -170,7 +167,7 @@ class BoxBot {
 				} else if (
 					this.shouldBuy(
 						currentPrice,
-						priceToBoxRatio,
+						priceToElixrRatio,
 						intersectingPrice,
 						longUnits,
 					)
@@ -183,16 +180,16 @@ class BoxBot {
 
 	shouldBuy(
 		currentPrice: number,
-		priceToBoxRatio: number,
+		priceToElixrRatio: number,
 		intersectingPrice: number,
 		longUnits: number,
 	): boolean {
 		const result =
-			(priceToBoxRatio === 0.0 || currentPrice < intersectingPrice) &&
+			(priceToElixrRatio === 0.0 || currentPrice < intersectingPrice) &&
 			longUnits === 0;
-		console.log("shouldBuy decision:", {
+		console.log(`shouldBuy decision:`, {
 			currentPrice,
-			priceToBoxRatio,
+			priceToElixrRatio,
 			intersectingPrice,
 			longUnits,
 			result,
@@ -202,16 +199,16 @@ class BoxBot {
 
 	shouldSell(
 		currentPrice: number,
-		priceToBoxRatio: number,
+		priceToElixrRatio: number,
 		intersectingPrice: number,
 		shortUnits: number,
 	): boolean {
 		const result =
-			(priceToBoxRatio === 1.0 || currentPrice > intersectingPrice) &&
+			(priceToElixrRatio === 1.0 || currentPrice > intersectingPrice) &&
 			shortUnits === 0;
-		console.log("shouldSell decision:", {
+		console.log(`shouldSell decision:`, {
 			currentPrice,
-			priceToBoxRatio,
+			priceToElixrRatio,
 			intersectingPrice,
 			shortUnits,
 			result,
@@ -220,4 +217,4 @@ class BoxBot {
 	}
 }
 
-export default BoxBot;
+export default ElixrBot;

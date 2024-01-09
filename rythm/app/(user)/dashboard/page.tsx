@@ -1,7 +1,6 @@
 "use client";
 import { fetchAllPairPositions } from "@/app/api/actions/fetchPositionData";
 import {
-	BoxModel,
 	MasterPosition,
 	MasterProfile,
 	ResoModel,
@@ -17,11 +16,10 @@ import {
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/app/components/ui";
+} from "@/app/components/ui/index";
 import { PositionData } from "@/types";
 import { useUser } from "@clerk/nextjs";
 import React, { useEffect, useState } from "react";
-import { OandaApiContext, api } from "../../../../ryver/src/services/OandaApi";
 import {
 	fetchFavoritePairs,
 	fetchInstruments,
@@ -270,7 +268,8 @@ const DashboardPage = () => {
 	};
 
 	return (
-		<OandaApiContext.Provider value={api}>
+		<div>
+			{" "}
 			<div className="w-full flex pt-20 lg:pt-20 lg:p-6 p-4 flex-wrap ">
 				<div className="w-full flex flex-wrap gap-2 mb-4">
 					<Dialog>
@@ -339,7 +338,6 @@ const DashboardPage = () => {
 									</SelectContent>
 								</Select>
 							</div>
-							<BoxModel pair={pair} streamData={streamData[pair]} />
 						</div>
 					))}
 					<Select
@@ -372,7 +370,7 @@ const DashboardPage = () => {
 			<div className="w-full p-2 lg:p-4">
 				<MasterPosition positionData={positionData} />
 			</div>
-		</OandaApiContext.Provider>
+		</div>
 	);
 };
 

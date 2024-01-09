@@ -1,10 +1,10 @@
 import { cors } from "@elysiajs/cors";
 import { swagger } from "@elysiajs/swagger";
-// Main server file adjustments
-import { Context, Elysia, t } from "elysia";
+import { Elysia } from "elysia";
 import forexPreferenceRoutes from "./api/routes/forexPreferenceRoutes";
 import oandaRoutes from "./api/routes/oandaRoutes";
 import userRoutes from "./api/routes/userRoutes";
+import modelRoutes from "./api/routes/modelRoutes";
 import { WebSocketServer } from "./services/websocketServer";
 
 const createServer = () => {
@@ -13,7 +13,8 @@ const createServer = () => {
 		.use(cors())
 		.use(oandaRoutes)
 		.use(userRoutes)
-		.use(forexPreferenceRoutes);
+		.use(forexPreferenceRoutes)
+		.use(modelRoutes);
 
 	return app;
 };

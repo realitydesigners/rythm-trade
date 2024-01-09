@@ -110,4 +110,23 @@ export class OandaController {
 			};
 		}
 	}
+
+	async fetchCandles(
+		userId: string,
+		pair: string,
+		count: number,
+		granularity: string,
+	) {
+		try {
+			const oandaApi = await this.getOandaApiForUser(userId);
+			if (!oandaApi) {
+				console.error("Oanda API not initialized for user:", userId);
+				return { error: "Oanda API not initialized" };
+			}
+			return await oandaApi.fetchCandles(pair, count, granularity);
+		} catch (error) {
+			console.error("Error fetching candles:", error);
+			return { error: "An error occurred while fetching candles" };
+		}
+	}
 }

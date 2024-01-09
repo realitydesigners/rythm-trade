@@ -1,10 +1,8 @@
 "use client";
 import { CandleData } from "@/types";
 import React, { Context, useContext, useEffect, useState } from "react";
-import {
-	OandaApi,
-	OandaApiContext,
-} from "../../../ryver/src/services/OandaApi";
+import { useUser } from "@clerk/nextjs";
+import { fetchCandles } from "../api/rest";
 
 interface DataTableProps {
 	pair: string;
@@ -13,22 +11,24 @@ interface DataTableProps {
 function DataTable({ pair }: DataTableProps) {
 	const [data, setData] = useState<CandleData[]>([]);
 	const [loading, setLoading] = useState(true);
-	const api = useContext(OandaApiContext as Context<OandaApi | null>);
+	const { user } = useUser();
 
 	useEffect(() => {
 		const getData = async () => {
-			try {
-				const candles = await api?.fetchCandles(pair, 300, "M1");
-				setData(candles || []);
-				setLoading(false);
-			} catch (error) {
-				console.error("Error fetching data for pair", pair, error);
-				setLoading(false);
+			if (user && user.id) {
+				try {
+					const candles = await fetchCandles(user.id, pair, 300, "M1");
+					setData(candles || []);
+					setLoading(false);
+				} catch (error) {
+					console.error("Error fetching data for pair", pair, error);
+					setLoading(false);
+				}
 			}
 		};
 
 		getData();
-	}, [api, pair]);
+	}, [user, pair]);
 
 	return (
 		<div className="overflow-auto">

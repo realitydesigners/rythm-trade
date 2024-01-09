@@ -22,6 +22,11 @@ const ResoBox: React.FC<BoxChartProps> = ({ boxArrays }) => {
 		let currentY = 0;
 		let corner = 0;
 
+		if (data.length === 0 || !("size" in data[0])) {
+			console.error("Data is empty or missing 'size' property");
+			return; // Exit the function if data is invalid
+		}
+
 		const sortedData = data.sort((a, b) => b.size - a.size);
 		const scaleFactor = size / sortedData[0].size;
 		const maxOverlayOpacity = 0.9; // Maximum white overlay opacity for the last box

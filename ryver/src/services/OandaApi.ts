@@ -1,7 +1,3 @@
-import axios, { AxiosResponse } from "axios";
-import { parseISO } from "date-fns";
-import React, { createContext } from "react";
-
 const key = process.env.NEXT_PUBLIC_OANDA_TOKEN as string;
 const acc_id = process.env.NEXT_PUBLIC_ACCOUNT_ID as string;
 const base_url = process.env.NEXT_PUBLIC_OANDA_BASE_URL as string;
@@ -16,17 +12,11 @@ export class OandaApi {
 		new Map();
 
 	constructor(
-		api_key: string = key,
+		api_key: string,
 		oanda_url: string = base_url,
-		account_id: string = acc_id,
+		account_id: string,
 		stream_link: string = stream_url,
 	) {
-		console.log("OandaApi constructor parameters:", {
-			api_key,
-			oanda_url,
-			account_id,
-			stream_link,
-		});
 		// Initialize Oanda API with optional API key, base URL, and account ID.
 
 		this.api_key = api_key;
@@ -75,14 +65,19 @@ export class OandaApi {
 		}
 	}
 
-	public unsubscribeFromPairs(pairs: string[]) {
+	public unsubscribeFromPairs(pairs: string[]): string[] {
+		const successfullyUnsubscribed = [];
+
 		for (const pair of pairs) {
 			const reader = this.activeStreams.get(pair);
 			if (reader) {
 				reader.cancel();
 				this.activeStreams.delete(pair);
+				successfullyUnsubscribed.push(pair);
 			}
 		}
+
+		return successfullyUnsubscribed;
 	}
 
 	private async streamData(
@@ -114,11 +109,10 @@ export class OandaApi {
 			console.error("Error in streamData:", error);
 		}
 	}
-
 	private async makeRequest(
 		url: string,
 		method: "get" | "post" | "put" = "get",
-		expectedStatusCode = 200,
+		expectedStatusCode: number = 200,
 		params: any = {},
 		data: any = {},
 	): Promise<[boolean, any]> {
@@ -147,9 +141,10 @@ export class OandaApi {
 			if (response.status === expectedStatusCode) {
 				const responseData = await response.json();
 				return [true, responseData];
+			} else {
+				const errorData = await response.json();
+				return [false, errorData];
 			}
-			const errorData = await response.json();
-			return [false, errorData];
 		} catch (error) {
 			console.error(`Error in makeRequest: ${error}`);
 			return [
@@ -169,11 +164,11 @@ export class OandaApi {
 		const [ok, data] = await this.makeRequest(url);
 		if (ok && data[dataKey]) {
 			return data[dataKey];
+		} else {
+			console.error(`ERROR getAccountEP(${endpoint})`, data);
+			return null;
 		}
-		console.error(`ERROR getAccountEP(${endpoint})`, data);
-		return null;
 	}
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	private async getInstrumentEP(endpoint: string, params: any) {
 		if (!this.api_key) {
 			console.error("API key is missing.");
@@ -183,9 +178,10 @@ export class OandaApi {
 		const [ok, data] = await this.makeRequest(url, "get", 200, params);
 		if (ok) {
 			return data;
+		} else {
+			console.error(`ERROR getInstrumentEP(${endpoint})`, data);
+			return null;
 		}
-		console.error(`ERROR getInstrumentEP(${endpoint})`, data);
-		return null;
 	}
 
 	public async getAccounts(dataKey: string) {
@@ -195,15 +191,16 @@ export class OandaApi {
 		const [ok, data] = await this.makeRequest(url);
 		if (ok && data[dataKey]) {
 			return data[dataKey];
+		} else {
+			console.error("ERROR getAccounts()", data);
+			return null;
 		}
-		console.error("ERROR getAccounts()", data);
-		return null;
 	}
 	public async fetchLargeCandles(
 		pairName: string,
-		total_count = 6000,
-		granularity = "M1",
-		price = "MBA",
+		total_count: number = 6000,
+		granularity: string = "M1",
+		price: string = "MBA",
 	) {
 		if (!this.api_key || !this.account_id) {
 			console.error("API key or account ID is missing.");
@@ -218,7 +215,6 @@ export class OandaApi {
 			toDate.getTime() - total_count * minutesPerCandle * 60000,
 		);
 
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		const allCandles: any[] = [];
 		let remaining_count = total_count;
 		let currentToDate = new Date(toDate);
@@ -232,7 +228,6 @@ export class OandaApi {
 			if (chunkFromDate < fromDate) {
 				chunkFromDate = new Date(fromDate);
 			}
-			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			const params: any = {
 				granularity,
 				price,
@@ -241,8 +236,8 @@ export class OandaApi {
 			};
 
 			const data = await this.getInstrumentEP(`${pairName}/candles`, params);
-			if (data?.candles) {
-				const fetchedCandles = data.candles;
+			if (data && data["candles"]) {
+				const fetchedCandles = data["candles"];
 				allCandles.unshift(...fetchedCandles);
 				remaining_count -= fetchedCandles.length;
 			} else {
@@ -259,16 +254,15 @@ export class OandaApi {
 
 	public async fetchCandles(
 		pairName: string,
-		count = 10,
-		granularity = "H1",
-		price = "MBA",
+		count: number = 10,
+		granularity: string = "H1",
+		price: string = "MBA",
 		dateFrom: Date | null = null,
 		dateTo: Date | null = null,
 	) {
 		// Fetch candle data. Returns an array of candle data.
 
 		const url = `instruments/${pairName}/candles`;
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		const params: any = {
 			granularity,
 			price,
@@ -282,11 +276,12 @@ export class OandaApi {
 		}
 
 		const data = await this.getInstrumentEP(`${pairName}/candles`, params);
-		if (data?.candles) {
-			return data.candles;
+		if (data && data["candles"]) {
+			return data["candles"];
+		} else {
+			console.error("ERROR fetchCandles()", params, data);
+			return null;
 		}
-		console.error("ERROR fetchCandles()", params, data);
-		return null;
 	}
 	public async getAccountSummary(account_id: string = this.account_id) {
 		// Fetch account summary. Returns account summary data.
@@ -315,13 +310,15 @@ export class OandaApi {
 		const [ok, data] = await this.makeRequest(endpoint, "get");
 		if (ok) {
 			return data.position;
+		} else {
+			if (data.errorCode === "NO_SUCH_POSITION") {
+				console.log(`No position exists for ${pair}`);
+				return null;
+			} else {
+				console.error(`ERROR getPairPositionSummary(${pair})`, data);
+				return null;
+			}
 		}
-		if (data.errorCode === "NO_SUCH_POSITION") {
-			console.log(`No position exists for ${pair}`);
-			return null;
-		}
-		console.error(`ERROR getPairPositionSummary(${pair})`, data);
-		return null;
 	}
 
 	// API call to get all positions, filter, and sort them
@@ -335,9 +332,10 @@ export class OandaApi {
 			);
 
 			return activePositions;
+		} else {
+			console.error("Error in getAllPositions", data);
+			return [];
 		}
-		console.error("Error in getAllPositions", data);
-		return [];
 	}
 
 	public async getAccountInstruments(account_id: string = this.account_id) {
@@ -356,8 +354,8 @@ export class OandaApi {
 		};
 
 		const [ok, response] = await this.makeRequest(url, "get", 200, params);
-		if (ok && response.prices && response.homeConversions) {
-			const prices = response.prices[0];
+		if (ok && response["prices"] && response["homeConversions"]) {
+			const prices = response["prices"][0];
 			return { ask: prices.ask, bid: prices.bid };
 		}
 		return null;
@@ -372,8 +370,8 @@ export class OandaApi {
 		};
 
 		const [ok, response] = await this.makeRequest(url, "get", 200, params);
-		if (ok && response.latestCandles) {
-			return response.latestCandles[0].candles[0].bid;
+		if (ok && response["latestCandles"]) {
+			return response["latestCandles"][0]["candles"][0]["bid"];
 		}
 		return null;
 	}
@@ -388,13 +386,13 @@ export class OandaApi {
 		};
 
 		const [ok, response] = await this.makeRequest(url, "get", 200, params);
-		if (ok && response.orders) {
-			const order = response.orders[0];
-			if (order.state === "FILLED") {
+		if (ok && response["orders"]) {
+			const order = response["orders"][0];
+			if (order["state"] === "FILLED") {
 				return {
-					units: order.units,
-					id: order.id,
-					state: order.state,
+					units: order["units"],
+					id: order["id"],
+					state: order["state"],
 				};
 			}
 		}
@@ -411,11 +409,12 @@ export class OandaApi {
 		takeProfitPrice?: number,
 	): Promise<string | null> {
 		const url = `accounts/${this.account_id}/orders`;
-		const adjustedUnits =
-			direction === -1 ? Math.round(units) * -1 : Math.round(units);
+		units = Math.round(units);
+		if (direction === -1) {
+			units *= -1;
+		}
 
 		// Declare orderData with a flexible type
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		const orderData: { [key: string]: any } = {
 			units: units.toString(),
 			instrument: pairName,
@@ -423,18 +422,18 @@ export class OandaApi {
 		};
 
 		if (orderType === "LIMIT" && price) {
-			orderData.price = price.toString();
+			orderData["price"] = price.toString();
 		}
 
 		if (stopLossPrice) {
-			orderData.stopLossOnFill = {
+			orderData["stopLossOnFill"] = {
 				price: stopLossPrice.toString(),
 				timeInForce: "GTC", // Good Till Cancelled
 			};
 		}
 
 		if (takeProfitPrice) {
-			orderData.takeProfitOnFill = {
+			orderData["takeProfitOnFill"] = {
 				price: takeProfitPrice.toString(),
 				timeInForce: "GTC", // Good Till Cancelled
 			};
@@ -445,8 +444,8 @@ export class OandaApi {
 		};
 
 		const [ok, response] = await this.makeRequest(url, "post", 201, {}, data);
-		if (ok && response.orderFillTransaction) {
-			return response.orderFillTransaction.id;
+		if (ok && response["orderFillTransaction"]) {
+			return response["orderFillTransaction"]["id"];
 		}
 		return null;
 	}
@@ -468,12 +467,9 @@ export class OandaApi {
 		}
 
 		const [ok, response] = await this.makeRequest(url, "put", 200, {}, data);
-		if (ok && response.relatedTransactionIDs) {
-			return response.relatedTransactionIDs;
+		if (ok && response["relatedTransactionIDs"]) {
+			return response["relatedTransactionIDs"];
 		}
 		return null;
 	}
 }
-
-export const OandaApiContext = React.createContext<OandaApi | null>(null);
-export const api = new OandaApi();

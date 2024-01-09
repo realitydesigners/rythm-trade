@@ -1,14 +1,13 @@
 import { BoxArrays } from "@/types";
-import { OandaApi } from "../../../ryver/src/services/OandaApi";
+import { OandaApi } from "../api/OandaApi";
 
 enum TradeState {
-	Initialized = 0,
-	Opened = 1,
-	Closed = 2,
+	Initialized,
+	Opened,
+	Closed,
 }
 
 interface TradeSnapshot {
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	boxArrays: any;
 	currentPrice: number;
 	stopLoss: number;
@@ -25,16 +24,11 @@ class ResoBot {
 	private marginCloseoutPercent: number | null = null;
 	private unitsLong: number | null = null;
 	private unitsShort: number | null = null;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	private accountSummary: any = null;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	private pairPositionSummary: any = null;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	private positionSummary: any = null;
-	private isProcessingTrade = false;
-
-	private isActive = false;
-
+	private isProcessingTrade: boolean = false;
+	private isActive: boolean = false;
 	private tradeState: TradeState = TradeState.Closed;
 	private tradeSnapshot: TradeSnapshot | null = null;
 
@@ -46,7 +40,7 @@ class ResoBot {
 	toggleActive() {
 		this.isActive = !this.isActive;
 	}
-	public async startDataCollection(interval = 10000) {
+	public async startDataCollection(interval: number = 10000) {
 		this.stopDataCollection();
 
 		await this.fetchData();

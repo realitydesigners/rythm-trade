@@ -1,24 +1,14 @@
 "use client";
 import { fetchPairPosition } from "@/app/api/actions/fetchPositionData";
 import { closeWebSocket, connectWebSocket } from "@/app/api/websocket";
-import {
-	BoxModel,
-	MasterPosition,
-	Stream,
-	ThreeDModel,
-} from "@/app/components/index";
+import { MasterPosition, ResoModel, Stream } from "@/app/components/index";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/app/components/ui";
-import {
-	OandaApiContext,
-	api,
-} from "../../../../../../ryver/src/services/OandaApi";
-
+} from "@/app/components/ui/index";
 import { BOX_SIZES } from "@/app/utils/constants";
 import { useUser } from "@clerk/nextjs";
 import { useParams } from "next/navigation";
@@ -80,23 +70,15 @@ const PairPage = () => {
 	);
 
 	return (
-		<OandaApiContext.Provider value={api}>
-			<div className="w-full relative z-0">
-				<StreamSection pair={pair} data={streamData[pair]} />
-				<ThreeDModelSection
-					pair={pair}
-					data={streamData[pair]}
-					selectedBoxArrayType={selectedBoxArrayType}
-				/>
-				<BoxModelSection
-					pair={pair}
-					data={streamData[pair]}
-					selectedBoxArrayType={selectedBoxArrayType}
-					onBoxArrayTypeChange={handleBoxArrayTypeChange}
-				/>
-				<MasterPositionSection data={positionData} pair={""} />
-			</div>
-		</OandaApiContext.Provider>
+		<div className="w-full relative z-0">
+			<StreamSection pair={pair} data={streamData[pair]} />
+			<ThreeDModelSection
+				pair={pair}
+				data={streamData[pair]}
+				selectedBoxArrayType={selectedBoxArrayType}
+			/>
+			<MasterPositionSection data={positionData} pair={""} />
+		</div>
 	);
 };
 
@@ -113,30 +95,11 @@ const ThreeDModelSection: React.FC<CommonComponentProps> = ({
 }) => (
 	<div className="w-full">
 		<div id="three" className="w-full flex h-screen absolute z-10">
-			<ThreeDModel
+			<ResoModel
 				pair={pair}
 				streamData={data}
 				selectedBoxArrayType={selectedBoxArrayType || ""}
 			/>
-		</div>
-	</div>
-);
-
-const BoxModelSection: React.FC<CommonComponentProps> = ({
-	pair,
-	data,
-	selectedBoxArrayType,
-	onBoxArrayTypeChange,
-}) => (
-	<div className="w-full">
-		<SelectBoxArrayType
-			selectedBoxArrayType={selectedBoxArrayType}
-			onBoxArrayTypeChange={onBoxArrayTypeChange}
-			pair={""}
-			data={undefined}
-		/>
-		<div id="elixr" className="w-full flex h-full">
-			<BoxModel pair={pair} streamData={data} />
 		</div>
 	</div>
 );

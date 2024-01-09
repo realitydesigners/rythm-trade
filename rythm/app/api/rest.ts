@@ -190,3 +190,62 @@ export const fetchOandaCredentials = async (userId: string) => {
 		throw error;
 	}
 };
+
+/**
+ * Fetches box arrays for a given user.
+ * @param {string} userId - The user's unique identifier.
+ * @param {string} pair - The currency pair.
+ * @param {string} boxArrayType - The type of box array.
+ * @returns {Promise<BoxArrays>} A promise that resolves to the box arrays.
+ * @throws {Error} Throws an error if the network response is not ok.
+ */
+export const fetchBoxArrays = async (
+	userId: any,
+	pair: any,
+	boxArrayType: any,
+) => {
+	try {
+		console.log("log array");
+		console.log(userId, pair, boxArrayType);
+		const response = await fetch(`${serverBaseUrl}/calculate-box-arrays`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ userId, pair, boxArrayType }),
+		});
+		return await handleResponse(response);
+	} catch (error) {
+		console.error("Error fetching box arrays:", error);
+		throw error;
+	}
+};
+
+/**
+ * Fetches candle data for a given user and currency pair.
+ * @param {string} userId - The user's unique identifier.
+ * @param {string} pair - The currency pair.
+ * @param {number} count - The number of candles to fetch.
+ * @param {string} granularity - The granularity of the candles.
+ * @returns {Promise<CandleData[]>} A promise that resolves to an array of candle data.
+ * @throws {Error} Throws an error if the network response is not ok.
+ */
+export const fetchCandles = async (
+	userId: any,
+	pair: any,
+	count = 300,
+	granularity = "M1",
+) => {
+	try {
+		const response = await fetch(
+			`${serverBaseUrl}/candles/${userId}/${pair}?count=${count}&granularity=${granularity}`,
+		);
+		if (!response.ok) {
+			throw new Error("Failed to fetch candles");
+		}
+		return await response.json();
+	} catch (error) {
+		console.error("Error fetching candles:", error);
+		throw error;
+	}
+};
