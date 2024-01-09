@@ -1,30 +1,31 @@
 import { cors } from "@elysiajs/cors";
 import { swagger } from "@elysiajs/swagger";
-// Main server file adjustments
-import { Context, Elysia, t } from "elysia";
+import { Elysia } from "elysia";
 import forexPreferenceRoutes from "./api/routes/forexPreferenceRoutes";
 import oandaRoutes from "./api/routes/oandaRoutes";
 import userRoutes from "./api/routes/userRoutes";
+import modelRoutes from "./api/routes/modelRoutes";
 import { WebSocketServer } from "./services/websocketServer";
 
 const createServer = () => {
-	const app = new Elysia()
-		.use(swagger())
-		.use(cors())
-		.use(oandaRoutes)
-		.use(userRoutes)
-		.use(forexPreferenceRoutes);
+  const app = new Elysia()
+    .use(swagger())
+    .use(cors())
+    .use(oandaRoutes)
+    .use(userRoutes)
+    .use(forexPreferenceRoutes)
+    .use(modelRoutes);
 
-	return app;
+  return app;
 };
 
 const startServer = async () => {
-	const app = createServer();
+  const app = createServer();
 
-	const port = process.env.PORT || 8080;
+  const port = process.env.PORT || 8080;
 
-	await app.listen(port);
-	console.log(`HTTP Server is running on port ${port}`);
+  await app.listen(port);
+  console.log(`HTTP Server is running on port ${port}`);
 };
 
 const app = createServer();
