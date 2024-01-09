@@ -16,6 +16,13 @@ export default function RootLayout({
 	return (
 		<ClerkProvider>
 			<html lang="en">
+				<head>
+					<link rel="icon" href="/favicon.ico" sizes="any" />
+					<script
+						type="module"
+						src="https://unpkg.com/@splinetool/viewer@1.0.17/build/spline-viewer.js"
+					/>
+				</head>
 				<body className="bg-black">
 					<Navbar />
 					<div className="p-0">{children}</div>
