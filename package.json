@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "format": "biome format --write ./app",
     "start": "next start",
     "lint": "next lint"
   },
@@ -18,7 +17,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@react-email/components": "^0.0.12",
     "@react-spring/three": "^9.7.3",
-    "@react-three/drei": "^9.89.0",
+    "@react-three/drei": "latest",
     "@react-three/fiber": "^8.15.11",
     "@react-three/postprocessing": "^2.15.11",
     "@types/chart.js": "^2.9.39",
@@ -31,7 +30,6 @@
     "@vercel/analytics": "^1.1.1",
     "autoprefixer": "^10.4.16",
     "axios": "^1.5.1",
-    "bun": "^1.0.21",
     "chart.js": "latest",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
@@ -43,26 +41,23 @@
     "isomorphic-ws": "^5.0.0",
     "million": "latest",
     "moment": "^2.29.4",
-    "next": "^14.0.4",
+    "next": "latest",
     "pondjs": "^0.9.0",
     "postcss": "^8.4.31",
     "react": "latest",
     "react-chartjs-2": "latest",
     "react-dom": "latest",
     "react-timeseries-charts": "^0.16.1",
-    "resend": "^2.0.0",
+    "resend": "^2.1.0",
     "rxjs": "^7.8.1",
     "tailwind-merge": "^2.0.0",
     "tailwindcss": "^3.3.3",
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.159.0",
+    "troika-three-text": "latest",
     "typescript": "^5.2.2",
     "uuid": "^9.0.1",
     "websocket": "^1.0.34",
     "ws": "^8.14.2"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "1.4.1",
-    "bun-types": "^1.0.21"
   }
 }
