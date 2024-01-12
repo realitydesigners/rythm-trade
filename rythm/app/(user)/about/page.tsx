@@ -1,6 +1,6 @@
 "use client";
 import Newsletter from "@/app/api/send/Newsletter";
-import { inter, jura, staatliches } from "@/app/fonts";
+import { jura, staatliches } from "@/app/fonts";
 import Prop from "@/public/icons/prop.svg";
 import Quant from "@/public/icons/quant.svg";
 import Repeat from "@/public/icons/repeat.svg";
