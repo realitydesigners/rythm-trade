@@ -1,7 +1,12 @@
 "use client";
 import { fetchPairPosition } from "@/app/api/actions/fetchPositionData";
 import { closeWebSocket, connectWebSocket } from "@/app/api/websocket";
-import { MasterPosition, ResoModel, Stream } from "@/app/components/index";
+import {
+	MasterPosition,
+	ResoModel,
+	Stream,
+	ThreeDModel,
+} from "@/app/components/index";
 import {
 	Select,
 	SelectContent,
@@ -95,7 +100,7 @@ const ThreeDModelSection: React.FC<CommonComponentProps> = ({
 }) => (
 	<div className="w-full">
 		<div id="three" className="w-full flex h-screen absolute z-10">
-			<ResoModel
+			<ThreeDModel
 				pair={pair}
 				streamData={data}
 				selectedBoxArrayType={selectedBoxArrayType || ""}

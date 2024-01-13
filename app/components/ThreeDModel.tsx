@@ -1,52 +1,71 @@
-"use client";
-
+import { useUser } from "@clerk/nextjs";
 import React, { useEffect, useState } from "react";
 import { BoxArrays, StreamData } from "../../types";
-import ThreeDBox from "./ThreeDBox";
 import { fetchBoxArrays } from "../api/rest";
-import { ResoBox } from ".";
+import { ResoBox, ThreeDBox } from "./index";
 
 interface ThreeDModelProps {
 	pair: string;
 	streamData: StreamData | null;
 	selectedBoxArrayType: string;
-	userId: string;
 }
 
 const ThreeDModel: React.FC<ThreeDModelProps> = ({
 	pair,
 	streamData,
 	selectedBoxArrayType,
-	userId,
 }) => {
 	const [boxArrays, setBoxArrays] = useState<BoxArrays>({});
 	const [initializationComplete, setInitializationComplete] =
 		useState<boolean>(false);
 
+	const { user } = useUser();
+
+	const [currentClosePrice, setCurrentClosePrice] = useState<number | null>(
+		null,
+	);
+
 	useEffect(() => {
-		let intervalId: string | number | NodeJS.Timeout | undefined;
+		let intervalId: string | number | NodeJS.Timeout | undefined = undefined;
 
 		const fetchAndSetBoxes = async () => {
-			try {
-				const newBoxArrays = await fetchBoxArrays(
-					userId,
-					pair,
-					selectedBoxArrayType,
-				);
-				setBoxArrays(newBoxArrays);
-				setInitializationComplete(true);
-			} catch (error) {
-				console.error("Error fetching box arrays:", error);
+			if (user?.id) {
+				console.log("Fetching boxes...");
+				try {
+					const newBoxArrays = await fetchBoxArrays(
+						user.id,
+						pair,
+						selectedBoxArrayType,
+					);
+					setBoxArrays(newBoxArrays);
+					setInitializationComplete(true);
+				} catch (error) {
+					console.error("Error fetching box arrays:", error);
+				}
 			}
 		};
 
-		// Fetch immediately and then set up the interval
 		fetchAndSetBoxes();
-		intervalId = setInterval(fetchAndSetBoxes, 60000); // Fetch every 60 seconds
+		intervalId = setInterval(fetchAndSetBoxes, 60000);
 
-		// Clean up the interval on component unmount
 		return () => clearInterval(intervalId);
-	}, [userId, pair, selectedBoxArrayType]);
+	}, [user, pair, selectedBoxArrayType]);
+
+	useEffect(() => {
+		if (streamData) {
+			const bidPrice = streamData.bids?.[0]?.price
+				? parseFloat(streamData.bids[0].price)
+				: null;
+			const askPrice = streamData.asks?.[0]?.price
+				? parseFloat(streamData.asks[0].price)
+				: null;
+
+			if (bidPrice !== null && askPrice !== null) {
+				const currentPrice = (bidPrice + askPrice) / 2;
+				setCurrentClosePrice(currentPrice);
+			}
+		}
+	}, [streamData]);
 
 	// Render
 	if (!initializationComplete) {
@@ -86,12 +105,11 @@ const ThreeDModel: React.FC<ThreeDModelProps> = ({
 	return (
 		<div className="w-full min-h-screen relative font-bold">
 			{initializationComplete ? (
-				<>
-					<div className="grid grid-cols-1 lg:grid-cols-2 w-full h-screen min-h-screen items-center justify-center gap-[1em] lg:pl-0 lg:pr-8 ">
-						{/* <ThreeDBox boxArrays={boxArrays} /> */}
-						<ResoBox boxArrays={boxArrays} />
-					</div>
-				</>
+				<div className="grid grid-cols-1 lg:grid-cols-2 w-full h-screen min-h-screen items-center justify-center gap-[1em] lg:pl-0 lg:pr-8 ">
+					<ThreeDBox boxArrays={boxArrays} />
+
+					<ResoBox boxArrays={boxArrays} />
+				</div>
 			) : (
 				<div>Loading...</div>
 			)}

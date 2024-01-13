@@ -1,16 +1,16 @@
-import React, { useMemo, useRef, RefObject } from "react";
-import { Canvas, useThree, useFrame } from "@react-three/fiber";
-import { BoxArrays } from "../../types";
-import * as THREE from "three";
-import { DirectionalLight } from "three";
+import { Center, OrbitControls, PerspectiveCamera } from "@react-three/drei";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import {
-	EffectComposer,
-	DotScreen,
 	Bloom,
+	DotScreen,
+	EffectComposer,
 	Scanline,
 } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
-import { OrbitControls, PerspectiveCamera, Center } from "@react-three/drei";
+import React, { RefObject, useMemo, useRef } from "react";
+import * as THREE from "three";
+import { DirectionalLight } from "three";
+import { BoxArrays } from "../../types";
 
 interface SingleBoxProps {
 	position: [number, number, number];
@@ -37,18 +37,45 @@ const SingleBox: React.FC<SingleBoxProps> = ({
 	size,
 	color,
 	opacity,
-}) => (
-	<mesh position={[0, 0, 0]}>
-		<primitive object={new THREE.BoxGeometry(...size)} />
-		<meshStandardMaterial
+}) => {
+	const boxRef = useRef<THREE.Mesh>(null);
+
+	useFrame(() => {
+		if (boxRef.current) {
+			boxRef.current.rotation.y += 0.001;
+		}
+	});
+
+	return (
+		<mesh ref={boxRef} position={position}>
+			<primitive object={new THREE.BoxGeometry(...size)} />
+			<meshStandardMaterial
+				color={color}
+				transparent
+				opacity={opacity}
+				emissiveIntensity={8}
+				toneMapped={true}
+			/>
+		</mesh>
+	);
+};
+
+const RotatingDirectionalLight: React.FC<RotatingDirectionalLightProps> = ({
+	position,
+	color,
+	intensity,
+}) => {
+	const lightRef: RefObject<DirectionalLight> = useRef<DirectionalLight>(null);
+
+	return (
+		<directionalLight
+			ref={lightRef}
+			position={position}
 			color={color}
-			transparent
-			opacity={opacity}
-			emissiveIntensity={8}
-			toneMapped={true}
+			intensity={intensity}
 		/>
-	</mesh>
-);
+	);
+};
 
 const BoxGroup: React.FC<BoxGroupProps> = ({ boxes }) => {
 	const boxesGroupRef = useRef<THREE.Group>(null);
@@ -118,30 +145,6 @@ const ThreeDBox: React.FC<ThreeDBoxProps> = ({ boxArrays }) => {
 				</Center>
 			</Canvas>
 		</div>
-	);
-};
-
-const RotatingDirectionalLight: React.FC<RotatingDirectionalLightProps> = ({
-	position,
-	color,
-	intensity,
-}) => {
-	const lightRef: RefObject<DirectionalLight> = useRef<DirectionalLight>(null);
-
-	useFrame(() => {
-		if (lightRef.current) {
-			lightRef.current.position.y = Math.sin(Date.now() * 0.0003) * 20;
-			lightRef.current.position.x = Math.cos(Date.now() * 0.0003) * 20;
-		}
-	});
-
-	return (
-		<directionalLight
-			ref={lightRef}
-			position={position}
-			color={color}
-			intensity={intensity}
-		/>
 	);
 };
 
