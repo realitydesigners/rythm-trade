@@ -68,7 +68,7 @@ const AppPage = () => {
 							>
 								Next Generation High Frequency Trading Models
 							</p>
-							<div className="py-20 lg:py-6 ">
+							<div className="py-12 lg:py-6 ">
 								<Link
 									href="/about"
 									className={`${monomaniac.className} text-xl uppercase inline-block bg-black hover:bg-gray-200 hover:text-black text-white font-bold py-4 px-8 border border-gray-600/50 rounded-lg transition duration-300 transform hover:scale-105`}
@@ -87,7 +87,7 @@ const AppPage = () => {
 				</div>
 			</section>
 
-			<section className="bg-black pt-20 py-20 lg:px-20 ">
+			<section className="bg-black pt-20 py-12 lg:px-20 ">
 				<div className="w-full px-4 md:px-20 ">
 					<h2
 						className={`${monomaniac.className} text-center text-gray-200 uppercase font-bold text-4xl lg:text-6xl mb-20`}
@@ -126,20 +126,24 @@ const AppPage = () => {
 				</div>
 			</section>
 
-			<section className="bg-black pt-20 pb-40 px-4 lg:px-20">
+			<section className="bg-black pt-20 py-12 px-4 lg:px-20">
+				<div className="w-full h-[400px] lg:h-[30vw] pb-4">
+					<Spline scene="https://prod.spline.design/wH23ygFEhlH5Gqvm/scene.splinecode" />
+				</div>
+
 				<div className="flex flex-col justify-center items-center w-full p-6 text-center">
-					<h1
-						className={`${monomaniac.className}  text-white text-5xl lg:text-6xl font-bold mb-8`}
+					<h2
+						className={`${monomaniac.className} w-full lg:w-1/2 text-white uppercase text-5xl lg:text-6xl font-bold mb-8`}
 					>
-						Welcome to Rythm
-					</h1>
+						a geometrical pattern recognition tool from the future!
+					</h2>
 					<p
 						className={`${jura.className}  text-gray-300 text-lg max-w-2xl mx-auto`}
 					>
-						Rythm is a cutting-edge trading algorithm designed to revolutionize
-						the way you interact with the financial markets. Using
-						state-of-the-art technology, Rythm analyzes market patterns to help
-						make informed decisions that propel you towards a profitable future.
+						Rythm was born from the idea that the financial markets are a series
+						of repeating patterns that can be identified and quantified. Our
+						proprietary algorithms are designed to identify and trade these
+						patterns with high precision and accuracy.
 					</p>
 				</div>
 			</section>
