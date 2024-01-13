@@ -98,8 +98,8 @@ const ThreeDModelSection: React.FC<CommonComponentProps> = ({
 	data,
 	selectedBoxArrayType,
 }) => (
-	<div className="w-full">
-		<div id="three" className="w-full flex h-screen absolute z-10">
+	<div className="w-full pb-20">
+		<div id="three" className="w-full flex min-h-screen absolute z-10">
 			<ThreeDModel
 				pair={pair}
 				streamData={data}

@@ -103,9 +103,9 @@ const ThreeDModel: React.FC<ThreeDModelProps> = ({
 	}
 
 	return (
-		<div className="w-full min-h-screen relative font-bold">
+		<div className="w-full min-h-screen relative font-bold ">
 			{initializationComplete ? (
-				<div className="grid grid-cols-1 lg:grid-cols-2 w-full h-screen min-h-screen items-center justify-center gap-[1em] lg:pl-0 lg:pr-8 ">
+				<div className="grid grid-cols-1 lg:grid-cols-2 w-full min-h-screen lg:pb-0 pb-40 items-center justify-center gap-[1em] lg:pl-0 lg:pr-8 ">
 					<ThreeDBox boxArrays={boxArrays} />
 
 					<ResoBox boxArrays={boxArrays} />
