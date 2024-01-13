@@ -10,17 +10,8 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-interface SplineViewerProps extends React.HTMLAttributes<HTMLElement> {
-	url: string;
-}
+import Spline from "@splinetool/react-spline";
 
-declare global {
-	namespace JSX {
-		interface IntrinsicElements {
-			"spline-viewer": SplineViewerProps;
-		}
-	}
-}
 const featureData = [
 	{
 		icon: Secure,
@@ -58,9 +49,8 @@ const AppPage = () => {
 			{/* Hero */}
 			<section className="bg-black w-full h-[90vh] lg:h-screen overflow-hidden">
 				<div className="w-full h-full relative flex justify-center items-center">
-					<iframe
-						title="Spline Design"
-						src="https://my.spline.design/untitled-9d19aefa4825eeefc5f2dc0a720c01f5/"
+					<Spline
+						scene="https://prod.spline.design/XvwEOVWxuHPaKgsk/scene.splinecode"
 						className="absolute w-full h-full z-0"
 					/>
 					<div className="w-full h-40 bottom-0 absolute bg-gradient-to-t from-black to-transparent" />
@@ -68,7 +58,7 @@ const AppPage = () => {
 					<div className="p-8 flex w-full lg:w-11/12 flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-4 z-20 ">
 						<div className="w-full lg:w-1/2 flex flex-col lg:items-start items-center rounded-lg shadow-lg ">
 							<h1
-								className={`${monomaniac.className} drop-shadow-md text-gray-200 uppercase font-bold  text-6xl lg:text-8xl`}
+								className={`${monomaniac.className} drop-shadow-md text-gray-200 uppercase font-bold  text-6xl lg:text-9xl`}
 							>
 								The Future
 								<br /> Of Trading
@@ -78,16 +68,16 @@ const AppPage = () => {
 							>
 								Next Generation High Frequency Trading Models
 							</p>
-							<div className="pt-8 ">
+							<div className="py-20 lg:py-6 ">
 								<Link
 									href="/about"
-									className={`${monomaniac.className} text-xl uppercase inline-block bg-black hover:bg-gray-200 hover:text-black text-white font-bold py-4 px-8 border border-gray-600/50/50/50/50/50 rounded-lg transition duration-300 transform hover:scale-105`}
+									className={`${monomaniac.className} text-xl uppercase inline-block bg-black hover:bg-gray-200 hover:text-black text-white font-bold py-4 px-8 border border-gray-600/50 rounded-lg transition duration-300 transform hover:scale-105`}
 								>
 									Join Beta v1.0
 								</Link>
 							</div>
 							<p
-								className={`${jura.className} drop-shadow-md p-2 absolute bottom-6 lg:hidden text-gray-300 w-1/2 text-center lg:text-left font-bold  text-sm mt-4`}
+								className={`${jura.className} drop-shadow-md p-2 absolute bottom-6 lg:hidden text-gray-400 w-1/2 text-center lg:text-left font-bold  text-md mt-4`}
 							>
 								Next Generation High Frequency Trading Models
 							</p>
@@ -97,15 +87,15 @@ const AppPage = () => {
 				</div>
 			</section>
 
-			<section className="bg-black pt-20 pb-6 px-4 lg:px-20">
-				<div className="container mx-auto">
+			<section className="bg-black pt-20 py-20 lg:px-20 ">
+				<div className="w-full px-4 md:px-20 ">
 					<h2
 						className={`${monomaniac.className} text-center text-gray-200 uppercase font-bold text-4xl lg:text-6xl mb-20`}
 					>
 						A New Kind Of
 						<br /> Trading Algorithm
 					</h2>
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+					<div className="grid grid-cols-2   lg:grid-cols-3 gap-2 lg:gap-8 ">
 						{featureData.map((feature, index) => (
 							<div
 								// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
@@ -125,12 +115,32 @@ const AppPage = () => {
 								>
 									{feature.title}
 								</h3>
-								<p className={`${jura.className} text-gray-400 text-center`}>
+								<p
+									className={`${jura.className} text-gray-400 text-xs text-center`}
+								>
 									{feature.description}
 								</p>
 							</div>
 						))}
 					</div>
+				</div>
+			</section>
+
+			<section className="bg-black pt-20 pb-40 px-4 lg:px-20">
+				<div className="flex flex-col justify-center items-center w-full p-6 text-center">
+					<h1
+						className={`${monomaniac.className}  text-white text-5xl lg:text-6xl font-bold mb-8`}
+					>
+						Welcome to Rythm
+					</h1>
+					<p
+						className={`${jura.className}  text-gray-300 text-lg max-w-2xl mx-auto`}
+					>
+						Rythm is a cutting-edge trading algorithm designed to revolutionize
+						the way you interact with the financial markets. Using
+						state-of-the-art technology, Rythm analyzes market patterns to help
+						make informed decisions that propel you towards a profitable future.
+					</p>
 				</div>
 			</section>
 			<section className="w-full p-4 pb-12 lg:pl-12 lg:pr-12 justify-center gap-12 flex flex-wrap lg:flex-row flex-col">
@@ -139,9 +149,9 @@ const AppPage = () => {
 				>
 					Development Team
 				</h3>
-				<div className="w-full lg:w-1/3  flex  items-center flex-row p-4 border border-gray-600/50/50 rounded-[1em] ">
+				<div className="w-full lg:w-1/3  flex  items-center flex-row p-4 border border-gray-600/50 rounded-[1em] ">
 					<div className="w-1/2 h-[333px]">
-						<spline-viewer url="https://prod.spline.design/rY0D0SWfS9Wovvzy/scene.splinecode" />
+						<Spline scene="https://prod.spline.design/enLBj2rztquUGmgp/scene.splinecode" />
 					</div>
 
 					<div className="w-1/2 flex flex-col items-start p-2">
@@ -167,9 +177,9 @@ const AppPage = () => {
 						</p>
 					</div>
 				</div>
-				<div className="w-full lg:w-1/3 flex  items-center flex-row p-4 border border-gray-600/50/50 rounded-[1em] ">
+				<div className="w-full lg:w-1/3 flex  items-center flex-row p-4 border border-gray-600/50 rounded-[1em] ">
 					<div className="w-1/2 h-[333px]">
-						<spline-viewer url="https://prod.spline.design/3km-uKPwoLJoaccg/scene.splinecode" />
+						<Spline scene="https://prod.spline.design/SBXn5bUCrycaaZrE/scene.splinecode" />
 					</div>
 
 					<div className="w-1/2 flex flex-col items-start p-2">
