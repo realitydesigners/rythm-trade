@@ -1,5 +1,5 @@
 "use client";
-import { staatliches } from "@/app/fonts";
+import { monomaniac } from "@/app/fonts";
 import React from "react";
 
 const EmailForm = () => {
@@ -28,7 +28,7 @@ const EmailForm = () => {
 		<form
 			onSubmit={handleSubmit}
 			id="rythmForm"
-			className={`${staatliches.className} flex flex-col space-y-4 w-11/12 md:w-1/2 lg:w-1/3`}
+			className={`${monomaniac.className} flex flex-col space-y-4 w-11/12 md:w-1/2 lg:w-1/3`}
 		>
 			<h2 className="text-4xl uppercase text-gray-200 text-center">
 				Reach Out
@@ -40,7 +40,7 @@ const EmailForm = () => {
 				id="name"
 				required
 				placeholder="name"
-				className="p-2 bg-gray-200 border border-gray-600 rounded-md"
+				className="p-2 bg-gray-200 border border-gray-600/50 rounded-md"
 			/>
 
 			<input
@@ -49,12 +49,12 @@ const EmailForm = () => {
 				id="email"
 				required
 				placeholder="email"
-				className="p-2 bg-gray-200 border border-gray-600 rounded-md"
+				className="p-2 bg-gray-200 border border-gray-600/50 rounded-md"
 			/>
 
 			<button
 				type="submit"
-				className="border uppercase tracking-wide bg-black  border-gray-600 text-white py-2 px-4 rounded-md hover:bg-black/70 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+				className="border uppercase tracking-wide bg-black  border-gray-600/50 text-white py-2 px-4 rounded-md hover:bg-black/70 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
 			>
 				{" "}
 				Send

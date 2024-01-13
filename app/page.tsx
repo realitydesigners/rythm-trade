@@ -1,6 +1,6 @@
 "use client";
 import Newsletter from "@/app/api/send/Newsletter";
-import { jura, staatliches } from "@/app/fonts";
+import { jura, monomaniac } from "@/app/fonts";
 import Prop from "@/public/icons/prop.svg";
 import Quant from "@/public/icons/quant.svg";
 import Repeat from "@/public/icons/repeat.svg";
@@ -68,20 +68,20 @@ const AppPage = () => {
 					<div className="p-8 flex w-full lg:w-11/12 flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-4 z-20 ">
 						<div className="w-full lg:w-1/2 flex flex-col lg:items-start items-center rounded-lg shadow-lg ">
 							<h1
-								className={`${staatliches.className} drop-shadow-md text-gray-200 uppercase font-bold  text-6xl lg:text-9xl`}
+								className={`${monomaniac.className} drop-shadow-md text-gray-200 uppercase font-bold  text-6xl lg:text-8xl`}
 							>
 								The Future
 								<br /> Of Trading
 							</h1>
 							<p
-								className={`${jura.className} drop-shadow-md p-2 hidden lg:block text-gray-300 w-3/4 text-center lg:text-left font-bold  text-md lg:text-lg mt-4`}
+								className={`${jura.className} drop-shadow-md p-2 hidden lg:block text-gray-400 w-3/4 text-center lg:text-left font-bold  text-md lg:text-lg mt-4`}
 							>
 								Next Generation High Frequency Trading Models
 							</p>
 							<div className="pt-8 ">
 								<Link
 									href="/about"
-									className={`${staatliches.className} text-xl uppercase inline-block bg-black hover:bg-gray-200 hover:text-black text-white font-bold py-2 px-8 border border-gray-600 rounded-lg transition duration-300 transform hover:scale-105`}
+									className={`${monomaniac.className} text-xl uppercase inline-block bg-black hover:bg-gray-200 hover:text-black text-white font-bold py-4 px-8 border border-gray-600/50/50/50/50/50 rounded-lg transition duration-300 transform hover:scale-105`}
 								>
 									Join Beta v1.0
 								</Link>
@@ -100,7 +100,7 @@ const AppPage = () => {
 			<section className="bg-black pt-20 pb-6 px-4 lg:px-20">
 				<div className="container mx-auto">
 					<h2
-						className={`${staatliches.className} text-center text-gray-200 uppercase font-bold text-4xl lg:text-6xl mb-20`}
+						className={`${monomaniac.className} text-center text-gray-200 uppercase font-bold text-4xl lg:text-6xl mb-20`}
 					>
 						A New Kind Of
 						<br /> Trading Algorithm
@@ -121,7 +121,7 @@ const AppPage = () => {
 									/>
 								</div>
 								<h3
-									className={`${staatliches.className} text-gray-200 text-center uppercase font-bold text-2xl`}
+									className={`${monomaniac.className} text-gray-200 text-center uppercase font-bold text-2xl`}
 								>
 									{feature.title}
 								</h3>
@@ -135,18 +135,18 @@ const AppPage = () => {
 			</section>
 			<section className="w-full p-4 pb-12 lg:pl-12 lg:pr-12 justify-center gap-12 flex flex-wrap lg:flex-row flex-col">
 				<h3
-					className={` ${staatliches.className}  w-full text-center text-gray-200 p-4 text-3xl`}
+					className={` ${monomaniac.className}  w-full text-center text-gray-200 p-4 text-3xl`}
 				>
 					Development Team
 				</h3>
-				<div className="w-full lg:w-1/3  flex  items-center flex-row p-4 border border-gray-600/50 rounded-[1em] ">
+				<div className="w-full lg:w-1/3  flex  items-center flex-row p-4 border border-gray-600/50/50 rounded-[1em] ">
 					<div className="w-1/2 h-[333px]">
 						<spline-viewer url="https://prod.spline.design/rY0D0SWfS9Wovvzy/scene.splinecode" />
 					</div>
 
 					<div className="w-1/2 flex flex-col items-start p-2">
 						<p
-							className={` ${staatliches.className} text-xl tracking-wide text-gray-200`}
+							className={` ${monomaniac.className} text-xl tracking-wide text-gray-200`}
 						>
 							Raymond
 						</p>
@@ -167,14 +167,14 @@ const AppPage = () => {
 						</p>
 					</div>
 				</div>
-				<div className="w-full lg:w-1/3 flex  items-center flex-row p-4 border border-gray-600/50 rounded-[1em] ">
+				<div className="w-full lg:w-1/3 flex  items-center flex-row p-4 border border-gray-600/50/50 rounded-[1em] ">
 					<div className="w-1/2 h-[333px]">
 						<spline-viewer url="https://prod.spline.design/3km-uKPwoLJoaccg/scene.splinecode" />
 					</div>
 
 					<div className="w-1/2 flex flex-col items-start p-2">
 						<p
-							className={` ${staatliches.className} text-xl tracking-wide text-gray-200`}
+							className={` ${monomaniac.className} text-xl tracking-wide text-gray-200`}
 						>
 							Mitch
 						</p>

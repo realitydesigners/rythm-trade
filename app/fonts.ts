@@ -1,4 +1,11 @@
-import { Inter, Roboto, Staatliches, Jura } from "next/font/google";
+import {
+	Inter,
+	Jura,
+	Monomaniac_One,
+	Play,
+	Roboto,
+	Staatliches,
+} from "next/font/google";
 
 export const roboto = Roboto({
 	weight: ["400", "700"],
@@ -20,6 +27,17 @@ export const inter = Inter({
 
 export const jura = Jura({
 	weight: ["400", "600", "700"],
+	subsets: ["latin"],
+	display: "swap",
+});
+
+export const play = Play({
+	weight: ["400", "700"],
+	subsets: ["latin"],
+	display: "swap",
+});
+export const monomaniac = Monomaniac_One({
+	weight: ["400"],
 	subsets: ["latin"],
 	display: "swap",
 });

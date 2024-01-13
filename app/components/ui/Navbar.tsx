@@ -1,5 +1,5 @@
 "use client";
-import { jura, staatliches } from "@/app/fonts";
+import { monomaniac, play } from "@/app/fonts";
 import "@/app/globals.css";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
@@ -10,7 +10,7 @@ type IconName = "logo" | "dashboard";
 export default function Navbar() {
 	const [isNavOpen, setIsNavOpen] = useState(false);
 
-	const toggleNav = () => {
+	const toggleNav: () => void = () => {
 		setIsNavOpen(!isNavOpen);
 		document.body.style.overflow = isNavOpen ? "auto" : "hidden";
 	};
@@ -88,7 +88,7 @@ export default function Navbar() {
 				</Link>
 				<Link href="/">
 					<div
-						className={`${staatliches.className}  text-gray-200 pt-2 pb-2 hidden lg:flex flex-col `}
+						className={`${monomaniac.className}  text-gray-200 pt-2 pb-2 hidden lg:flex flex-col `}
 					>
 						<span className="text-xl font-bold tracking-widest leading-none">
 							RYTHM
@@ -126,7 +126,7 @@ export default function Navbar() {
 			>
 				<div className="w-auto  flex ">
 					<p
-						className={`${jura.className}  text-gray-400  text-center text-xs font-mono`}
+						className={`${play.className}  text-gray-400  text-center text-[10px]`}
 					>
 						{" "}
 						The Future Of Trading
@@ -137,7 +137,7 @@ export default function Navbar() {
 					<li className="block">
 						<Link
 							href="/dashboard"
-							className={`${staatliches.className}   flex items-center  text-3xl lg:text-sm text-gray-200   tracking-wide font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-2 rounded-lg transition-all duration-200 ease-in-out`}
+							className={`${monomaniac.className}   flex items-center  text-3xl lg:text-sm text-gray-200   tracking-wide  font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-2 rounded-lg transition-all duration-200 ease-in-out`}
 							onClick={closeNav}
 						>
 							{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
@@ -148,7 +148,7 @@ export default function Navbar() {
 					<li className="block">
 						<Link
 							href="/account"
-							className={`${staatliches.className}   flex items-center text-3xl lg:text-sm text-gray-200   tracking-wide  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-2 rounded-lg transition-all duration-200 ease-in-out`}
+							className={`${monomaniac.className}   flex items-center text-3xl lg:text-sm text-gray-200   tracking-wide   font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-2 rounded-lg transition-all duration-200 ease-in-out`}
 							onClick={closeNav}
 						>
 							{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
@@ -159,7 +159,7 @@ export default function Navbar() {
 					<li className="block">
 						<Link
 							href="/"
-							className={`${staatliches.className}   flex items-center  text-3xl lg:text-sm text-gray-200  tracking-wide   font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-2 rounded-lg transition-all duration-200 ease-in-out`}
+							className={`${monomaniac.className}   flex items-center  text-3xl lg:text-sm text-gray-200  tracking-wide   font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-2 rounded-lg transition-all duration-200 ease-in-out`}
 							onClick={closeNav}
 						>
 							{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
@@ -170,7 +170,7 @@ export default function Navbar() {
 					<li className="block">
 						<Link
 							href="/about"
-							className={`${staatliches.className}  flex items-center  text-3xl lg:text-sm text-gray-200  tracking-wide  font-mono font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-2 rounded-lg transition-all duration-200 ease-in-out`}
+							className={`${monomaniac.className}  flex items-center  text-3xl lg:text-sm text-gray-200  tracking-wide  font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-2 rounded-lg transition-all duration-200 ease-in-out`}
 							onClick={closeNav}
 						>
 							{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
@@ -181,7 +181,7 @@ export default function Navbar() {
 				</ul>
 				<div className="w-auto  lg:flex  hidden ">
 					<p
-						className={`${jura.className}  text-gray-400  text-center text-xs underline font-mono`}
+						className={`${play.className}  text-gray-400  text-center text-[10px] underline `}
 					>
 						rythm.capital
 					</p>
@@ -192,7 +192,7 @@ export default function Navbar() {
 					<Link
 						href="/sign-up"
 						onClick={closeNav}
-						className="relative items-center justify-center mr-2 p-2 items-center flex font-mono text-xs text-black font-semibold rounded-full transition-all duration-200 ease-in-out bg-white border-1 border-black hover:border-gray-300"
+						className="relative items-center justify-center mr-2 p-2 items-center flex text-xs text-black font-semibold rounded-full transition-all duration-200 ease-in-out bg-white border-1 border-black hover:border-gray-300"
 					>
 						<span className="whitespace-nowrap">Sign-In</span>
 					</Link>

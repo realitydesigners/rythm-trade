@@ -1,7 +1,9 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { useUser } from "@clerk/nextjs";
+"use client";
 import { fetchOandaCredentials, updateOandaCredentials } from "@/app/api/rest";
+import { jura, monomaniac } from "@/app/fonts";
+import { useUser } from "@clerk/nextjs";
+import React, { useEffect, useState } from "react";
 
 export default function AccountForm() {
 	const { user } = useUser();
@@ -40,10 +42,14 @@ export default function AccountForm() {
 	};
 
 	return (
-		<div className="flex justify-center items-center w-full">
-			<div className="w-full max-w-xl bg-black rounded-lg shadow-md p-6 mt-6">
+		<div
+			className={`${monomaniac.className} flex justify-center items-center w-full`}
+		>
+			<div
+				className={`w-full max-w-xl bg-black rounded-lg shadow-md p-6 mt-6 ${monomaniac.className}`}
+			>
 				<div className="mb-4">
-					<h2 className="font-mono text-lg text-white mb-2">
+					<h2 className={`${monomaniac.className} text-lg text-white mb-2`}>
 						Oanda Credentials
 					</h2>
 					{existingCredentials.apiKey && (
@@ -61,7 +67,7 @@ export default function AccountForm() {
 					<div className="mb-4">
 						<label
 							htmlFor="accountId"
-							className="block font-mono text-gray-600 text-sm font-bold mb-2"
+							className={`${monomaniac.className} block text-gray-600 text-sm font-bold mb-2`}
 						>
 							New Account ID
 						</label>
@@ -72,13 +78,13 @@ export default function AccountForm() {
 							value={accountId}
 							onChange={(e) => setAccountId(e.target.value)}
 							placeholder="Enter new Account ID"
-							className="font-mono shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+							className={`${monomaniac.className} shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
 						/>
 					</div>
 					<div className="mb-6">
 						<label
 							htmlFor="apiKey"
-							className="block font-mono text-gray-600 text-sm font-bold mb-2"
+							className={`${monomaniac.className} block text-gray-600 text-sm font-bold mb-2`}
 						>
 							New API Key
 						</label>
@@ -89,12 +95,12 @@ export default function AccountForm() {
 							value={apiKey}
 							onChange={(e) => setApiKey(e.target.value)}
 							placeholder="Enter new API Key"
-							className="font-mono shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+							className={`${monomaniac.className} shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
 						/>
 					</div>
 					<button
 						type="submit"
-						className="w-full font-mono bg-white hover:bg-gray-200/50 text-black font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105"
+						className={`${monomaniac.className} w-full text-xl uppercase inline-block bg-black hover:bg-gray-200 hover:text-black text-white font-bold py-4 px-8 border border-gray-600/50 rounded-lg transition duration-300 transform hover:scale-105`}
 					>
 						Update Credentials
 					</button>

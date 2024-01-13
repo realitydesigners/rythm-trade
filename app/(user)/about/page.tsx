@@ -1,6 +1,6 @@
 "use client";
 import Newsletter from "@/app/api/send/Newsletter";
-import { jura, staatliches } from "@/app/fonts";
+import { jura, monomaniac } from "@/app/fonts";
 import Prop from "@/public/icons/prop.svg";
 import Quant from "@/public/icons/quant.svg";
 import Repeat from "@/public/icons/repeat.svg";
@@ -45,7 +45,7 @@ const AboutPage = () => {
 		<>
 			<div className="flex flex-col justify-center items-center w-full min-h-screen p-6 text-center">
 				<h1
-					className={`${staatliches.className}  text-white text-5xl lg:text-6xl font-bold mb-8`}
+					className={`${monomaniac.className}  text-white text-5xl lg:text-6xl font-bold mb-8`}
 				>
 					Welcome to Rythm
 				</h1>
@@ -65,7 +65,7 @@ const AboutPage = () => {
 			<section className="bg-black pt-20 pb-40 px-4 lg:px-20">
 				<div className="container mx-auto">
 					<h2
-						className={`${staatliches.className} text-center text-gray-200 uppercase font-bold text-4xl lg:text-6xl mb-20`}
+						className={`${monomaniac.className} text-center text-gray-200 uppercase font-bold text-4xl lg:text-6xl mb-20`}
 					>
 						A New Kind Of
 						<br /> Trading Algorithm
@@ -86,7 +86,7 @@ const AboutPage = () => {
 									/>
 								</div>
 								<h3
-									className={`${staatliches.className} text-gray-200 text-center uppercase font-bold text-2xl`}
+									className={`${monomaniac.className} text-gray-200 text-center uppercase font-bold text-2xl`}
 								>
 									{feature.title}
 								</h3>

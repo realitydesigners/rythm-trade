@@ -19,6 +19,7 @@ import {
 } from "@/app/components/ui/index";
 import { PositionData } from "@/types";
 import { useUser } from "@clerk/nextjs";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import {
 	fetchFavoritePairs,
@@ -282,20 +283,20 @@ const DashboardPage = () => {
 					</Dialog>
 				</div>
 
-				<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 lg:gap-4 w-full">
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-4 w-full">
 					{favoritePairs.slice(0, numDisplayedFavorites).map((pair, index) => (
 						<div
 							key={pair}
-							className="w-full p-3 lg:p-6 border border-gray-600 h-[450px] sm:h-[575px] md:h-[60px] lg:h-[675px] rounded-lg"
+							className="w-full p-3 lg:p-6 border border-gray-600/50 h-[140vw] md:h-[70vw] lg:h-[45vw] rounded-lg"
 							onDrop={(e) => handleDrop(e, "favorites", index)}
 							onDragOver={handleDragOver}
 							draggable
 							onDragStart={() => handleDragStart(pair)}
 						>
 							<Button onClick={() => deleteFavoritePair(pair)}>Delete</Button>
-							<a href={`/dashboard/pairs/${pair}`}>
+							<Link href={`/dashboard/pairs/${pair}`}>
 								<Stream pair={pair} data={streamData[pair]} />
-							</a>
+							</Link>
 
 							<ResoModel
 								pair={pair}
@@ -344,7 +345,7 @@ const DashboardPage = () => {
 						onValueChange={(pairToAdd) => addToFavorites(pairToAdd)}
 						value=""
 					>
-						<div className="w-full border border-gray-600 rounded-lg flex flex-col justify-center   items-center p-4 space-y-4 relative">
+						<div className="w-full border border-gray-600/50 rounded-lg flex flex-col justify-center   items-center p-4 space-y-4 relative">
 							<div className="text-9xl text-gray-600/75 pb-4">+</div>
 							<div className="w-full flex justify-center z-10 text-center">
 								<SelectTrigger>
