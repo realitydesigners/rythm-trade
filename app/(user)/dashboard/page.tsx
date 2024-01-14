@@ -287,16 +287,37 @@ const DashboardPage = () => {
 					{favoritePairs.slice(0, numDisplayedFavorites).map((pair, index) => (
 						<div
 							key={pair}
-							className="w-full p-3 lg:p-6 border border-gray-600/50 h-[140vw] md:h-[70vw] lg:h-[45vw] rounded-lg"
+							className="w-full flex flex-col p-3 lg:p-6 border border-gray-600/50 h-[140vw] md:h-[70vw] lg:h-[45vw] rounded-lg"
 							onDrop={(e) => handleDrop(e, "favorites", index)}
 							onDragOver={handleDragOver}
 							draggable
 							onDragStart={() => handleDragStart(pair)}
 						>
-							<Button onClick={() => deleteFavoritePair(pair)}>Delete</Button>
-							<Link href={`/dashboard/pairs/${pair}`}>
-								<Stream pair={pair} data={streamData[pair]} />
-							</Link>
+							<div className="w-full flex flex-row justify-evenly items-center gap-2">
+								<div className="w-full p-2">
+									<Stream pair={pair} data={streamData[pair]} />
+								</div>
+
+								<Link
+									href={`/dashboard/pairs/${pair}`}
+									className="bg-gray-600/25 w-12 flex p-4 items-center justify-center rounded-[10em] h-12 rounded-lg transition-transform hover:scale-105 hover:brightness-110"
+								>
+									{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
+									<svg
+										className="w-6 h-6 text-gray-200/75 transform scale-x-[-1]"
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 20 20"
+										fill="currentColor"
+										xlinkTitle="svg"
+									>
+										<path
+											fillRule="evenodd"
+											d="M10.707 2.293a1 1 0 010 1.414L4.414 10l6.293 6.293a1 1 0 11-1.414 1.414l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 0z"
+											clipRule="evenodd"
+										/>
+									</svg>
+								</Link>
+							</div>
 
 							<ResoModel
 								pair={pair}
@@ -321,6 +342,7 @@ const DashboardPage = () => {
 										))}
 									</SelectContent>
 								</Select>
+
 								<Select
 									value={pair}
 									onValueChange={(newValue) =>
@@ -338,6 +360,7 @@ const DashboardPage = () => {
 										))}
 									</SelectContent>
 								</Select>
+								<Button onClick={() => deleteFavoritePair(pair)}>Delete</Button>
 							</div>
 						</div>
 					))}
