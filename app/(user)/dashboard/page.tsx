@@ -270,129 +270,118 @@ const DashboardPage = () => {
 	};
 
 	return (
-		<div>
-			<div className="w-full flex pt-20 lg:pt-20 lg:p-6 p-4 flex-wrap ">
-				<FavoritesList favoritePairs={favoritePairs} streamData={streamData} />
-				<div className="w-full flex flex-wrap gap-2 mb-4">
-					<Dialog>
-						<DialogTrigger asChild>
-							<Button onClick={toggleProfile}>Account Summary</Button>
-						</DialogTrigger>
-						<DialogContent>
-							<MasterProfile />
-						</DialogContent>
-					</Dialog>
-				</div>
-
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-4 w-full">
-					{favoritePairs.slice(0, numDisplayedFavorites).map((pair, index) => (
-						<div
-							key={pair}
-							className="w-full flex flex-col p-3 lg:p-6 border border-gray-600/50 h-[140vw] md:h-[70vw] lg:h-[45vw] rounded-lg"
-							onDrop={(e) => handleDrop(e, "favorites", index)}
-							onDragOver={handleDragOver}
-							draggable
-							onDragStart={() => handleDragStart(pair)}
-						>
-							<div className="w-full flex flex-row justify-evenly items-center gap-2">
-								<div className="w-full p-2">
-									<Stream pair={pair} data={streamData[pair]} />
-								</div>
-
-								<Link
-									href={`/dashboard/pairs/${pair}`}
-									className="relative bg-gray-600/25 w-10 flex items-center justify-center rounded-[1em] h-10 rounded-lg transition-transform hover:scale-105 hover:brightness-110 overflow-hidden"
-								>
-									<div className="absolute inset-0 bg-gray-600/25 transition-opacity opacity-0 hover:opacity-100" />
-									{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
-									<svg
-										className="w-4 h-4 text-gray-200/75 transform scale-x-[-1] transition-transform duration-300 ease-in-out"
-										xmlns="http://www.w3.org/2000/svg"
-										viewBox="0 0 20 20"
-										fill="currentColor"
-										xlinkTitle="svg"
-									>
-										<path
-											fillRule="evenodd"
-											d="M10.707 2.293a1 1 0 010 1.414L4.414 10l6.293 6.293a1 1 0 11-1.414 1.414l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 0z"
-											clipRule="evenodd"
-										/>
-									</svg>
-								</Link>
-							</div>
-
-							<ResoModel
-								pair={pair}
-								streamData={streamData[pair]}
-								selectedBoxArrayType={selectedBoxArrayTypes[pair]}
-							/>
-							<div className="w-full  flex justify-center items-center gap-2">
-								<Select
-									value={selectedBoxArrayTypes[pair]}
-									onValueChange={(newValue) =>
-										handleBoxArrayChange(pair, newValue)
-									}
-								>
-									<SelectTrigger>
-										<SelectValue>{selectedBoxArrayTypes[pair]}</SelectValue>
-									</SelectTrigger>
-									<SelectContent>
-										{Object.keys(BOX_SIZES).map((arrayKey) => (
-											<SelectItem key={arrayKey} value={arrayKey}>
-												{arrayKey}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-
-								<Select
-									value={pair}
-									onValueChange={(newValue) =>
-										handleReplaceFavorite(newValue, index)
-									}
-								>
-									<SelectTrigger>
-										<SelectValue>{pair}</SelectValue>
-									</SelectTrigger>
-									<SelectContent>
-										{currencyPairs.map((p) => (
-											<SelectItem key={p} value={p}>
-												{p}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-								<Button onClick={() => deleteFavoritePair(pair)}>Delete</Button>
-							</div>
-						</div>
-					))}
-					<Select
-						onValueChange={(pairToAdd) => addToFavorites(pairToAdd)}
-						value=""
-					>
-						<div className="w-full border border-gray-600/50 rounded-lg flex flex-col justify-center   items-center p-4 space-y-4 relative">
-							<div className="text-9xl text-gray-600/75 pb-4">+</div>
-							<div className="w-full flex justify-center z-10 text-center">
-								<SelectTrigger>
-									<p className="text-gray-200 text-xs w-full text-left p-2">
-										Select Pair
-									</p>
-								</SelectTrigger>
-
-								<SelectContent>
-									{currencyPairs
-										.filter((pair) => !favoritePairs.includes(pair))
-										.map((pair) => (
-											<SelectItem key={pair} value={pair}>
-												{pair}
-											</SelectItem>
-										))}
-								</SelectContent>
-							</div>
-						</div>
-					</Select>
-				</div>
+		<div className="w-full flex pt-20 lg:pt-20 lg:p-6 p-4 flex-wrap ">
+			<FavoritesList favoritePairs={favoritePairs} streamData={streamData} />
+			<div className="w-full flex flex-wrap gap-2 mb-4">
+				<Dialog>
+					<DialogTrigger asChild>
+						<Button onClick={toggleProfile}>Account Summary</Button>
+					</DialogTrigger>
+					<DialogContent>
+						<MasterProfile />
+					</DialogContent>
+				</Dialog>
+				<Select
+					onValueChange={(pairToAdd) => addToFavorites(pairToAdd)}
+					value=""
+				>
+					<SelectTrigger>
+						<p className="text-gray-200 text-xs w-full text-left p-2">
+							Add Pair
+						</p>
+					</SelectTrigger>
+					<SelectContent>
+						{currencyPairs
+							.filter((pair) => !favoritePairs.includes(pair))
+							.map((pair) => (
+								<SelectItem key={pair} value={pair}>
+									{pair}
+								</SelectItem>
+							))}
+					</SelectContent>
+				</Select>
 			</div>
+			<div className="flex  w-full relative  overflow-x-auto">
+				{favoritePairs.slice(0, numDisplayedFavorites).map((pair, index) => (
+					<div
+						key={pair}
+						className="flex flex-col w-[90vw] h-[125vw] lg:w-[800px] lg:h-[600px] p-3 lg:p-6 border border-gray-600/50 rounded-lg mr-4 mb-4"
+						onDrop={(e) => handleDrop(e, "favorites", index)}
+						onDragOver={handleDragOver}
+						draggable
+						onDragStart={() => handleDragStart(pair)}
+					>
+						<div className="flex justify-between items-center">
+							<div className="p-2">
+								<Stream pair={pair} data={streamData[pair]} />
+							</div>
+							<Link
+								href={`/dashboard/pairs/${pair}`}
+								className="relative bg-gray-600/25 w-10 flex items-center justify-center rounded-[1em] h-10 rounded-lg transition-transform hover:scale-105 hover:brightness-110 overflow-hidden"
+							>
+								<div className="absolute inset-0 bg-gray-600/25 transition-opacity opacity-0 hover:opacity-100" />
+								{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
+								<svg
+									className="w-4 h-4 text-gray-200/75 transform scale-x-[-1] transition-transform duration-300 ease-in-out"
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 20 20"
+									fill="currentColor"
+									xlinkTitle="svg"
+								>
+									<path
+										fillRule="evenodd"
+										d="M10.707 2.293a1 1 0 010 1.414L4.414 10l6.293 6.293a1 1 0 11-1.414 1.414l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 0z"
+										clipRule="evenodd"
+									/>
+								</svg>
+							</Link>
+						</div>
+						<ResoModel
+							pair={pair}
+							streamData={streamData[pair]}
+							selectedBoxArrayType={selectedBoxArrayTypes[pair]}
+						/>
+						<div className="flex  justify-center items-center space-x-2">
+							<Select
+								value={selectedBoxArrayTypes[pair]}
+								onValueChange={(newValue) =>
+									handleBoxArrayChange(pair, newValue)
+								}
+							>
+								<SelectTrigger>
+									<SelectValue>{selectedBoxArrayTypes[pair]}</SelectValue>
+								</SelectTrigger>
+								<SelectContent>
+									{Object.keys(BOX_SIZES).map((arrayKey) => (
+										<SelectItem key={arrayKey} value={arrayKey}>
+											{arrayKey}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
+							<Select
+								value={pair}
+								onValueChange={(newValue) =>
+									handleReplaceFavorite(newValue, index)
+								}
+							>
+								<SelectTrigger>
+									<SelectValue>{pair}</SelectValue>
+								</SelectTrigger>
+								<SelectContent>
+									{currencyPairs.map((p) => (
+										<SelectItem key={p} value={p}>
+											{p}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
+							<Button onClick={() => deleteFavoritePair(pair)}>Delete</Button>
+						</div>
+					</div>
+				))}
+			</div>
+
 			<div className="w-full p-2 lg:p-4">
 				<MasterPosition positionData={positionData} />
 			</div>
