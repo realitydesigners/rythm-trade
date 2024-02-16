@@ -4,6 +4,7 @@ import {
 	Monomaniac_One,
 	Play,
 	Roboto,
+	Space_Grotesk,
 	Staatliches,
 } from "next/font/google";
 
@@ -40,4 +41,9 @@ export const monomaniac = Monomaniac_One({
 	weight: ["400"],
 	subsets: ["latin"],
 	display: "swap",
+});
+export const space = Space_Grotesk({
+	weight: ["400", "600"],
+	style: ["normal"],
+	subsets: ["latin"],
 });

@@ -1,4 +1,3 @@
-import { Label } from "@/app/components/ui/label";
 import { StreamData } from "@/types";
 import React from "react";
 
@@ -14,23 +13,29 @@ const Stream: React.FC<StreamProps> = ({ pair, data }) => {
 	return (
 		<div className="w-full justify-center flex">
 			<div className="w-full ">
-				<Label className="font-bold">
-					{pair}:
+				<div>
+					<span className="text-lg font-bold text-gray-200 ">{pair}</span>:
 					{data ? (
-						<>
-							<br />
-							<Label className="text-teal-400 font-bold">Bid:</Label>{" "}
-							<Label>{bid}</Label>
-							<br />
-							<Label className="text-red-400 font-bold">Ask:</Label>{" "}
-							<Label>{ask}</Label>{" "}
-						</>
+						<div className="flex-row flex flex-wrap leading-none ">
+							<div className="mr-2 flex flex-row py-1">
+								<div className="text-teal-400 uppercase font-bold pr-1">
+									Bid:
+								</div>
+								<div className="text-gray-400">{bid}</div>
+							</div>
+							<div className="mr-2 flex flex-row py-1">
+								<div className="text-red-400 uppercase font-bold pr-1">
+									Ask:
+								</div>
+								<div className="text-gray-400">{ask}</div>
+							</div>
+						</div>
 					) : (
-						<div className="w-full p-4 h-full flex p-2">
+						<div className="w-full h-full flex p-2">
 							{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
 							<svg
-								width="20"
-								height="20"
+								width="15"
+								height="15"
 								viewBox="0 0 50 50"
 								xmlns="http://www.w3.org/2000/svg"
 							>
@@ -56,7 +61,7 @@ const Stream: React.FC<StreamProps> = ({ pair, data }) => {
 							</svg>
 						</div>
 					)}
-				</Label>
+				</div>
 			</div>
 		</div>
 	);

@@ -1,8 +1,8 @@
+import Navbar from "@/app/components/ui/Navbar";
+import { play, space } from "@/app/fonts";
+import { ClerkProvider } from "@clerk/nextjs";
 import { Metadata } from "next";
 import "./globals.css";
-
-import Navbar from "@/app/components/ui/Navbar";
-import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
 	title: "RYTHM - High Precision Algorithmic Trading",
@@ -15,7 +15,7 @@ export default function RootLayout({
 }: { children: React.ReactNode }) {
 	return (
 		<ClerkProvider>
-			<html lang="en">
+			<html lang="en" className={`${space.className} `}>
 				<head>
 					<link rel="icon" href="/favicon.ico" sizes="any" />
 				</head>

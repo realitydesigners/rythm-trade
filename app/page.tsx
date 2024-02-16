@@ -175,7 +175,7 @@ const AppPage = () => {
 							trading system and philospophy since 2019.
 						</p>
 						<p
-							className={`${jura.className}  text-gray-400  text-center text-xs underline font-mono`}
+							className={`${jura.className}  text-gray-400  text-center text-xs underline `}
 						>
 							raymond@rythm.capital
 						</p>
@@ -204,7 +204,7 @@ const AppPage = () => {
 						</p>
 
 						<p
-							className={`${jura.className}  text-gray-400  text-center text-xs underline font-mono`}
+							className={`${jura.className}  text-gray-400  text-center text-xs underline `}
 						>
 							mitch@rythm.capital
 						</p>

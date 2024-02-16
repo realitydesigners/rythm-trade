@@ -1,5 +1,6 @@
 "use client";
 import { fetchAllPairPositions } from "@/app/api/actions/fetchPositionData";
+import FavoritesList from "@/app/components/FavoritesList";
 import {
 	MasterPosition,
 	MasterProfile,
@@ -270,8 +271,8 @@ const DashboardPage = () => {
 
 	return (
 		<div>
-			{" "}
 			<div className="w-full flex pt-20 lg:pt-20 lg:p-6 p-4 flex-wrap ">
+				<FavoritesList favoritePairs={favoritePairs} streamData={streamData} />
 				<div className="w-full flex flex-wrap gap-2 mb-4">
 					<Dialog>
 						<DialogTrigger asChild>
@@ -300,11 +301,12 @@ const DashboardPage = () => {
 
 								<Link
 									href={`/dashboard/pairs/${pair}`}
-									className="bg-gray-600/25 w-12 flex p-4 items-center justify-center rounded-[10em] h-12 rounded-lg transition-transform hover:scale-105 hover:brightness-110"
+									className="relative bg-gray-600/25 w-10 flex items-center justify-center rounded-[1em] h-10 rounded-lg transition-transform hover:scale-105 hover:brightness-110 overflow-hidden"
 								>
+									<div className="absolute inset-0 bg-gray-600/25 transition-opacity opacity-0 hover:opacity-100" />
 									{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
 									<svg
-										className="w-6 h-6 text-gray-200/75 transform scale-x-[-1]"
+										className="w-4 h-4 text-gray-200/75 transform scale-x-[-1] transition-transform duration-300 ease-in-out"
 										xmlns="http://www.w3.org/2000/svg"
 										viewBox="0 0 20 20"
 										fill="currentColor"
@@ -372,7 +374,7 @@ const DashboardPage = () => {
 							<div className="text-9xl text-gray-600/75 pb-4">+</div>
 							<div className="w-full flex justify-center z-10 text-center">
 								<SelectTrigger>
-									<p className="text-gray-200 font-mono text-xs w-full text-left p-2">
+									<p className="text-gray-200 text-xs w-full text-left p-2">
 										Select Pair
 									</p>
 								</SelectTrigger>
