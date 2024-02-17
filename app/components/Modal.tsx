@@ -42,7 +42,7 @@ export default function Modal({ children }: { children: React.ReactNode }) {
 			className="fixed inset-0 z-10 mx-auto bg-black/80 flex items-center justify-center"
 			onClick={onClick}
 		>
-			<div className="w-11/12  relative h-[800px]">{children}</div>
+			<div className="w-11/12  relative h-5/6 lg:h-[800px]">{children}</div>
 		</div>
 	);
 }
