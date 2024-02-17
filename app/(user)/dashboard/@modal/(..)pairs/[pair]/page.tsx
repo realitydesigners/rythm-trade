@@ -1,7 +1,6 @@
 "use client";
 import { closeWebSocket, connectWebSocket } from "@/app/api/websocket";
 import Modal from "@/app/components/Modal";
-import PairModalContent from "@/app/components/PairModalContent";
 import { ResoModel, Stream, ThreeDModel } from "@/app/components/index";
 import { useUser } from "@clerk/nextjs";
 import { useParams } from "next/navigation";
