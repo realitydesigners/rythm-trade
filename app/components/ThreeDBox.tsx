@@ -117,8 +117,8 @@ const ThreeDBox: React.FC<ThreeDBoxProps> = ({ boxArrays }) => {
 	}, [boxArrays]);
 
 	return (
-		<div className="w-full lg:h-[100vh] h-[60vh] ">
-			<Canvas style={{ width: "100%", height: "100%" }}>
+		<div className="w-full h-full ">
+			<Canvas>
 				<PerspectiveCamera makeDefault position={[1, 0, 1.5]} fov={60} />
 				<OrbitControls />
 
@@ -128,18 +128,12 @@ const ThreeDBox: React.FC<ThreeDBoxProps> = ({ boxArrays }) => {
 					color={"rgba(58, 153, 147)"}
 					intensity={1}
 				/>
-				<RotatingDirectionalLight
-					position={[10, 0, 10]}
-					color={"rgb(255, 182, 193)"}
-					intensity={1}
-				/>
 
-				<pointLight position={[0, 3, 0]} color={"#59cfc3"} intensity={100} />
-				<pointLight position={[0, -3, 0]} color={"#CF596E"} intensity={100} />
+				<pointLight position={[0, 3, 0]} color={"#59cfc3"} intensity={20} />
 
 				<Center>
 					<EffectComposer>
-						<Scanline blendFunction={BlendFunction.OVERLAY} density={5} />
+						<Scanline blendFunction={BlendFunction.MULTIPLY} density={10} />
 						<BoxGroup boxes={boxes} />
 					</EffectComposer>
 				</Center>
