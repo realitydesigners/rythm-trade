@@ -1,6 +1,7 @@
 "use client";
 import { fetchAllPairPositions } from "@/app/api/actions/fetchPositionData";
 import FavoritesList from "@/app/components/FavoritesList";
+import { useWebSocket } from "@/app/components/context/WebSocketContext";
 import {
 	MasterPosition,
 	MasterProfile,
@@ -27,11 +28,7 @@ import {
 	fetchInstruments,
 	updateFavoritePairs,
 } from "../../api/rest";
-import {
-	closeWebSocket,
-	connectWebSocket,
-	sendWebSocketMessage,
-} from "../../api/websocket";
+import { sendWebSocketMessage } from "../../api/websocket";
 import { BOX_SIZES } from "../../utils/constants";
 
 const initialFavorites = [
@@ -46,53 +43,18 @@ const initialFavorites = [
 ];
 const DashboardPage = () => {
 	const { user } = useUser();
+	const { streamData } = useWebSocket();
 	const [currencyPairs, setCurrencyPairs] = useState<string[]>([]);
 	const [favoritePairs, setFavoritePairs] = useState<string[]>([]);
 	const [draggedItem, setDraggedItem] = useState<string | null>(null);
 	const [allPairs, setAllPairs] = useState<string[]>([]);
 	const [showProfile, setShowProfile] = useState(false);
 	const [numDisplayedFavorites, setNumDisplayedFavorites] = useState<number>(0);
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	const [streamData, setStreamData] = useState<{ [pair: string]: any }>({});
+
 	const [selectedBoxArrayTypes, setSelectedBoxArrayTypes] = useState(
 		Object.fromEntries(allPairs.map((pair) => [pair, "d"])),
 	);
 	const [positionData, setPositionData] = useState<PositionData[]>([]);
-	const [ws, setWs] = useState<WebSocket | null>(null);
-
-	useEffect(() => {
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-		const handleWebSocketMessage = (message: any) => {
-			const { data, pair } = message;
-			if (data.type !== "HEARTBEAT") {
-				setStreamData((prevData) => ({
-					...prevData,
-					[pair]: data,
-				}));
-			}
-		};
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-		const handleWebSocketError = (event: any) => {
-			console.error("WebSocket Error:", event);
-		};
-
-		const handleWebSocketClose = () => {
-			console.log("WebSocket Disconnected");
-		};
-
-		if (user) {
-			connectWebSocket(
-				user.id,
-				handleWebSocketMessage,
-				handleWebSocketError,
-				handleWebSocketClose,
-			);
-		}
-
-		return () => {
-			closeWebSocket();
-		};
-	}, [user]);
 
 	useEffect(() => {
 		const loadFavoritePairs = async () => {

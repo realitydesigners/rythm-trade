@@ -1,6 +1,7 @@
 "use client";
 import { closeWebSocket, connectWebSocket } from "@/app/api/websocket";
 import Modal from "@/app/components/Modal";
+import { useWebSocket } from "@/app/components/context/WebSocketContext";
 import { ResoModel, Stream, ThreeDModel } from "@/app/components/index";
 import { useUser } from "@clerk/nextjs";
 import { useParams } from "next/navigation";
@@ -14,35 +15,12 @@ type CommonComponentProps = {
 	onBoxArrayTypeChange?: (newType: string) => void;
 };
 
-const useWebSocketData = (userId: string | undefined, pair: string) => {
-	const [streamData, setStreamData] = useState<Record<string, unknown>>({});
-
-	useEffect(() => {
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-		const handleWebSocketMessage = (message: any) => {
-			const { data } = message;
-			if (data?.type !== "HEARTBEAT") {
-				setStreamData((prevData) => ({ ...prevData, [pair]: data }));
-			}
-		};
-
-		if (userId) {
-			connectWebSocket(userId, handleWebSocketMessage, console.error, () =>
-				console.log("WebSocket Disconnected"),
-			);
-			return () => closeWebSocket();
-		}
-	}, [userId, pair]);
-
-	return streamData;
-};
-
 const PairPage = () => {
 	const { user } = useUser();
 	const params = useParams();
+	const { streamData } = useWebSocket();
 	const pair = Array.isArray(params.pair) ? params.pair[0] : params.pair || "";
 	const [selectedBoxArrayType, setSelectedBoxArrayType] = useState("d");
-	const streamData = useWebSocketData(user?.id, pair);
 
 	const handleBoxArrayTypeChange = useCallback(
 		(newType: string) => setSelectedBoxArrayType(newType),
