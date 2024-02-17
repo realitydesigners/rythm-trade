@@ -1,70 +1,57 @@
 "use client";
-import { closeWebSocket, connectWebSocket } from "@/app/api/websocket";
+import { fetchPairPosition } from "@/app/api/actions/fetchPositionData";
 import Modal from "@/app/components/Modal";
 import { useWebSocket } from "@/app/components/context/WebSocketContext";
 import { ResoModel, Stream, ThreeDModel } from "@/app/components/index";
+import { PositionData, StreamData } from "@/types";
 import { useUser } from "@clerk/nextjs";
 import { useParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 
-type CommonComponentProps = {
-	pair: string;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	data: any;
-	selectedBoxArrayType?: string;
-	onBoxArrayTypeChange?: (newType: string) => void;
-};
-
-const PairPage = () => {
+const PairPages = () => {
 	const { user } = useUser();
-	const params = useParams();
 	const { streamData } = useWebSocket();
+	const params = useParams();
 	const pair = Array.isArray(params.pair) ? params.pair[0] : params.pair || "";
+	const [positionData, setPositionData] = useState<PositionData | null>(null);
 	const [selectedBoxArrayType, setSelectedBoxArrayType] = useState("d");
+
+	useEffect(() => {
+		const getPositionData = async () => {
+			if (user?.id) {
+				const position = await fetchPairPosition(user.id, pair);
+				setPositionData(position);
+			}
+		};
+
+		getPositionData();
+	}, [user?.id, pair]);
 
 	const handleBoxArrayTypeChange = useCallback(
 		(newType: string) => setSelectedBoxArrayType(newType),
 		[],
 	);
 
+	const currentPairData: StreamData | null = streamData[pair] ?? null;
+
 	return (
 		<Modal>
-			<div className="w-full h-full bg-black/80 border-gray-600/50 p-8 border rounded-lg">
-				<StreamSection pair={pair} data={streamData[pair]} />
+			<div className="bg-black w-full h-full bg-gray-400 border border-gray-600/50 rounded-xl">
+				<div className="w-auto p-8">
+					<Stream pair={pair} data={currentPairData} />
+				</div>
+				<div className="w-full pb-20">
+					<div className="w-full flex min-h-screen absolute z-10">
+						<ThreeDModel
+							pair={pair}
+							streamData={currentPairData}
+							selectedBoxArrayType={selectedBoxArrayType || ""}
+						/>
+					</div>
+				</div>
 			</div>
 		</Modal>
 	);
 };
 
-const StreamSection: React.FC<CommonComponentProps> = ({
-	pair,
-	data,
-	selectedBoxArrayType,
-}) => (
-	<div className="flex-row">
-		<Stream pair={pair} data={data} />
-		{/* <ThreeDModelSection
-			pair={pair}
-			data={data}
-			selectedBoxArrayType={selectedBoxArrayType}
-		/> */}
-	</div>
-);
-
-const ThreeDModelSection: React.FC<CommonComponentProps> = ({
-	pair,
-	data,
-	selectedBoxArrayType,
-}) => (
-	<div className="w-full pb-20">
-		<div id="three" className="w-full flex">
-			<ResoModel
-				pair={pair}
-				streamData={data}
-				selectedBoxArrayType={selectedBoxArrayType || ""}
-			/>
-		</div>
-	</div>
-);
-
-export default PairPage;
+export default PairPages;
