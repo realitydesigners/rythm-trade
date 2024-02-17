@@ -316,7 +316,7 @@ const DashboardPage = () => {
 								<Stream pair={pair} data={streamData[pair]} />
 							</div>
 							<Link
-								href={`/dashboard/pairs/${pair}`}
+								href={`/pairs/${pair}`}
 								className="relative bg-gray-600/25 w-10 flex items-center justify-center rounded-[1em] h-10 rounded-lg transition-transform hover:scale-105 hover:brightness-110 overflow-hidden"
 							>
 								<div className="absolute inset-0 bg-gray-600/25 transition-opacity opacity-0 hover:opacity-100" />

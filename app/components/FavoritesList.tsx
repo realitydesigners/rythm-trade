@@ -20,7 +20,7 @@ const FavoriteItem: React.FC<NavbarStreamProps> = ({ pair, data }) => {
 
 	return (
 		<Link
-			href={`/dashboard/pairs/${pair}`}
+			href={`/pairs/${pair}`}
 			className="border border-gray-600/50 rounded-lg flex items-center px-4 py-2 hover:scale-105 hover:bg-gray-600/25 transition-all duration-300"
 		>
 			<div className="pr-4 white-space-nowrap">

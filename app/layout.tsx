@@ -21,7 +21,7 @@ export default function RootLayout({
 				</head>
 				<body className="bg-black">
 					<Navbar />
-					<div className="p-0">{children}</div>
+					{children}
 				</body>
 			</html>
 		</ClerkProvider>
