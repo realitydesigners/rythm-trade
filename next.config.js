@@ -1,9 +1,11 @@
-const million = require('million/compiler');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-   images: {
-      domains: ['img.clerk.com'],
-   },
+	images: {
+		domains: ["img.clerk.com"],
+	},
+	// Additional configuration options can be added here
 };
 
-module.exports = million.next(nextConfig, { auto: { rsc: true } });
+module.exports = {
+	...nextConfig,
+};
