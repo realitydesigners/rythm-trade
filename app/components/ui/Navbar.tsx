@@ -128,7 +128,6 @@ export default function Navbar() {
 					<p
 						className={`${play.className}  text-gray-400  text-center text-[10px]`}
 					>
-						{" "}
 						The Future Of Trading
 					</p>
 				</div>
@@ -137,34 +136,28 @@ export default function Navbar() {
 					<li className="block">
 						<Link
 							href="/dashboard"
-							className={`${monomaniac.className}   flex items-center  text-3xl lg:text-sm text-gray-200   tracking-wide  font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-2 rounded-lg transition-all duration-200 ease-in-out`}
+							className={`${monomaniac.className} uppercase  flex items-center  text-3xl lg:text-sm text-gray-200   tracking-wide  font-semibold hover:bg-gray-600/10 hover:text-gray-200 hover:scale-105 p-2 rounded-lg transition-all duration-200 ease-in-out`}
 							onClick={closeNav}
 						>
-							{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
-							<svg className="w-4 h-4">{getIcon("dashboard")}</svg>
 							<span className="ml-2">Dashboard</span>
 						</Link>
 					</li>
 					<li className="block">
 						<Link
 							href="/account"
-							className={`${monomaniac.className}   flex items-center text-3xl lg:text-sm text-gray-200   tracking-wide   font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-2 rounded-lg transition-all duration-200 ease-in-out`}
+							className={`${monomaniac.className} uppercase  flex items-center text-3xl lg:text-sm text-gray-200   tracking-wide   font-semibold hover:bg-gray-600/10 hover:text-gray-200 hover:scale-105 p-2 rounded-lg transition-all duration-200 ease-in-out`}
 							onClick={closeNav}
 						>
-							{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
-							<svg className="w-4 h-4">{getIcon("dashboard")}</svg>
 							<span className="ml-2">My Account</span>
 						</Link>
 					</li>
 					<li className="block">
 						<Link
 							href="/"
-							className={`${monomaniac.className}   flex items-center  text-3xl lg:text-sm text-gray-200  tracking-wide   font-semibold hover:bg-gray-600/30 hover:text-gray-200 hover:scale-105 p-2 rounded-lg transition-all duration-200 ease-in-out`}
+							className={`${monomaniac.className} uppercase   flex items-center  text-3xl lg:text-sm text-gray-200  tracking-wide   font-semibold hover:bg-gray-600/10 hover:text-gray-200 hover:scale-105 p-2 rounded-lg transition-all duration-200 ease-in-out`}
 							onClick={closeNav}
 						>
-							{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
-							<svg className="w-4 h-4">{getIcon("dashboard")}</svg>
-							<span className="ml-2">Our Tools</span>
+							<span className="ml-2">Tools</span>
 						</Link>
 					</li>
 				</ul>

@@ -30,7 +30,7 @@ const EmailForm = () => {
 			id="rythmForm"
 			className={`${monomaniac.className} flex flex-col space-y-4 w-11/12 md:w-1/2 lg:w-1/3`}
 		>
-			<h2 className="text-4xl uppercase text-gray-200 text-center">
+			<h2 className="text-4xl uppercase  bg-gradient-to-r text-center from-purple-200 via-purple-100 to-indigo-200 text-transparent bg-clip-text text-center">
 				Reach Out
 			</h2>
 
@@ -40,7 +40,7 @@ const EmailForm = () => {
 				id="name"
 				required
 				placeholder="name"
-				className="p-2 bg-gray-200 border border-gray-600/50 rounded-md"
+				className="p-2 bg-gray-200/50 border border-gray-600/50 rounded-md"
 			/>
 
 			<input
@@ -49,14 +49,13 @@ const EmailForm = () => {
 				id="email"
 				required
 				placeholder="email"
-				className="p-2 bg-gray-200 border border-gray-600/50 rounded-md"
+				className="p-2 bg-gray-20/50 border border-gray-600/50 rounded-md"
 			/>
 
 			<button
 				type="submit"
-				className="border uppercase tracking-wide bg-black  border-gray-600/50 text-white py-2 px-4 rounded-md hover:bg-black/70 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+				className="border uppercase bg-black tracking-wide bg-black  border-gray-600/50 text-white py-2 px-4 rounded-md hover:bg-black/70 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
 			>
-				{" "}
 				Send
 			</button>
 		</form>
