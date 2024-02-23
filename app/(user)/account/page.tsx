@@ -7,25 +7,25 @@ export default async function AccountPage() {
 
 	if (!user)
 		return (
-			<div className="flex justify-center items-center h-screen bg-gray-900 text-white">
+			<div className="flex h-screen items-center justify-center bg-gray-900 text-white">
 				<p className="text-xl">Not logged in</p>
 			</div>
 		);
 
 	return (
-		<div className="flex justify-center items-center h-screen  p-4">
-			<div className="max-w-2xl w-full rounded-lg shadow-xl border border-gray-600/50 overflow-hidden">
-				<div className="p-8 bg-black text-white text-center">
+		<div className="flex h-screen items-center justify-center  p-4">
+			<div className="w-full max-w-2xl overflow-hidden rounded-lg border border-gray-600/50 shadow-xl">
+				<div className="bg-black p-8 text-center text-white">
 					{user?.imageUrl && (
 						<Image
 							src={user.imageUrl}
 							alt="Profile"
 							width="100"
 							height="100"
-							className=" border rounded-full object-cover mx-auto mb-6"
+							className=" mx-auto mb-6 rounded-full border object-cover"
 						/>
 					)}
-					<h1 className="text-4xl font-bold mb-4">
+					<h1 className="mb-4 text-4xl font-bold">
 						Welcome, {user?.firstName}!
 					</h1>
 				</div>

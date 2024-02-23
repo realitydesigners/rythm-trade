@@ -40,7 +40,7 @@ const PairPage = () => {
 	const currentPairData: StreamData | null = streamData[pair] ?? null;
 
 	return (
-		<div className="w-full relative z-0">
+		<div className="relative z-0 w-full">
 			<StreamSection pair={pair} data={currentPairData} />
 			<ThreeDModelSection
 				pair={pair}
@@ -52,7 +52,7 @@ const PairPage = () => {
 };
 
 const StreamSection: React.FC<CommonComponentProps> = ({ pair, data }) => (
-	<div className="w-full top-20 fixed z-30 pl-6 pr-6">
+	<div className="fixed top-20 z-30 w-full pl-6 pr-6">
 		<Stream pair={pair} data={data} />
 	</div>
 );
@@ -63,7 +63,7 @@ const ThreeDModelSection: React.FC<CommonComponentProps> = ({
 	selectedBoxArrayType,
 }) => (
 	<div className="w-full pb-20">
-		<div id="three" className="w-full flex min-h-screen absolute z-10">
+		<div id="three" className="absolute z-10 flex min-h-screen w-full">
 			<ThreeDModel
 				pair={pair}
 				streamData={data}

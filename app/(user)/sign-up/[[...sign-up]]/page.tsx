@@ -1,6 +1,6 @@
 "use client";
-import React, { useCallback, useEffect } from "react";
 import { SignUp, useUser } from "@clerk/nextjs";
+import React, { useCallback, useEffect } from "react";
 
 export default function Page() {
 	const { user } = useUser();
@@ -43,7 +43,7 @@ export default function Page() {
 	}, [user, handleSignUpSuccess]);
 
 	return (
-		<div className="w-full h-screen -mt-12 flex justify-center items-center p-8">
+		<div className="-mt-12 flex h-screen w-full items-center justify-center p-8">
 			<SignUp />
 		</div>
 	);

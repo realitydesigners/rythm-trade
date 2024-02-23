@@ -39,10 +39,10 @@ export default function Modal({ children }: { children: React.ReactNode }) {
 		// biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
 		<div
 			ref={overlay}
-			className="fixed inset-0 z-10 mx-auto bg-black/80 flex items-center justify-center"
+			className="fixed inset-0 z-10 mx-auto flex items-center justify-center bg-black/80"
 			onClick={onClick}
 		>
-			<div className="w-11/12  relative h-5/6 lg:h-[800px]">{children}</div>
+			<div className="relative  h-5/6 w-11/12 lg:h-[800px]">{children}</div>
 		</div>
 	);
 }

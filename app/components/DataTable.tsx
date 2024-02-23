@@ -1,7 +1,7 @@
 "use client";
 import { CandleData } from "@/types";
-import React, { Context, useContext, useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
+import React, { Context, useContext, useEffect, useState } from "react";
 import { fetchCandles } from "../api/rest";
 
 interface DataTableProps {
@@ -45,7 +45,7 @@ function DataTable({ pair }: DataTableProps) {
 				<tbody>
 					{loading ? (
 						<tr>
-							<td colSpan={5} className="text-center px-4 py-2">
+							<td colSpan={5} className="px-4 py-2 text-center">
 								Loading...
 							</td>
 						</tr>

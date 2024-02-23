@@ -1,6 +1,6 @@
 "use client";
-import React, { useCallback, useEffect } from "react";
 import { SignIn, useUser } from "@clerk/nextjs";
+import React, { useCallback, useEffect } from "react";
 
 export default function Page() {
 	const { user } = useUser();

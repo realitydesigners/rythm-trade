@@ -34,10 +34,10 @@ const MasterProfile: React.FC = () => {
 		<div>
 			{accountSummary ? (
 				<div>
-					<h2 className="title text-gray-200 font-mono mb-4 uppercase font-bold">
+					<h2 className="title mb-4 font-mono font-bold uppercase text-gray-200">
 						Account Summary
 					</h2>
-					<div className="flex-col gap-2 flex flex-wrap">
+					<div className="flex flex-col flex-wrap gap-2">
 						<Label>
 							ID: <span>{accountSummary.id}</span>
 						</Label>
@@ -76,7 +76,7 @@ const MasterProfile: React.FC = () => {
 					</div>
 				</div>
 			) : (
-				<div className="w-full h-full flex items-center justify-center">
+				<div className="flex h-full w-full items-center justify-center">
 					{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
 					<svg
 						width="60"

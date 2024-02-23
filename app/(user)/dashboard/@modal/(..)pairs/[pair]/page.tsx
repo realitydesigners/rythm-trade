@@ -51,15 +51,15 @@ const PairPages = () => {
 
 	return (
 		<Modal>
-			<div className="bg-black w-full relative h-full bg-black border border-gray-600/50 rounded-xl">
+			<div className="relative h-full w-full rounded-xl border border-gray-600/50 bg-black bg-black">
 				{initializationComplete ? (
-					<div className="flex lg:flex-row flex-col w-full h-full relative ">
-						<div className="w-full lg:w-1/2 h-3/4 lg:h-full ">
+					<div className="relative flex h-full w-full flex-col lg:flex-row ">
+						<div className="h-3/4 w-full lg:h-full lg:w-1/2 ">
 							<ThreeDBox boxArrays={boxArrays} />
 							{/* <ResoBox boxArrays={boxArrays} /> */}
 						</div>
-						<div className="w-full lg:w-1/2 p-4  lg:p-8">
-							<div className="w-full h-full p-8 border rounded-lg border-gray-600/50">
+						<div className="w-full p-4 lg:w-1/2  lg:p-8">
+							<div className="h-full w-full rounded-lg border border-gray-600/50 p-8">
 								<Stream pair={pair} data={currentPairData} />
 							</div>
 						</div>
@@ -75,7 +75,7 @@ const PairPages = () => {
 export default PairPages;
 
 const LoadingIndicator = () => (
-	<div className="w-full h-full flex items-center justify-center">
+	<div className="flex h-full w-full items-center justify-center">
 		{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
 		<svg
 			width="80"

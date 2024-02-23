@@ -117,7 +117,7 @@ const ThreeDBox: React.FC<ThreeDBoxProps> = ({ boxArrays }) => {
 	}, [boxArrays]);
 
 	return (
-		<div className="w-full h-full ">
+		<div className="h-full w-full ">
 			<Canvas>
 				<PerspectiveCamera makeDefault position={[1, 0, 1.5]} fov={60} />
 				<OrbitControls />

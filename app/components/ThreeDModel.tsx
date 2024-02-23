@@ -68,9 +68,9 @@ const ThreeDModel: React.FC<ThreeDModelProps> = ({
 	}, [streamData]);
 
 	return (
-		<div className="w-full min-h-screen relative font-bold ">
+		<div className="relative min-h-screen w-full font-bold ">
 			{initializationComplete ? (
-				<div className="grid grid-cols-1 lg:grid-cols-2 w-full min-h-screen lg:pb-0 pb-40 items-center justify-center gap-[1em] lg:pl-0 lg:pr-8 ">
+				<div className="grid min-h-screen w-full grid-cols-1 items-center justify-center gap-[1em] pb-40 lg:grid-cols-2 lg:pb-0 lg:pl-0 lg:pr-8 ">
 					<ThreeDBox boxArrays={boxArrays} />
 					<ResoBox boxArrays={boxArrays} />
 				</div>
@@ -84,7 +84,7 @@ const ThreeDModel: React.FC<ThreeDModelProps> = ({
 export default ThreeDModel;
 
 const LoadingIndicator = () => (
-	<div className="w-full h-full flex items-center justify-center">
+	<div className="flex h-full w-full items-center justify-center">
 		{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
 		<svg
 			width="80"

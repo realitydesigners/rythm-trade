@@ -95,7 +95,7 @@ const BoxChart: React.FC<BoxChartProps> = ({ boxArrays }) => {
 	}, [boxArrays, containerWidth]);
 
 	return (
-		<div ref={containerRef} className="w-full flex justify-center">
+		<div ref={containerRef} className="flex w-full justify-center">
 			<svg ref={svgRef} />
 		</div>
 	);

@@ -5,6 +5,8 @@ import { Metadata } from "next";
 
 export default function RootLayout({
 	children,
-}: { children: React.ReactNode }) {
+}: {
+	children: React.ReactNode;
+}) {
 	return <WebSocketProvider>{children}</WebSocketProvider>;
 }

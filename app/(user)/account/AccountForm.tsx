@@ -43,13 +43,13 @@ export default function AccountForm() {
 
 	return (
 		<div
-			className={`${monomaniac.className} flex justify-center items-center w-full`}
+			className={`${monomaniac.className} flex w-full items-center justify-center`}
 		>
 			<div
-				className={`w-full max-w-xl bg-black rounded-lg shadow-md p-6 mt-6 ${monomaniac.className}`}
+				className={`mt-6 w-full max-w-xl rounded-lg bg-black p-6 shadow-md ${monomaniac.className}`}
 			>
 				<div className="mb-4">
-					<h2 className={`${monomaniac.className} text-lg text-white mb-2`}>
+					<h2 className={`${monomaniac.className} mb-2 text-lg text-white`}>
 						Oanda Credentials
 					</h2>
 					{existingCredentials.apiKey && (
@@ -58,7 +58,7 @@ export default function AccountForm() {
 						</p>
 					)}
 					{existingCredentials.accountId && (
-						<p className="text-gray-400 mb-4">
+						<p className="mb-4 text-gray-400">
 							Account ID: {existingCredentials.accountId}
 						</p>
 					)}
@@ -67,7 +67,7 @@ export default function AccountForm() {
 					<div className="mb-4">
 						<label
 							htmlFor="accountId"
-							className={`${monomaniac.className} block text-gray-600 text-sm font-bold mb-2`}
+							className={`${monomaniac.className} mb-2 block text-sm font-bold text-gray-600`}
 						>
 							New Account ID
 						</label>
@@ -78,13 +78,13 @@ export default function AccountForm() {
 							value={accountId}
 							onChange={(e) => setAccountId(e.target.value)}
 							placeholder="Enter new Account ID"
-							className={`${monomaniac.className} shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+							className={`${monomaniac.className} focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none`}
 						/>
 					</div>
 					<div className="mb-6">
 						<label
 							htmlFor="apiKey"
-							className={`${monomaniac.className} block text-gray-600 text-sm font-bold mb-2`}
+							className={`${monomaniac.className} mb-2 block text-sm font-bold text-gray-600`}
 						>
 							New API Key
 						</label>
@@ -95,12 +95,12 @@ export default function AccountForm() {
 							value={apiKey}
 							onChange={(e) => setApiKey(e.target.value)}
 							placeholder="Enter new API Key"
-							className={`${monomaniac.className} shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
+							className={`${monomaniac.className} focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none`}
 						/>
 					</div>
 					<button
 						type="submit"
-						className={`${monomaniac.className} w-full text-xl uppercase inline-block bg-black hover:bg-gray-200 hover:text-black text-white font-bold py-4 px-8 border border-gray-600/50 rounded-lg transition duration-300 transform hover:scale-105`}
+						className={`${monomaniac.className} inline-block w-full transform rounded-lg border border-gray-600/50 bg-black px-8 py-4 text-xl font-bold uppercase text-white transition duration-300 hover:scale-105 hover:bg-gray-200 hover:text-black`}
 					>
 						Update Credentials
 					</button>

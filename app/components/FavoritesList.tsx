@@ -21,15 +21,15 @@ const FavoriteItem: React.FC<NavbarStreamProps> = ({ pair, data }) => {
 	return (
 		<Link
 			href={`/pairs/${pair}`}
-			className="border border-gray-600/50 rounded-lg flex items-center px-4 py-2 hover:scale-105 hover:bg-gray-600/25 transition-all duration-300"
+			className="flex items-center rounded-lg border border-gray-600/50 px-4 py-2 transition-all duration-300 hover:scale-105 hover:bg-gray-600/25"
 		>
-			<div className="pr-4 white-space-nowrap">
+			<div className="white-space-nowrap pr-4">
 				<div className={`${monomaniac.className} text-mg text-gray-200`}>
 					{pair}
 				</div>
-				<div className="text-xl text-gray-400 font-bold">{price}</div>
+				<div className="text-xl font-bold text-gray-400">{price}</div>
 			</div>
-			<div className="w-32 flex justify-center items-center">
+			<div className="flex w-32 items-center justify-center">
 				<img src={trendIconPath} alt={trend} className="h-12" />
 			</div>
 		</Link>
@@ -41,8 +41,8 @@ const FavoritesList: React.FC<FavoritesListProps> = ({
 	streamData,
 }) => {
 	return (
-		<div className="w-full h-auto">
-			<div className="mx-auto py-4 flex items-center justify-start space-x-4 overflow-x-auto">
+		<div className="h-auto w-full">
+			<div className="mx-auto flex items-center justify-start space-x-4 overflow-x-auto py-4">
 				{favoritePairs.map((pair) => (
 					<FavoriteItem key={pair} pair={pair} data={streamData[pair]} />
 				))}

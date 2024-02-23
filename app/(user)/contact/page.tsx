@@ -3,8 +3,8 @@ import React from "react";
 
 const ContactPage = () => {
 	return (
-		<div className="bg-black flex justify-center items-center w-full h-screen">
-			<h1 className="text-gray-200 text-xl  "> Contact</h1>
+		<div className="flex h-screen w-full items-center justify-center bg-black">
+			<h1 className="text-xl text-gray-200  "> Contact</h1>
 		</div>
 	);
 };

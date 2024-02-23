@@ -71,7 +71,7 @@ const ResoModel: React.FC<ResoModelProps> = ({
 	// Render
 	if (!initializationComplete) {
 		return (
-			<div className="w-full h-full flex items-center  justify-center">
+			<div className="flex h-full w-full items-center  justify-center">
 				{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
 				<svg
 					width="50"
@@ -104,7 +104,7 @@ const ResoModel: React.FC<ResoModelProps> = ({
 	}
 
 	return (
-		<div className="w-full h-auto text-teal-400 font-bold">
+		<div className="h-auto w-full font-bold text-teal-400">
 			<ResoBox boxArrays={boxArrays} />
 		</div>
 	);
