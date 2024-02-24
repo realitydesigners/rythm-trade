@@ -105,8 +105,8 @@ const ResoBox: React.FC<BoxChartProps> = ({ boxArrays }) => {
 		const size = containerWidth - padding * 1; // Subtract padding from both sides
 		const svg = d3
 			.select(svgRef.current)
-			.attr("width", size + padding * 2)
-			.attr("height", size + padding * 2)
+			.attr("width", size + padding * 1)
+			.attr("height", size + padding * 1)
 			.append("g")
 			.attr("transform", `translate(${padding}, ${padding})`); // Translate the g element by the padding amount
 
@@ -141,10 +141,7 @@ const ResoBox: React.FC<BoxChartProps> = ({ boxArrays }) => {
 	}, [drawChart]);
 
 	return (
-		<div
-			ref={containerRef}
-			className="flex h-auto w-auto items-center justify-center lg:pb-0"
-		>
+		<div ref={containerRef} className="relative flex h-full w-full pb-6 ">
 			<svg ref={svgRef} />
 		</div>
 	);

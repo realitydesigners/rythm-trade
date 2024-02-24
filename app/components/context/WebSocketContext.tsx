@@ -30,10 +30,6 @@ const WebSocketContext = createContext<WebSocketContextType>({
 	streamData: {},
 });
 
-interface WebSocketProviderProps {
-	children: ReactNode;
-}
-
 export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
 	children,
 }) => {

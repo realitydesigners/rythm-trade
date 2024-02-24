@@ -15,7 +15,7 @@ function DataTable({ pair }: DataTableProps) {
 
 	useEffect(() => {
 		const getData = async () => {
-			if (user && user.id) {
+			if (user?.id) {
 				try {
 					const candles = await fetchCandles(user.id, pair, 300, "M1");
 					setData(candles || []);

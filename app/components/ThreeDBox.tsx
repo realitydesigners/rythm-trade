@@ -82,7 +82,7 @@ const BoxGroup: React.FC<BoxGroupProps> = ({ boxes }) => {
 
 	useFrame(() => {
 		if (boxesGroupRef.current) {
-			boxesGroupRef.current.rotation.y += 0.001;
+			boxesGroupRef.current.rotation.y += 0.0001;
 		}
 	});
 
@@ -117,7 +117,7 @@ const ThreeDBox: React.FC<ThreeDBoxProps> = ({ boxArrays }) => {
 	}, [boxArrays]);
 
 	return (
-		<div className="h-full w-full ">
+		<div className="h-full w-full">
 			<Canvas>
 				<PerspectiveCamera makeDefault position={[1, 0, 1.5]} fov={60} />
 				<OrbitControls />
