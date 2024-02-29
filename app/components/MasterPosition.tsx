@@ -6,6 +6,9 @@ interface MasterPositionProps {
 }
 
 function MasterPosition({ positionData }: MasterPositionProps) {
+	if (!Array.isArray(positionData) || positionData.length === 0) {
+		return <div className="text-white">No position data available.</div>;
+	}
 	return (
 		<div className="w-full overflow-x-auto  rounded-lg border border-gray-600/50 shadow-2xl ">
 			<table className="min-w-full table-auto border-collapse bg-black shadow-lg">
