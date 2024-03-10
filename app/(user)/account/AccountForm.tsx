@@ -69,45 +69,80 @@ export default function AccountForm() {
             console.error("Error updating credentials:", error);
         }
     };
+
     return (
-        <Sheet>
-            <SheetTrigger asChild>
-                <Button variant="default">Edit Oanda Credentials</Button>
-            </SheetTrigger>
-            <SheetContent>
-                <SheetHeader>
-                    <SheetTitle>Edit Oanda Credentials</SheetTitle>
-                </SheetHeader>
-                <div>
-                    Update your Oanda account credentials here. Click save when
-                    you're done.
-                    <form onSubmit={handleSubmit} className="grid gap-4 p-4">
-                        <Input
-                            id="accountId"
-                            name="accountId"
-                            type="text"
-                            value={accountId}
-                            onChange={(e) => setAccountId(e.target.value)}
-                            className="col-span-3"
-                            placeholder="Your Oanda Account ID"
-                        />
-                        <Input
-                            id="apiKey"
-                            name="apiKey"
-                            type="text"
-                            value={apiKey}
-                            onChange={(e) => setApiKey(e.target.value)}
-                            className="col-span-3"
-                            placeholder="Your Oanda API Key"
-                        />
-                        <SheetFooter>
-                            <SheetClose asChild>
-                                <Button type="submit">Save changes</Button>
-                            </SheetClose>
-                        </SheetFooter>
-                    </form>
-                </div>
-            </SheetContent>
-        </Sheet>
+        <>
+            <Sheet>
+                <SheetTrigger asChild>
+                    <Button variant="default">Edit Oanda Credentials</Button>
+                </SheetTrigger>
+                <SheetContent className="p-8">
+                    <div className="text-center">
+                        <h1 className="text-3xl font-semibold text-gray-900">
+                            Edit Your Credentials
+                        </h1>
+                        <p className="mt-2 text-sm text-gray-600">
+                            Update your Oanda account credentials here. Click
+                            save when you're done.
+                        </p>
+                    </div>
+
+                    <div className="mt-8">
+                        <h2 className="text-xl font-semibold text-gray-900">
+                            Oanda Credentials
+                        </h2>
+                        <div className="mb-6">
+                            {existingCredentials.apiKey && (
+                                <p className="mt-4">
+                                    <span className="font-semibold">
+                                        Current API Key:
+                                    </span>
+                                    <span className="ml-2 text-gray-700">
+                                        {existingCredentials.apiKey}
+                                    </span>
+                                </p>
+                            )}
+                            {existingCredentials.accountId && (
+                                <p className="mt-4">
+                                    <span className="font-semibold">
+                                        Account ID:
+                                    </span>
+                                    <span className="ml-2 text-gray-700">
+                                        {existingCredentials.accountId}
+                                    </span>
+                                </p>
+                            )}
+                        </div>
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <Input
+                                id="accountId"
+                                name="accountId"
+                                type="text"
+                                value={accountId}
+                                onChange={(e) => setAccountId(e.target.value)}
+                                className="w-full"
+                                placeholder="Your Oanda Account ID"
+                            />
+                            <Input
+                                id="apiKey"
+                                name="apiKey"
+                                type="text"
+                                value={apiKey}
+                                onChange={(e) => setApiKey(e.target.value)}
+                                className="w-full"
+                                placeholder="Your Oanda API Key"
+                            />
+                            <SheetFooter>
+                                <SheetClose asChild>
+                                    <Button variant="secondary" type="submit">
+                                        Save changes
+                                    </Button>
+                                </SheetClose>
+                            </SheetFooter>
+                        </form>
+                    </div>
+                </SheetContent>
+            </Sheet>
+        </>
     );
 }
