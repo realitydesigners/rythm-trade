@@ -3,6 +3,7 @@ import { fetchAllPairPositions } from "@/app/api/actions/fetchPositionData";
 import FavoritesList from "@/app/components/FavoritesList";
 import { useWebSocket } from "@/app/components/context/WebSocketContext";
 import {
+	BoxDashboard,
 	MasterPosition,
 	MasterProfile,
 	ResoModel,
@@ -235,8 +236,17 @@ const DashboardPage = () => {
 		setNumDisplayedFavorites(updatedPairs.length);
 	};
 
+	console.log(streamData);
 	return (
 		<div className="flex w-full flex-wrap p-4 pt-20 lg:p-6 lg:pt-20 ">
+			{favoritePairs.slice(0, numDisplayedFavorites).map((pair) => (
+				<BoxDashboard
+					pair={pair}
+					streamData={streamData[pair]}
+					selectedBoxArrayType={selectedBoxArrayTypes[pair]}
+				/>
+			))}
+
 			<FavoritesList favoritePairs={favoritePairs} streamData={streamData} />
 			<div className="mb-4 flex w-full flex-wrap gap-2">
 				<Dialog>
@@ -347,7 +357,6 @@ const DashboardPage = () => {
 					</div>
 				))}
 			</div>
-
 			<div className="w-full p-2 lg:p-4">
 				<MasterPosition positionData={positionData} />
 			</div>

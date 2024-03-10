@@ -7,3 +7,4 @@ export { default as ThreeDBox } from "./ThreeDBox";
 export { default as ResoBox } from "./ResoBox";
 export { default as DataTable } from "./DataTable";
 export { default as BoxChart } from "./BoxChart";
+export { default as BoxDashboard } from "./BoxDashboard";
