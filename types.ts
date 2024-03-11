@@ -1,3 +1,7 @@
+export interface User {
+	id: string;
+}
+
 export interface CandleData {
 	time: string;
 	mid: {
@@ -6,7 +10,7 @@ export interface CandleData {
 		h: string;
 		l: string;
 	};
-	symbol: string; // Add the symbol property to represent the currency pair
+	symbol: string;
 }
 
 interface PriceDetail {
@@ -27,10 +31,6 @@ export interface Price {
 
 export interface ForexData {
 	[key: string]: Price | undefined;
-
-	GBP_USD?: Price;
-	USD_JPY?: Price;
-	// Add more properties for other currency pairs if needed
 }
 
 export interface Box {
@@ -41,7 +41,6 @@ export interface Box {
 	rngSize: number;
 }
 
-// Updated BoxArrays interface to hold a single Box per key
 export interface BoxArrays {
 	[key: number]: Box;
 }
