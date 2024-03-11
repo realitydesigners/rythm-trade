@@ -1,6 +1,8 @@
 "use client";
 import { fetchAllPairPositions } from "@/app/api/actions/fetchPositionData";
+import FavoritesSection from "@/components/FavoritesSection";
 import { useWebSocket } from "@/components/context/WebSocketContext";
+import useFavorites from "@/components/hooks/useFavorites";
 import {
 	FavoritesDashboard,
 	FavoritesList,
@@ -10,8 +12,6 @@ import {
 import { PositionData } from "@/types";
 import { useUser } from "@clerk/nextjs";
 import React, { useEffect, useState } from "react";
-import FavoritesSection from "../../../components/FavoritesSection";
-import useFavorites from "../../../components/useFavorites";
 
 const DashboardPage = () => {
 	const { user } = useUser();

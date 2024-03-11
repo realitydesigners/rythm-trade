@@ -1,12 +1,9 @@
 "use client";
-
-import { Button } from "@/components/ui/button";
+import { StreamData } from "@/types";
 import { useUser } from "@clerk/nextjs";
 import React, { useEffect, useState } from "react";
-import { fetchBoxArrays } from "../app/api/rest";
-import { BoxArrays, StreamData } from "../types";
 import ResoBox from "./ResoBox";
-import useFetchBoxes from "./useFetchBoxes"; // Assuming useFetchBoxes is exported from a file named useFetchBoxes.ts
+import useFetchBoxes from "./hooks/useFetchBoxes"; // Assuming useFetchBoxes is exported from a file named useFetchBoxes.ts
 
 interface ResoModelProps {
 	pair: string;

@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
 import {
 	fetchFavoritePairs,
 	fetchInstruments,
 	updateFavoritePairs,
-} from "../app/api/rest";
-import { sendWebSocketMessage } from "../app/api/websocket";
+} from "@/app/api/rest";
+import { sendWebSocketMessage } from "@/app/api/websocket";
+import React, { useEffect, useState } from "react";
 
 const initialFavorites = [
 	"GBP_USD",

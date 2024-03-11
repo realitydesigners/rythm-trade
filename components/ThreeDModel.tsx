@@ -1,9 +1,8 @@
+import { StreamData } from "@/types";
 import { useUser } from "@clerk/nextjs";
 import React, { useEffect, useState } from "react";
-import { fetchBoxArrays } from "../app/api/rest";
-import { BoxArrays, StreamData } from "../types";
+import useFetchBoxes from "./hooks/useFetchBoxes";
 import { ResoBox, ThreeDBox } from "./index";
-import useFetchBoxes from "./useFetchBoxes";
 
 interface ThreeDModelProps {
 	pair: string;

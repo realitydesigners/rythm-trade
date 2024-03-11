@@ -1,16 +1,11 @@
+import { BoxArrays } from "@/types";
 import { Center, OrbitControls, PerspectiveCamera } from "@react-three/drei";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import {
-	Bloom,
-	DotScreen,
-	EffectComposer,
-	Scanline,
-} from "@react-three/postprocessing";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { EffectComposer, Scanline } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
 import React, { RefObject, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { DirectionalLight } from "three";
-import { BoxArrays } from "../types";
 
 interface SingleBoxProps {
 	position: [number, number, number];

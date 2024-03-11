@@ -1,8 +1,8 @@
 "use client";
+import { fetchBoxArrays } from "@/app/api/rest";
 import { User } from "@/types";
+import { BoxArrays } from "@/types";
 import React, { useEffect, useState } from "react";
-import { fetchBoxArrays } from "../app/api/rest";
-import { BoxArrays } from "../types";
 
 const useFetchBoxes = (
 	user: User | undefined,

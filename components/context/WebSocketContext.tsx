@@ -1,7 +1,7 @@
 "use client";
+import { closeWebSocket, connectWebSocket } from "@/app/api/websocket";
 import { StreamData } from "@/types";
 import { useUser } from "@clerk/nextjs";
-// WebSocketContext.tsx
 import React, {
 	ReactNode,
 	createContext,
@@ -9,14 +9,9 @@ import React, {
 	useEffect,
 	useState,
 } from "react";
-import {
-	closeWebSocket,
-	connectWebSocket,
-	sendWebSocketMessage,
-} from "../../app/api/websocket";
 
 interface StreamDataType {
-	[key: string]: StreamData; // Use StreamData directly for each key
+	[key: string]: StreamData;
 }
 
 interface WebSocketContextType {

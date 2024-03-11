@@ -1,9 +1,9 @@
 "use client";
+import { BoxArrays, StreamData } from "@/types";
 import { useUser } from "@clerk/nextjs";
 import { User } from "@clerk/nextjs/server";
 import React, { useEffect } from "react";
-import { BoxArrays, StreamData } from "../types";
-import useFetchBoxes from "./useFetchBoxes"; // Assuming useFetchBoxes is exported from a file named useFetchBoxes.ts
+import useFetchBoxes from "./hooks/useFetchBoxes"; // Assuming useFetchBoxes is exported from a file named useFetchBoxes.ts
 
 interface DashboardProps {
 	pair: string;

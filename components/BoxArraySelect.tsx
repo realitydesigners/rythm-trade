@@ -6,8 +6,8 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/index";
+import { BOX_SIZES } from "@/utils/constants";
 import React from "react";
-import { BOX_SIZES } from "../app/utils/constants";
 
 interface BoxArraySelectProps {
 	selectedBoxArrayTypes: { [key: string]: string };

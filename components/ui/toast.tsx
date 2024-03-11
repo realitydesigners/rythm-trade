@@ -5,7 +5,7 @@ import * as ToastPrimitives from "@radix-ui/react-toast";
 import { type VariantProps, cva } from "class-variance-authority";
 import * as React from "react";
 
-import { cn } from "@/app/utils/utils";
+import { cn } from "@/components/ui/utils";
 
 const ToastProvider = ToastPrimitives.Provider;
 

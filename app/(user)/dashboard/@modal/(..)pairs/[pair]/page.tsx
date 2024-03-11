@@ -2,13 +2,13 @@
 import { fetchBoxArrays } from "@/app/api/rest";
 import Modal from "@/components/Modal";
 import { useWebSocket } from "@/components/context/WebSocketContext";
+import useFetchBoxes from "@/components/hooks/useFetchBoxes";
 import { ResoBox, Stream, ThreeDBox } from "@/components/index";
 import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
 import { PositionData, StreamData } from "@/types";
 import { useUser } from "@clerk/nextjs";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import useFetchBoxes from "../../../../../../components/useFetchBoxes";
 
 const PairPages = () => {
 	const { user } = useUser();
