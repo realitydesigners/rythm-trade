@@ -1,8 +1,5 @@
 import {
-	Inter,
-	Jura,
 	Monomaniac_One,
-	Play,
 	Roboto,
 	Space_Grotesk,
 	Staatliches,
@@ -21,22 +18,6 @@ export const staatliches = Staatliches({
 	display: "swap",
 });
 
-export const inter = Inter({
-	subsets: ["latin"],
-	display: "swap",
-});
-
-export const jura = Jura({
-	weight: ["400", "600", "700"],
-	subsets: ["latin"],
-	display: "swap",
-});
-
-export const play = Play({
-	weight: ["400", "700"],
-	subsets: ["latin"],
-	display: "swap",
-});
 export const monomaniac = Monomaniac_One({
 	weight: ["400"],
 	subsets: ["latin"],
