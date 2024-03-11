@@ -190,15 +190,11 @@ export const useFavorites = (user: any) => {
 
     return {
         favoritePairs,
-        allPairs,
         currencyPairs,
         handleReplaceFavorite,
         selectedBoxArrayTypes,
         numDisplayedFavorites,
-        showProfile,
         updateFavoritePairsOnDragDrop,
-        setShowProfile,
-        handleUpdateFavoritePairs,
         deleteFavoritePair,
         addToFavorites,
         handleBoxArrayChange,

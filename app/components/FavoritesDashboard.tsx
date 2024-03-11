@@ -9,6 +9,34 @@ interface DashboardProps {
     streamData: StreamData | null;
     selectedBoxArrayType: string;
 }
+
+interface FavoritesDashboardProps {
+    favoritePairs: string[];
+    numDisplayedFavorites: number;
+    streamData: { [key: string]: StreamData | null }; // Assuming StreamData is the type for your stream data
+    selectedBoxArrayTypes: { [key: string]: string };
+}
+
+const FavoritesDashboard: React.FC<FavoritesDashboardProps> = ({
+    favoritePairs,
+    numDisplayedFavorites,
+    streamData,
+    selectedBoxArrayTypes,
+}) => {
+    return (
+        <div>
+            {favoritePairs.slice(0, numDisplayedFavorites).map((pair) => (
+                <BoxDashbaord
+                    key={pair}
+                    pair={pair}
+                    streamData={streamData[pair]}
+                    selectedBoxArrayType={selectedBoxArrayTypes[pair]}
+                />
+            ))}
+        </div>
+    );
+};
+
 const BoxDashbaord: React.FC<DashboardProps> = ({
     pair,
     streamData,
@@ -77,4 +105,4 @@ const BoxDashbaord: React.FC<DashboardProps> = ({
     );
 };
 
-export default BoxDashbaord;
+export default FavoritesDashboard;
