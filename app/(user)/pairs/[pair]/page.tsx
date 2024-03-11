@@ -1,9 +1,9 @@
 "use client";
 import { fetchPairPosition } from "@/app/api/actions/fetchPositionData";
 import { fetchBoxArrays } from "@/app/api/rest";
-import { useWebSocket } from "@/app/components/context/WebSocketContext";
-import { ResoBox, Stream, ThreeDBox } from "@/app/components/index";
-import LoadingSkeleton from "@/app/components/loading/LoadingSkeleton";
+import { useWebSocket } from "@/components/context/WebSocketContext";
+import { ResoBox, Stream, ThreeDBox } from "@/components/index";
+import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
 import { BoxArrays, PositionData, StreamData } from "@/types";
 import { useUser } from "@clerk/nextjs";
 import { useParams } from "next/navigation";

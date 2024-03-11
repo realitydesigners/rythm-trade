@@ -1,7 +1,7 @@
 "use client";
 import * as d3 from "d3";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { BoxArrays } from "../../types";
+import { BoxArrays } from "../types";
 
 interface BoxChartProps {
 	boxArrays: BoxArrays;

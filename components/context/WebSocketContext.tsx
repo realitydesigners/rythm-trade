@@ -13,7 +13,7 @@ import {
 	closeWebSocket,
 	connectWebSocket,
 	sendWebSocketMessage,
-} from "../../api/websocket";
+} from "../../app/api/websocket";
 
 interface StreamDataType {
 	[key: string]: StreamData; // Use StreamData directly for each key

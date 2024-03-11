@@ -1,5 +1,5 @@
 "use client";
-import { Label } from "@/app/components/ui/label";
+import { Label } from "@/components/ui/label";
 import { useUser } from "@clerk/nextjs";
 import React, { useEffect, useState } from "react";
 

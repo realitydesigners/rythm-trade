@@ -1,5 +1,5 @@
-import Navbar from "@/app/components/ui/Navbar";
 import { play, space } from "@/app/fonts";
+import Navbar from "@/components/ui/Navbar";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Metadata } from "next";
 import "./globals.css";
@@ -12,7 +12,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
 	children,
-}: { children: React.ReactNode }) {
+}: {
+	children: React.ReactNode;
+}) {
 	return (
 		<ClerkProvider>
 			<html lang="en" className={`${space.className} `}>
