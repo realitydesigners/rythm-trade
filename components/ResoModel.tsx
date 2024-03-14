@@ -4,6 +4,7 @@ import { StreamData } from "@/types";
 import { useUser } from "@clerk/nextjs";
 import React, { useEffect, useState } from "react";
 import ResoBox from "./ResoBox";
+import StreamLink from "./StreamLink";
 import useFetchBoxes from "./hooks/useFetchBoxes"; // Assuming useFetchBoxes is exported from a file named useFetchBoxes.ts
 
 interface ResoModelProps {
@@ -54,7 +55,7 @@ const ResoModel: React.FC<ResoModelProps> = ({
     }
 
     return (
-        <div className="h-auto w-full font-bold text-teal-400">
+        <div className="flex h-auto  w-full flex-col font-bold">
             <ResoBox boxArrays={boxArrays} />
         </div>
     );
