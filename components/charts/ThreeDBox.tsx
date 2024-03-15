@@ -1,11 +1,11 @@
+"use client";
 import { BoxArrays } from "@/types";
 import { Center, OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { EffectComposer, Scanline } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
 import React, { RefObject, useMemo, useRef } from "react";
-import { BoxGeometry, Group, Mesh } from "three";
-import { DirectionalLight } from "three";
+import { BoxGeometry, DirectionalLight, Group, Mesh } from "three";
 
 interface SingleBoxProps {
     position: [number, number, number];

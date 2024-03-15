@@ -1,5 +1,5 @@
 "use client";
-import { monomaniac } from "@/app/fonts";
+import { space } from "@/app/fonts";
 import React from "react";
 
 const EmailForm = () => {
@@ -28,7 +28,7 @@ const EmailForm = () => {
 		<form
 			onSubmit={handleSubmit}
 			id="rythmForm"
-			className={`${monomaniac.className} flex flex-col space-y-4 w-11/12 md:w-1/2 lg:w-1/3`}
+			className={`${space.className} flex flex-col space-y-4 w-11/12 md:w-1/2 lg:w-1/3`}
 		>
 			<h2 className="text-4xl uppercase  bg-gradient-to-r text-center from-purple-200 via-purple-100 to-indigo-200 text-transparent bg-clip-text text-center">
 				Reach Out

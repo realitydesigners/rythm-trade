@@ -1,9 +1,4 @@
-import {
-	Monomaniac_One,
-	Roboto,
-	Space_Grotesk,
-	Staatliches,
-} from "next/font/google";
+import { Roboto, Space_Grotesk, Staatliches } from "next/font/google";
 
 export const roboto = Roboto({
 	weight: ["400", "700"],
@@ -18,11 +13,6 @@ export const staatliches = Staatliches({
 	display: "swap",
 });
 
-export const monomaniac = Monomaniac_One({
-	weight: ["400"],
-	subsets: ["latin"],
-	display: "swap",
-});
 export const space = Space_Grotesk({
 	weight: ["400", "600"],
 	style: ["normal"],

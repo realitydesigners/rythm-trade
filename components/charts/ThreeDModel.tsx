@@ -1,9 +1,10 @@
+"use client";
 import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
 import { StreamData } from "@/types";
 import { useUser } from "@clerk/nextjs";
 import React, { useEffect, useState } from "react";
-import useFetchBoxes from "./hooks/useFetchBoxes";
-import { ResoBox, ThreeDBox } from "./index";
+import useFetchBoxes from "../hooks/useFetchBoxes";
+import { ResoBox, ThreeDBox } from "../index";
 
 interface ThreeDModelProps {
     pair: string;

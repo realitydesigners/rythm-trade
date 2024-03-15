@@ -1,5 +1,5 @@
 import { space } from "@/app/fonts";
-import Navbar from "@/components/ui/Navbar";
+import { Navbar } from "@/components/index";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Metadata } from "next";
 import "./globals.css";
