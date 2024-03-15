@@ -46,7 +46,7 @@ const Stream: React.FC<StreamProps> = ({ pair, data }) => {
                     </div>
                 ) : (
                     <div className="flex h-full w-full p-2">
-                        <LoadingSkeleton width="50" height="50" />
+                        <LoadingSkeleton width="25" height="25" />
                     </div>
                 )}
             </div>

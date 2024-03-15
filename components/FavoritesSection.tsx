@@ -27,24 +27,28 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
     deleteFavoritePair,
 }) => {
     return (
-        <div className="relative flex w-full overflow-x-auto">
+        <div className="relative flex h-full w-full gap-4 overflow-x-auto py-2 ">
             {favoritePairs
                 .slice(0, numDisplayedFavorites)
                 .map((pair, index) => (
                     <div
                         key={pair}
-                        className="mb-4 mr-4 flex h-[125vw] w-[90vw] flex-col rounded-lg border border-gray-600/50 p-3 lg:h-[600px] lg:w-[800px] lg:p-6"
+                        className="flex w-auto flex-col rounded-lg border border-gray-600/50 p-4 "
                     >
                         <StreamCard
                             key={pair}
                             pair={pair}
                             streamData={streamData}
                         />
-                        <ResoModel
-                            pair={pair}
-                            streamData={streamData[pair]}
-                            selectedBoxArrayType={selectedBoxArrayTypes[pair]}
-                        />
+                        <div className="h-[20em] w-[20em] overflow-hidden rounded-lg border border-gray-700/50">
+                            <ResoModel
+                                pair={pair}
+                                streamData={streamData[pair]}
+                                selectedBoxArrayType={
+                                    selectedBoxArrayTypes[pair]
+                                }
+                            />
+                        </div>
                         <BoxArraySelect
                             selectedBoxArrayTypes={selectedBoxArrayTypes}
                             handleBoxArrayChange={handleBoxArrayChange}

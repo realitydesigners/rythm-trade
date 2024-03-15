@@ -2,7 +2,7 @@ import React from "react";
 
 export default function LoadingSkeleton({ width = "100", height = "100" }) {
     return (
-        <div className="z-[1000] flex h-screen w-full items-center justify-center bg-black">
+        <div className=" flex h-auto w-auto items-center justify-center bg-black">
             <div className="flex h-auto w-full animate-pulse justify-center p-2">
                 {/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
                 <svg
