@@ -48,17 +48,17 @@ const AppPage = () => {
     return (
         <>
             {/* Hero */}
-            <section className="h-screen w-full overflow-hidden bg-black lg:h-screen">
+            <section className=" h-[90vh] w-full overflow-hidden bg-black lg:h-screen lg:h-screen">
                 <div className="relative flex h-full w-full items-center justify-center">
                     <Spline
                         scene="https://prod.spline.design/xSKIvrYdS-sBwPhA/scene.splinecode"
                         className="absolute z-0 h-full w-full"
                     />
-                    <div className="absolute bottom-32 flex w-full flex-wrap  items-center justify-center  lg:items-start   ">
+                    <div className="absolute bottom-2 flex w-full flex-wrap items-center  justify-center lg:bottom-32  lg:items-start   ">
                         <p className="w-full py-4 text-center text-xs tracking-wide text-gray-400 shadow-lg">
                             Want an early accesss preview? Send us an email.
                         </p>
-                        <div className="flex flex-col gap-4  md:flex-row">
+                        <div className="flex flex-col gap-2  md:flex-row">
                             <Link
                                 href="#"
                                 className="inline-block transform items-center justify-center rounded-lg border border-gray-700/75 bg-black/50 px-6 py-4 text-xl font-bold uppercase text-gray-200 transition-all duration-200  ease-in-out hover:-translate-y-1 hover:bg-black"
