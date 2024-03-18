@@ -13,7 +13,6 @@ interface FavoritesSectionProps {
 	index: number;
 	currencyPairs: string[];
 	deleteFavoritePair: any;
-	
 }
 
 const FavoritesSection: React.FC<FavoritesSectionProps> = ({

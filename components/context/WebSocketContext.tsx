@@ -43,7 +43,6 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
 			}
 		};
 
-		
 		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		const handleWebSocketError = (event: any) => {
 			console.error("WebSocket Error:", event);
