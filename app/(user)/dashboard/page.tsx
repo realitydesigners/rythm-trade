@@ -24,7 +24,6 @@ const DashboardPage = () => {
 		handleReplaceFavorite,
 		selectedBoxArrayTypes,
 		numDisplayedFavorites,
-		updateFavoritePairsOnDragDrop,
 		deleteFavoritePair,
 		addToFavorites,
 		handleBoxArrayChange,
@@ -63,7 +62,6 @@ const DashboardPage = () => {
 				handleReplaceFavorite={handleReplaceFavorite}
 				currencyPairs={currencyPairs}
 				deleteFavoritePair={deleteFavoritePair}
-				updateFavoritePairsOnDragDrop={updateFavoritePairsOnDragDrop}
 				index={0}
 			/>
 			<FavoritesDashboard

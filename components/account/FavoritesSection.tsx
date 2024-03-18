@@ -13,7 +13,7 @@ interface FavoritesSectionProps {
 	index: number;
 	currencyPairs: string[];
 	deleteFavoritePair: any;
-	updateFavoritePairsOnDragDrop: any;
+	
 }
 
 const FavoritesSection: React.FC<FavoritesSectionProps> = ({
@@ -33,11 +33,15 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
 					key={pair}
 					className="flex w-auto flex-col rounded-lg border border-gray-600/50 p-4 "
 				>
-					<StreamCard key={pair} pair={pair} streamData={streamData} />
+					<StreamCard
+						key={pair}
+						pair={pair}
+						streamData={streamData?.[pair] || {}}
+					/>
 					<div className="h-[20em] w-[20em] overflow-hidden rounded-lg border border-gray-700/50">
 						<ResoModel
 							pair={pair}
-							streamData={streamData[pair]}
+							streamData={streamData?.[pair] || {}}
 							selectedBoxArrayType={selectedBoxArrayTypes[pair]}
 						/>
 					</div>

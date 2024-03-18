@@ -153,37 +153,12 @@ export const useFavorites = (user: any) => {
 		setNumDisplayedFavorites(updatedPairs.length);
 	};
 
-	const updateFavoritePairsOnDragDrop = (
-		draggedItem: string,
-		dropZoneId: string,
-		index: number,
-	) => {
-		if (dropZoneId === "favorites" && index !== -1) {
-			setFavoritePairs((prev) => {
-				const newFavorites = [...prev];
-				const existingIndex = newFavorites.indexOf(draggedItem);
-
-				if (existingIndex !== -1) {
-					[newFavorites[index], newFavorites[existingIndex]] = [
-						newFavorites[existingIndex],
-						newFavorites[index],
-					];
-				} else {
-					newFavorites[index] = draggedItem;
-				}
-
-				return newFavorites;
-			});
-		}
-	};
-
 	return {
 		favoritePairs,
 		currencyPairs,
 		handleReplaceFavorite,
 		selectedBoxArrayTypes,
 		numDisplayedFavorites,
-		updateFavoritePairsOnDragDrop,
 		deleteFavoritePair,
 		addToFavorites,
 		handleBoxArrayChange,
