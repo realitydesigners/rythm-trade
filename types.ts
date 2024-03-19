@@ -21,6 +21,8 @@ export interface StreamData {
 	bids?: PriceDetail[];
 	asks?: PriceDetail[];
 	trend?: "up" | "down";
+	closeoutAsk?: any;
+	closeoutBid?: any;
 }
 
 export interface Price {
