@@ -14,7 +14,7 @@ export default async function AccountPage() {
 
 	return (
 		<div className="flex h-screen items-center justify-center  p-4">
-			<div className="w-full max-w-xl overflow-hidden rounded-lg border border-gray-600/50 shadow-xl">
+			<div className="w-full max-w-xl overflow-hidden rounded-lg border border-gray-600/25 shadow-xl">
 				<div className="flex items-center  bg-black p-6 text-center text-white">
 					<div className="w-50 pr-6">
 						{user?.imageUrl && (

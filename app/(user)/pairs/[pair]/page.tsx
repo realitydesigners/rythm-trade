@@ -71,7 +71,7 @@ const PairPage = () => {
 			{initializationComplete ? (
 				<div className="relative top-16 flex h-full flex-col  p-2 lg:flex-row">
 					<div className="relative flex h-full w-full flex-col items-center  justify-center p-1 lg:w-1/2 lg:p-4 ">
-						<div className="relative flex h-[500px] w-full overflow-hidden rounded-xl  border border-gray-600/50 lg:h-[800px] ">
+						<div className="relative flex h-[500px] w-full overflow-hidden rounded-xl  border border-gray-600/25 lg:h-[800px] ">
 							{boxView === "3D" ? (
 								<div className="flex h-full w-full items-center justify-center ">
 									<ThreeDBox boxArrays={boxArrays} />
@@ -89,7 +89,7 @@ const PairPage = () => {
 						</div>
 					</div>
 					<div className="flex h-full w-full p-1 lg:w-1/2 lg:p-4">
-						<div className="h-full w-full rounded-xl border border-gray-600/50 p-6">
+						<div className="h-full w-full rounded-xl border border-gray-600/25 p-6">
 							<Stream pair={pair} data={currentPairData} />
 						</div>
 					</div>

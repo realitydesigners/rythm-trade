@@ -60,11 +60,11 @@ const ThreeDModel: React.FC<ThreeDModelProps> = ({
 	);
 
 	return (
-		<div className="absolute h-full w-full rounded-xl border border-gray-600/50 bg-black">
+		<div className="absolute h-full w-full rounded-xl border border-gray-600/25 bg-black">
 			{initializationComplete ? (
 				<div className="flex h-full flex-col p-2 lg:flex-row">
 					<div className="relative flex h-full w-full w-full  flex-col items-center p-1 lg:p-4 ">
-						<div className="relative flex h-full w-full overflow-hidden rounded-xl  border border-gray-600/50">
+						<div className="relative flex h-full w-full overflow-hidden rounded-xl  border border-gray-600/25">
 							{boxView === "3D" ? (
 								<div className="flex h-full w-full items-center justify-center ">
 									<ThreeDBox boxArrays={boxArrays} />

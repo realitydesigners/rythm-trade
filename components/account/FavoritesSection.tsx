@@ -18,7 +18,7 @@ interface FavoritesSectionProps {
 
 const LoadingSkeleton: React.FC = () => {
   return (
-    <div className="bg-gray-600/10 w-[350px] h-[480px] animate-pulse rounded-lg border border-gray-600/50" />
+    <div className="bg-gray-600/10 w-[350px] h-[480px] animate-pulse rounded-lg border border-gray-600/25" />
   );
 };
 
@@ -51,7 +51,7 @@ const FavoritesSection: React.FC<FavoritesSectionProps> = ({
           {loading ? (
             <LoadingSkeleton />
           ) : (
-            <div className="flex w-auto flex-col rounded-lg border border-gray-600/50 p-4">
+            <div className="flex w-auto flex-col rounded-lg border border-gray-600/25 p-4">
               <StreamCard key={pair} pair={pair} streamData={streamData?.[pair] || {}} />
               <div className="h-[20em] w-[20em] overflow-hidden rounded-lg border border-gray-700/50">
                 <ResoModel

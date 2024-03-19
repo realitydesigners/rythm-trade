@@ -8,7 +8,7 @@ interface LoadingPulseProps {
 
 const LoadingPulse: React.FC<LoadingPulseProps> = ({ className = "" }) => {
 	return (
-		<div className={`bg-gray-600/50 rounded-md animate-pulse  ${className}`} />
+		<div className={`bg-gray-600/25 rounded-md animate-pulse  ${className}`} />
 	);
 };
 

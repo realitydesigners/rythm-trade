@@ -40,13 +40,13 @@ const PairPages = () => {
 
 	return (
 		<Modal>
-			<div className="h-full w-full rounded-xl border border-gray-600/50 bg-black">
+			<div className="h-full w-full rounded-xl border border-gray-600/25 bg-black">
 				{initializationComplete ? (
 					<div className="flex h-full flex-col p-2 lg:flex-row">
 						<div className="  flex h-full w-full flex-col  p-1 lg:w-1/2 lg:p-4 ">
 							<div
 								id="charts"
-								className="relative flex h-full w-full items-center justify-center rounded-xl  border border-gray-600/50 "
+								className="relative flex h-full w-full items-center justify-center rounded-xl  border border-gray-600/25 "
 							>
 								{boxView === "3D" ? (
 									<div className="flex h-full w-full items-center justify-center ">
@@ -65,7 +65,7 @@ const PairPages = () => {
 							</div>
 						</div>
 						<div className="flex h-full w-full p-1 lg:w-1/2 lg:p-4">
-							<div className="h-full w-full rounded-xl border border-gray-600/50 p-6">
+							<div className="h-full w-full rounded-xl border border-gray-600/25 p-6">
 								<Stream pair={pair} data={currentPairData} />
 							</div>
 						</div>

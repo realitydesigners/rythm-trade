@@ -18,7 +18,7 @@ interface FavoritesListProps {
 
 const LoadingSkeleton: React.FC = () => {
   return (
-    <div className="bg-gray-600/10 min-w-[250px] h-[75px] animate-pulse rounded-lg border border-gray-600/50 p-4" />
+    <div className="bg-gray-600/10 min-w-[250px] h-[75px] animate-pulse rounded-lg border border-gray-600/25 p-4" />
   );
 };
 
@@ -32,7 +32,7 @@ const FavoriteItem: React.FC<NavbarStreamProps> = ({ pair, data }) => {
     <Link
       href={`/pairs/${pair}`}
 	 
-      className="flex items-center  min-w-[250px]  h-[75px]  rounded-lg border border-gray-600/50 px-3 py-2 transition-all duration-300 hover:scale-105 hover:bg-gray-600/10"
+      className="flex items-center  min-w-[250px]  h-[75px]  rounded-lg border border-gray-600/25 px-3 py-2 transition-all duration-300 hover:scale-105 hover:bg-gray-600/10"
     >
       <div className="white-space-nowrap pr-2">
         {pair ? (

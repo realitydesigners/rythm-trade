@@ -40,7 +40,7 @@ const EmailForm = () => {
 				id="name"
 				required
 				placeholder="name"
-				className="p-2 bg-gray-200/50 border border-gray-600/50 rounded-md"
+				className="p-2 bg-gray-200/50 border border-gray-600/25 rounded-md"
 			/>
 
 			<input
@@ -49,12 +49,12 @@ const EmailForm = () => {
 				id="email"
 				required
 				placeholder="email"
-				className="p-2 bg-gray-20/50 border border-gray-600/50 rounded-md"
+				className="p-2 bg-gray-20/50 border border-gray-600/25 rounded-md"
 			/>
 
 			<button
 				type="submit"
-				className="border uppercase bg-black tracking-wide bg-black  border-gray-600/50 text-white py-2 px-4 rounded-md hover:bg-black/70 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+				className="border uppercase bg-black tracking-wide bg-black  border-gray-600/25 text-white py-2 px-4 rounded-md hover:bg-black/70 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
 			>
 				Send
 			</button>
