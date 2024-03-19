@@ -1,12 +1,12 @@
 import React from "react";
 
-interface LoadingSkeletonProps {
+interface LoadingCircleProps {
 	width?: string;
 	height?: string;
 	className?: string;
 }
 
-const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
+const LoadingCirle: React.FC<LoadingCircleProps> = ({
 	width = "100",
 	height = "100",
 	className = "",
@@ -48,4 +48,4 @@ const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
 	);
 };
 
-export default LoadingSkeleton;
+export default LoadingCirle;

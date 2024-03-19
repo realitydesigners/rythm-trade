@@ -53,6 +53,7 @@ const DashboardPage = () => {
 				currencyPairs={currencyPairs}
 				favoritePairs={favoritePairs}
 			/>
+			
 			<FavoritesSection
 				favoritePairs={favoritePairs}
 				numDisplayedFavorites={numDisplayedFavorites}

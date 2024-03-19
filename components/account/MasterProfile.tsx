@@ -1,5 +1,5 @@
 "use client";
-import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
+import LoadingCircle from "@/components/loading/LoadingCircle";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@clerk/nextjs";
 import React, { useEffect, useState } from "react";
@@ -78,7 +78,7 @@ const MasterProfile: React.FC = () => {
 				</div>
 			) : (
 				<div className="flex h-full w-full items-center justify-center">
-					<LoadingSkeleton width="50" height="50" />
+					<LoadingCircle width="50" height="50" />
 				</div>
 			)}
 		</div>

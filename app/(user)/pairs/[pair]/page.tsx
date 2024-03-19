@@ -3,7 +3,7 @@ import { fetchPairPosition } from "@/app/api/actions/fetchPositionData";
 import { fetchBoxArrays } from "@/app/api/rest";
 import { useWebSocket } from "@/components/context/WebSocketContext";
 import { ResoBox, Stream, ThreeDBox } from "@/components/index";
-import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
+import LoadingCircle from "@/components/loading/LoadingCircle";
 import { StreamData } from "@/types";
 import { useUser } from "@clerk/nextjs";
 import { useParams } from "next/navigation";
@@ -95,7 +95,7 @@ const PairPage = () => {
 					</div>
 				</div>
 			) : (
-				<LoadingSkeleton />
+				<LoadingCircle />
 			)}
 		</div>
 	);

@@ -1,5 +1,5 @@
 "use client";
-import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
+import LoadingCircle from "@/components/loading/LoadingCircle";
 import { StreamData } from "@/types";
 import { useUser } from "@clerk/nextjs";
 import React, { useEffect, useState } from "react";
@@ -83,7 +83,7 @@ const ThreeDModel: React.FC<ThreeDModelProps> = ({
 					</div>
 				</div>
 			) : (
-				<LoadingSkeleton width="50" height="50" />
+				<LoadingCircle width="50" height="50" />
 			)}
 		</div>
 	);

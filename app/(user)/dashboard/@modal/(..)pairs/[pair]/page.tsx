@@ -2,7 +2,7 @@
 import { useWebSocket } from "@/components/context/WebSocketContext";
 import useFetchBoxes from "@/components/hooks/useFetchBoxes";
 import { Modal, ResoBox, Stream, ThreeDBox } from "@/components/index";
-import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
+import LoadingCircle from "@/components/loading/LoadingCircle";
 import { StreamData } from "@/types";
 import { useUser } from "@clerk/nextjs";
 import { useParams } from "next/navigation";
@@ -72,7 +72,7 @@ const PairPages = () => {
 					</div>
 				) : (
 					<div className="flex h-full w-full items-center  justify-center">
-						<LoadingSkeleton width="100" height="100" />
+						<LoadingCircle width="100" height="100" />
 					</div>
 				)}
 			</div>
