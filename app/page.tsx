@@ -65,12 +65,6 @@ const AppPage = () => {
                             >
                                 Join Beta v1.0
                             </Link>
-                            <Link
-                                href="#"
-                                className="inline-block transform items-center justify-center rounded-lg border border-gray-700/75 bg-black/50 px-6 py-4 text-xl font-bold uppercase text-gray-200 transition-all duration-200  ease-in-out hover:-translate-y-1 hover:bg-black"
-                            >
-                                Learn More
-                            </Link>
                         </div>
                     </div>
                 </div>
