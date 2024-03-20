@@ -45,13 +45,14 @@ const PairPage = () => {
         <div className="h-full w-full rounded-xl bg-black">
             {initializationComplete ? (
                 <div className="relative top-16 flex h-full flex-col flex-wrap p-2 lg:flex-row">
-                    <div className="h-[400px] w-full border border-gray-700 pt-32">
+                    <div className="h-[400px] w-full ">
                         <LineChart
                             data={
                                 currentPairData
                                     ? parseFloat(currentPairData.closeoutBid)
                                     : null
                             }
+                            boxArrays={boxArrays}
                         />
                     </div>
                     <div className="relative flex h-full w-full flex-col items-center justify-center p-1 lg:w-1/2 lg:p-4 ">
