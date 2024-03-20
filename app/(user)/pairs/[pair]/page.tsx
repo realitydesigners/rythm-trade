@@ -40,12 +40,18 @@ const PairPage = () => {
 
   useEffect(() => {
     if (initializationComplete && streamData[pair]) {
+      console.log("Updating boxes with new stream data for pair:", pair);
       const currentPrice = parseFloat(streamData[pair].closeoutBid);
+      console.log(`Current price for ${pair}:`, currentPrice);
       const updatedBoxArrays = updateBoxArraysWithCurrentPrice(
         currentPrice,
         boxArrays,
         pair,
         selectedBoxArrayType
+      );
+      console.log(
+        `Updated box arrays for ${pair} with type ${selectedBoxArrayType}:`,
+        updatedBoxArrays
       );
       setBoxArrays(updatedBoxArrays);
     }
