@@ -11,6 +11,9 @@ export interface CandleData {
 		l: string;
 	};
 	symbol: string;
+	ask: { c: string };
+	bid: { c: string };
+	volume: number;
 }
 
 interface PriceDetail {

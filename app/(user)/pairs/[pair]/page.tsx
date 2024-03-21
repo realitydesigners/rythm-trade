@@ -4,14 +4,16 @@ import { fetchBoxArrays } from "@/app/api/rest";
 import { fetchCandles } from "@/app/api/rest";
 import { updateBoxArraysWithCurrentPrice } from "@/app/api/services/boxCalcs";
 import LineChart from "@/components/charts/LineChart";
+import S5Chart from "@/components/charts/S5Chart";
 import S5StreamChart from "@/components/charts/S5StreamChart";
 import { useWebSocket } from "@/components/context/WebSocketContext";
 import { ResoBox, Stream, ThreeDBox } from "@/components/index";
 import LoadingCircle from "@/components/loading/LoadingCircle";
-import { StreamData } from "@/types";
+import { CandleData, StreamData } from "@/types";
 import { useUser } from "@clerk/nextjs";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+
 const PairPage = () => {
     const { user } = useUser();
     const { streamData } = useWebSocket();
@@ -24,7 +26,8 @@ const PairPage = () => {
     const [selectedBoxArrayType, setSelectedBoxArrayType] = useState("d");
     const [boxView, setBoxView] = useState("2D");
     const [initializationComplete, setInitializationComplete] = useState(false);
-    const [candles, setCandles] = useState([]); // State to store the candles data
+    const [candles, setCandles] = useState<CandleData[]>([]);
+    const [s5Candles, setS5Candles] = useState<CandleData[]>([]);
 
     useEffect(() => {
         if (user?.id) {
@@ -66,6 +69,7 @@ const PairPage = () => {
         selectedBoxArrayType,
         initializationComplete,
     ]);
+
     useEffect(() => {
         if (user?.id && pair) {
             fetchCandles(user.id, pair, 300, "S5")
@@ -82,17 +86,52 @@ const PairPage = () => {
         }
     }, [user?.id, pair]);
 
+    const fetchNewS5Candles = () => {
+        if (user?.id && pair) {
+            fetchCandles(user.id, pair, 1, "S5")
+                .then((newCandles) => {
+                    setS5Candles((prevCandles: CandleData[]) => [
+                        ...prevCandles,
+                        ...newCandles,
+                    ]);
+                })
+                .catch((error) => {
+                    console.error("Failed to fetch new S5 candle:", error);
+                });
+        }
+    };
+
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    useEffect(() => {
+        fetchCandles(user?.id, pair, 300, "S5")
+            .then((candleData) => {
+                setS5Candles(candleData);
+                console.log(
+                    "Initial S5 candles fetched successfully:",
+                    candleData,
+                );
+            })
+            .catch((error) => {
+                console.error("Failed to fetch initial S5 candles:", error);
+            });
+
+        const interval = setInterval(fetchNewS5Candles, 5000);
+
+        return () => clearInterval(interval);
+    }, [user?.id, pair]);
+
     const currentPairData: StreamData | null = streamData[pair] ?? null;
 
     return (
         <div className="h-full w-full rounded-xl bg-black">
             {initializationComplete ? (
                 <div className="relative top-16 flex h-full flex-col flex-wrap p-2 lg:flex-row">
-                    <div className="h-[400px] w-full ">
+                    <div className="flex h-full w-full flex-col items-center justify-center gap-4 ">
                         <S5StreamChart
                             s5Candles={candles}
                             streamingData={currentPairData}
                         />
+                        <S5Chart s5Candles={s5Candles} />
 
                         {/* <LineChart
                             data={
