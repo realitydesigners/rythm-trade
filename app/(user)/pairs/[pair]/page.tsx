@@ -127,13 +127,14 @@ const PairPage = () => {
             {initializationComplete ? (
                 <div className="relative top-16 flex h-full flex-col flex-wrap p-2 lg:flex-row">
                     <div className="flex h-full w-full flex-col items-center justify-center gap-4 ">
-                        <S5StreamChart
-                            s5Candles={candles}
-                            streamingData={currentPairData}
-                            boxArrays={boxArrays}
-                        />
-                        <S5Chart s5Candles={s5Candles} />
-
+                        <div className="flex h-full w-full p-6">
+                            <S5StreamChart
+                                s5Candles={candles}
+                                streamingData={currentPairData}
+                                boxArrays={boxArrays}
+                            />
+                        </div>
+                        {/* <S5Chart s5Candles={s5Candles} /> */}
                         {/* <LineChart
                             data={
                                 currentPairData

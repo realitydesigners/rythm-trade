@@ -20,6 +20,20 @@ interface LineProps {
     minY: number;
     maxY: number;
     streamingData?: number | null;
+    padding?: number;
+}
+
+interface HighAndLowProps {
+    boxArrays?: {
+        [key: string]: {
+            high: number;
+            low: number;
+            boxMovedDn: boolean;
+            boxMovedUp: boolean;
+        };
+    };
+    minY: number;
+    maxY: number;
 }
 
 const S5StreamChart: React.FC<S5ChartProps> = ({
@@ -49,52 +63,32 @@ const S5StreamChart: React.FC<S5ChartProps> = ({
         const bidPrice = parseFloat(streamingData.closeoutBid);
         if (!Number.isNaN(bidPrice)) {
             setClosingPrices((prevPrices) => [...prevPrices, bidPrice]);
-            if (closingPrices.length > 300) {
-                setClosingPrices((prevPrices) => prevPrices.slice(-300)); // Keep only the latest 300 prices
+            if (closingPrices.length > 1000) {
+                setClosingPrices((prevPrices) => prevPrices.slice(-1000));
             }
         }
-    }, [streamingData]); // Depend on streamingData to update when it changes
+    }, [streamingData]);
 
     if (closingPrices.length === 0) {
         return <div>Loading...</div>;
     }
 
+    const padding = 250;
     const minY = Math.min(...closingPrices);
     const maxY = Math.max(...closingPrices);
 
     return (
         <div className="h-[400px] w-full">
-            <svg width="1600" height="400" viewBox="0 0 1600 400">
-                <title>Line Chart</title>
-
-                {/* X-axis */}
-                <line
-                    x1="0"
-                    y1="400"
-                    x2="1600"
-                    y2="400"
-                    stroke="#555"
-                    strokeWidth="5"
-                />
-
-                {/* Y-axis */}
-                <line
-                    x1="0"
-                    y1="0"
-                    x2="0"
-                    y2="400"
-                    stroke="#555"
-                    strokeWidth="5"
-                />
-
-                {/* Main line chart */}
+            {/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
+            <svg width="1200" height="400" viewBox="0 0 1200 400">
+                <HighAndLow boxArrays={boxArrays} minY={minY} maxY={maxY} />
                 <Line
                     closingPrices={closingPrices}
                     minY={minY}
                     maxY={maxY}
                     streamingData={streamingData}
+                    padding={padding}
                 />
-                <HighAndLow boxArrays={boxArrays} minY={minY} maxY={maxY} />
             </svg>
         </div>
     );
@@ -104,76 +98,33 @@ const Line: React.FC<LineProps> = ({
     closingPrices,
     minY,
     maxY,
-    streamingData,
+
+    padding = 0,
 }) => {
+    const chartWidth = 1200;
+    const chartHeight = 400;
+    const paddedWidth = chartWidth - padding;
     const pathData = closingPrices
         .map((price, index) => {
-            const x = (index / (closingPrices.length - 1)) * 1600; // Assuming 1600 is the chartWidth
-            const y = 400 - ((price - minY) / (maxY - minY)) * 400;
+            const x = (index / (closingPrices.length - 1)) * paddedWidth;
+            const y =
+                chartHeight - ((price - minY) / (maxY - minY)) * chartHeight;
             return `${x.toFixed(2)},${y.toFixed(2)}`;
         })
         .join(" L ");
 
     return (
         <g>
-            {/* Main line chart */}
             <path
-                d={`M 0,400 L ${pathData} L 1600,400`}
+                d={`M 0,${chartHeight} L ${pathData} L ${paddedWidth},${chartHeight}`}
                 fill="none"
                 stroke="white"
                 strokeWidth="2"
             />
-
-            {/* Current data line with price label */}
-            {typeof streamingData === "number" &&
-                !Number.isNaN(streamingData) && (
-                    <>
-                        <line
-                            x1="0"
-                            y1={(
-                                400 -
-                                ((streamingData - minY) / (maxY - minY)) * 400
-                            ).toFixed(2)}
-                            x2="1600"
-                            y2={(
-                                400 -
-                                ((streamingData - minY) / (maxY - minY)) * 400
-                            ).toFixed(2)}
-                            stroke="#555"
-                            strokeWidth="1"
-                            strokeDasharray="4 4"
-                        />
-                        {/* Price label for current data */}
-                        <text
-                            x="1000"
-                            y={(
-                                400 -
-                                ((streamingData - minY) / (maxY - minY)) * 420
-                            ).toFixed(2)}
-                            dominantBaseline="middle"
-                            fill="#555"
-                            fontSize="14px"
-                        >
-                            Current: {streamingData.toFixed(2)}
-                        </text>
-                    </>
-                )}
         </g>
     );
 };
 
-interface HighAndLowProps {
-    boxArrays?: {
-        [key: string]: {
-            high: number;
-            low: number;
-            boxMovedDn: boolean;
-            boxMovedUp: boolean;
-        };
-    };
-    minY: number;
-    maxY: number;
-}
 const HighAndLow: React.FC<HighAndLowProps> = ({ boxArrays, minY, maxY }) => {
     if (!boxArrays) return null;
 
@@ -198,6 +149,8 @@ const HighAndLow: React.FC<HighAndLowProps> = ({ boxArrays, minY, maxY }) => {
                         directionLabel === "U" ? "#59cfc3" : "#CF596E";
                     const textColor =
                         directionLabel === "U" ? "#59cfc3" : "#CF596E";
+                    const boxColor =
+                        directionLabel === "U" ? "#59cfc3" : "#CF596E";
 
                     return (
                         <g key={boxKey}>
@@ -205,19 +158,28 @@ const HighAndLow: React.FC<HighAndLowProps> = ({ boxArrays, minY, maxY }) => {
                             <line
                                 x1="0"
                                 y1={(400 - highY).toFixed(2)}
-                                x2="1600"
+                                x2="1200"
                                 y2={(400 - highY).toFixed(2)}
                                 stroke={lineColor}
-                                strokeWidth="2"
+                                strokeWidth="1"
                             />
                             {/* Low Line */}
                             <line
                                 x1="0"
                                 y1={(400 - lowY).toFixed(2)}
-                                x2="1600"
+                                x2="1200"
                                 y2={(400 - lowY).toFixed(2)}
                                 stroke={lineColor}
                                 strokeWidth="1"
+                            />
+                            {/* Box area */}
+                            <rect
+                                x="0"
+                                y={(400 - highY).toFixed(2)}
+                                width="1200"
+                                height={(highY - lowY).toFixed(2)}
+                                fill={boxColor}
+                                fillOpacity="0.05"
                             />
                             {/* Price labels for high and low with direction indicator */}
                             <text
@@ -227,16 +189,16 @@ const HighAndLow: React.FC<HighAndLowProps> = ({ boxArrays, minY, maxY }) => {
                                 fill={textColor}
                                 fontSize="12px"
                             >
-                                {boxKey} {high.toFixed(2)}
+                                ({boxKey}): {high.toFixed(2)}
                             </text>
                             <text
-                                x="1000"
+                                x="100"
                                 y={(410 - lowY).toFixed(2)}
                                 dominantBaseline="middle"
                                 fill={textColor}
                                 fontSize="12px"
                             >
-                                {boxKey}: {low.toFixed(2)}
+                                ({boxKey}): {low.toFixed(2)}
                             </text>
                         </g>
                     );
