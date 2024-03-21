@@ -130,6 +130,7 @@ const PairPage = () => {
                         <S5StreamChart
                             s5Candles={candles}
                             streamingData={currentPairData}
+                            boxArrays={boxArrays}
                         />
                         <S5Chart s5Candles={s5Candles} />
 
@@ -187,7 +188,9 @@ const PairPage = () => {
                     </div>
                 </div>
             ) : (
-                <LoadingCircle />
+                <div className="flex h-screen w-screen items-center  justify-center">
+                    <LoadingCircle width="100" height="100" />
+                </div>
             )}
         </div>
     );
