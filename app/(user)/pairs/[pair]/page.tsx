@@ -4,7 +4,7 @@ import { fetchBoxArrays } from "@/app/api/rest";
 import { fetchCandles } from "@/app/api/rest";
 import { updateBoxArraysWithCurrentPrice } from "@/app/api/services/boxCalcs";
 import LineChart from "@/components/charts/LineChart";
-import SecondChart from "@/components/charts/SecondChart";
+import S5StreamChart from "@/components/charts/S5StreamChart";
 import { useWebSocket } from "@/components/context/WebSocketContext";
 import { ResoBox, Stream, ThreeDBox } from "@/components/index";
 import LoadingCircle from "@/components/loading/LoadingCircle";
@@ -67,12 +67,9 @@ const PairPage = () => {
         initializationComplete,
     ]);
     useEffect(() => {
-        // Ensure we have a user and a pair before attempting to fetch candles
         if (user?.id && pair) {
-            // Call fetchCandles with S5 granularity and request 300 candles
             fetchCandles(user.id, pair, 300, "S5")
                 .then((candleData) => {
-                    // Handle the fetched candle data
                     setCandles(candleData);
                     console.log(
                         "Candle data fetched successfully:",
@@ -80,11 +77,10 @@ const PairPage = () => {
                     );
                 })
                 .catch((error) => {
-                    // Handle any errors that occur during fetch
                     console.error("Failed to fetch candle data:", error);
                 });
         }
-    }, [user?.id, pair]); // Depend on user.id and pair to re-fetch when they change
+    }, [user?.id, pair]);
 
     const currentPairData: StreamData | null = streamData[pair] ?? null;
 
@@ -93,7 +89,10 @@ const PairPage = () => {
             {initializationComplete ? (
                 <div className="relative top-16 flex h-full flex-col flex-wrap p-2 lg:flex-row">
                     <div className="h-[400px] w-full ">
-                        <SecondChart s5Candles={candles} />
+                        <S5StreamChart
+                            s5Candles={candles}
+                            streamingData={currentPairData}
+                        />
 
                         {/* <LineChart
                             data={

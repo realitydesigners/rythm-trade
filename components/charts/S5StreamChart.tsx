@@ -11,9 +11,13 @@ interface Candle {
 
 interface S5ChartProps {
     s5Candles: Candle[];
+    streamingData: any | null;
 }
 
-const SecondChart: React.FC<S5ChartProps> = ({ s5Candles }) => {
+const S5StreamChart: React.FC<S5ChartProps> = ({
+    s5Candles,
+    streamingData,
+}) => {
     const [closingPrices, setClosingPrices] = useState<number[]>([]);
 
     useEffect(() => {
@@ -25,10 +29,23 @@ const SecondChart: React.FC<S5ChartProps> = ({ s5Candles }) => {
         const newClosingPrices = s5Candles.map((candle) =>
             parseFloat(candle.ask.c),
         );
-        console.log("Closing prices:", newClosingPrices);
+        console.log("Closing prices from candles:", newClosingPrices);
 
         setClosingPrices(newClosingPrices);
     }, [s5Candles]);
+
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    useEffect(() => {
+        if (!streamingData) return;
+
+        const bidPrice = parseFloat(streamingData.closeoutBid);
+        if (!Number.isNaN(bidPrice)) {
+            setClosingPrices((prevPrices) => [...prevPrices, bidPrice]);
+            if (closingPrices.length > 300) {
+                setClosingPrices((prevPrices) => prevPrices.slice(-300));
+            }
+        }
+    }, [streamingData]);
 
     if (closingPrices.length === 0) {
         return <div>Loading...</div>;
@@ -37,18 +54,13 @@ const SecondChart: React.FC<S5ChartProps> = ({ s5Candles }) => {
     const minY = Math.min(...closingPrices);
     const maxY = Math.max(...closingPrices);
 
-    console.log("minY:", minY);
-    console.log("maxY:", maxY);
-
     const pathData = closingPrices
         .map((price, index) => {
-            const x = (index / (closingPrices.length - 1)) * 1200; // Assuming 1200 is the chartWidth
+            const x = (index / (closingPrices.length - 1)) * 1200;
             const y = 400 - ((price - minY) / (maxY - minY)) * 400;
             return `${x.toFixed(3)},${y.toFixed(2)}`;
         })
         .join(" L ");
-
-    console.log("pathData:", pathData);
 
     return (
         <div className="h-[400px] w-full">
@@ -89,4 +101,4 @@ const SecondChart: React.FC<S5ChartProps> = ({ s5Candles }) => {
     );
 };
 
-export default SecondChart;
+export default S5StreamChart;
