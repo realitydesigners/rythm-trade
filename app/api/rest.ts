@@ -234,7 +234,7 @@ export const fetchCandles = async (
 	userId: any,
 	pair: any,
 	count = 300,
-	granularity = "M1",
+	granularity = "S5",
 ) => {
 	try {
 		const response = await fetch(
