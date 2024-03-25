@@ -73,3 +73,17 @@ export interface PositionDetails {
 	unrealizedPL?: string;
 	tradeIDs?: string[];
 }
+
+export interface RangeLineProps {
+	boxArrays?: BoxArrays;
+	minY: number;
+	maxY: number;
+}
+
+export interface ChartLineProps {
+	closingPrices: number[];
+	minY: number;
+	maxY: number;
+	streamingData?: StreamData | null;
+	padding?: number;
+}

@@ -4,8 +4,7 @@ import { fetchBoxArrays } from "@/app/api/rest";
 import { fetchCandles } from "@/app/api/rest";
 import { updateBoxArraysWithCurrentPrice } from "@/app/api/services/boxCalcs";
 import LineChart from "@/components/charts/LineChart";
-import S5Chart from "@/components/charts/S5Chart";
-import S5StreamChart from "@/components/charts/S5StreamChart";
+import StreamChart from "@/components/charts/StreamChart";
 import { useWebSocket } from "@/components/context/WebSocketContext";
 import { ResoBox, Stream, ThreeDBox } from "@/components/index";
 import LoadingCircle from "@/components/loading/LoadingCircle";
@@ -103,7 +102,7 @@ const PairPage = () => {
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
-        fetchCandles(user?.id, pair, 300, "S5")
+        fetchCandles(user?.id, pair, 1500, "S5")
             .then((candleData) => {
                 setS5Candles(candleData);
                 console.log(
@@ -128,21 +127,18 @@ const PairPage = () => {
                 <div className="relative top-16 flex h-full flex-col flex-wrap p-2 lg:flex-row">
                     <div className="flex h-full w-full flex-col items-center justify-center gap-4 ">
                         <div className="flex h-full w-full p-6">
-                            <S5StreamChart
+                            <StreamChart
                                 s5Candles={candles}
                                 streamingData={currentPairData}
                                 boxArrays={boxArrays}
                             />
                         </div>
-                        {/* <S5Chart s5Candles={s5Candles} /> */}
-                        {/* <LineChart
-                            data={
-                                currentPairData
-                                    ? parseFloat(currentPairData.closeoutBid)
-                                    : null
-                            }
-                            boxArrays={boxArrays}
-                        /> */}
+                        <div className="flex h-full w-full p-6">
+                            <LineChart
+                                s5Candles={s5Candles}
+                                boxArrays={boxArrays}
+                            />
+                        </div>
                     </div>
                     <div className="relative flex h-full w-full flex-col items-center justify-center p-1 lg:w-1/2 lg:p-4 ">
                         <div className="relative flex h-[500px] w-full overflow-hidden rounded-xl border border-gray-600/25 lg:h-[800px] ">
