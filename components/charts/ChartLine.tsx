@@ -1,8 +1,8 @@
 "use client";
-import { LineProps } from "@/types";
+import { ChartLineProps } from "@/types";
 import React from "react";
 
-const ChartLine: React.FC<LineProps> = ({
+const ChartLine: React.FC<ChartLineProps> = ({
     closingPrices,
     minY,
     maxY,
