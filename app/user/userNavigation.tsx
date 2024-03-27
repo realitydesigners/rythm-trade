@@ -1,24 +1,11 @@
 "use client";
-import { saira, sirin, space } from "@/app/fonts";
 import "@/app/globals.css";
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import React, { useState } from "react";
 
 type IconName = "logo" | "dashboard" | "settings" | "user";
 
 export default function UserNavigation() {
-    const [isNavOpen, setIsNavOpen] = useState(false);
-
-    const toggleNav: () => void = () => {
-        setIsNavOpen(!isNavOpen);
-        document.body.style.overflow = isNavOpen ? "auto" : "hidden";
-    };
-    const closeNav = () => {
-        setIsNavOpen(false);
-        document.body.style.overflow = "auto";
-    };
-
     const getIcon = (name: IconName) => {
         const icons = {
             logo: (

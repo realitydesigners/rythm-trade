@@ -13,6 +13,8 @@ import { PositionData } from "@/types";
 import { useUser } from "@clerk/nextjs";
 import React, { useEffect, useState } from "react";
 
+import { Container, Text } from "@/components/ui-ux/index";
+
 const UserPage = () => {
     const { user } = useUser();
     const { streamData } = useWebSocket();
@@ -45,7 +47,14 @@ const UserPage = () => {
     }, [user?.id]);
 
     return (
-        <div className="flex min-h-screen w-full flex-wrap bg-black p-4 pt-20 lg:pl-40 lg:pt-20 " />
+        <div className="flex min-h-screen w-full flex-wrap bg-black p-4 pt-20 lg:pl-40 lg:pt-20 ">
+            <Container variant="default">
+                <Text variant="default">Test Text</Text>
+                <Text variant="p" className="text-xl">
+                    Test Text
+                </Text>
+            </Container>
+        </div>
     );
 };
 
