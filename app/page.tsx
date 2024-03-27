@@ -1,6 +1,7 @@
 "use client";
 import Newsletter from "@/app/api/send/Newsletter";
 import { saira, space } from "@/app/fonts";
+import { Navbar } from "@/components/index";
 import Prop from "@/public/icons/prop.svg";
 import Quant from "@/public/icons/quant.svg";
 import Repeat from "@/public/icons/repeat.svg";
@@ -47,6 +48,7 @@ const featureData = [
 const AppPage = () => {
     return (
         <>
+            <Navbar />
             {/* Hero */}
             <section className=" h-[90vh] w-full overflow-hidden bg-black lg:h-screen lg:h-screen">
                 <div className="relative flex h-full w-full items-center justify-center">
