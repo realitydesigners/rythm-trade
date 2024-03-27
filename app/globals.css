@@ -46,3 +46,19 @@
       @apply bg-background text-foreground;
    }
 }
+
+body,
+input,
+button {
+   font-family: var(--font-stack);
+   color: var(--text-color);
+}
+
+.cl-rootBox {
+   width: 50%;
+}
+
+.cl-signUp-start,
+.cl-signIn-start {
+   width: 100%;
+}
