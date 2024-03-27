@@ -5,7 +5,6 @@ export default function DashboardLayout({
     children,
 }: {
     children: React.ReactNode;
-    modal: React.ReactNode;
 }) {
     return (
         <>
