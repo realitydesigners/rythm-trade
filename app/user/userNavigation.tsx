@@ -1,9 +1,14 @@
 "use client";
 import "@/app/globals.css";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 type IconName = "logo" | "dashboard" | "settings" | "user";
+
+const playSound = (soundUrl: any) => {
+    const audio = new Audio(soundUrl);
+    audio.play();
+};
 
 export default function UserNavigation() {
     const getIcon = (name: IconName) => {
@@ -89,12 +94,50 @@ export default function UserNavigation() {
         };
         return icons[name] || <path />;
     };
+    const playHoverSound = () => {
+        playSound("/sound/hover.mp3");
+    };
 
+    const playClickSound = () => {
+        playSound("/sound/menu.mp3");
+    };
+
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    useEffect(() => {
+        const handleHover = (event: any) => {
+            playHoverSound();
+        };
+
+        const handleClick = (event: any) => {
+            playClickSound();
+        };
+
+        const hoverElements = document.querySelectorAll(".sound");
+        const clickElements = document.querySelectorAll(".sound");
+
+        for (const element of hoverElements) {
+            element.addEventListener("mouseenter", handleHover);
+        }
+
+        for (const element of clickElements) {
+            element.addEventListener("click", handleClick);
+        }
+
+        return () => {
+            for (const element of hoverElements) {
+                element.removeEventListener("mouseenter", handleHover);
+            }
+
+            for (const element of clickElements) {
+                element.removeEventListener("click", handleClick);
+            }
+        };
+    }, []);
     return (
         <>
             <Link
                 href="/user"
-                className="z-90 absolute left-4 top-4 rounded-[.5em] border border-gray-700/25 bg-gray-700/10 p-1 lg:hidden"
+                className="z-80 sound absolute left-4 top-4 rounded-[.5em] border border-gray-700/25 bg-gray-700/10 p-1 lg:hidden"
             >
                 <svg className="h-10 w-10 ">
                     <title>Logo</title>
@@ -107,7 +150,7 @@ export default function UserNavigation() {
             >
                 <Link
                     href="/user"
-                    className="hidden rounded-[.5em] border border-gray-700/25 bg-gray-700/10  lg:block"
+                    className="hidden  rounded-[.5em] border border-gray-700/25 bg-gray-700/10  lg:block"
                 >
                     <svg className="h-10 w-10 ">
                         <title>Logo</title>
@@ -123,7 +166,7 @@ export default function UserNavigation() {
                         <li className="block">
                             <Link
                                 href="/user"
-                                className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-700/50 p-2 transition-all  duration-200 ease-in-out hover:scale-105 hover:bg-gray-700/25 "
+                                className="sound flex h-12 w-12 items-center justify-center rounded-full border border-gray-700/50 p-2 transition-all  duration-200 ease-in-out hover:scale-105 hover:bg-gray-700/25 "
                             >
                                 {getIcon("settings")}
                             </Link>
@@ -131,7 +174,7 @@ export default function UserNavigation() {
                         <li className="block">
                             <Link
                                 href="/user"
-                                className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-700/50 p-2 transition-all  duration-200 ease-in-out hover:scale-105 hover:bg-gray-700/25 "
+                                className="sound flex h-12 w-12 items-center justify-center rounded-full border border-gray-700/50 p-2 transition-all  duration-200 ease-in-out hover:scale-105 hover:bg-gray-700/25 "
                             >
                                 {getIcon("dashboard")}
                             </Link>
@@ -139,7 +182,7 @@ export default function UserNavigation() {
                         <li className="block">
                             <Link
                                 href="/user"
-                                className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-700/50 p-2 transition-all  duration-200 ease-in-out hover:scale-105 hover:bg-gray-700/25 "
+                                className=" sound flex h-12 w-12 items-center justify-center rounded-full border border-gray-700/50 p-2 transition-all  duration-200 ease-in-out hover:scale-105 hover:bg-gray-700/25 "
                             >
                                 {getIcon("user")}
                             </Link>
