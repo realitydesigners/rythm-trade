@@ -1,6 +1,6 @@
 export default function UserStatusBar() {
     return (
-        <div className="fixed bottom-0 hidden h-8 w-full justify-end border border-t border-gray-700/50 pl-20 lg:flex ">
+        <div className="fixed bottom-0 hidden h-8 w-full justify-end border border-t border-gray-700/50 bg-black pl-20 lg:flex ">
             <div className="flex items-center justify-center border-l border-gray-700/50 px-2">
                 <span className="text-xs font-semibold uppercase text-gray-600">
                     NETWORK: GOOD
